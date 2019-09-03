@@ -1,0 +1,1091 @@
+syntax = "proto2";
+package pbd;
+
+// 协议版本号
+enum E_MSG_VERSION
+{
+    Msg_Version_Id  = 0x00000002;
+}
+
+enum E_ONLINE_UNIT_RET
+{
+    EOUR_OK                     = 0x00000000;   // 单元上线成功
+    EOUR_FAILED                 = 0x00000001;   // 单元上线失败
+    EOUR_NOT_EXIST              = 0x00000002;   // 单元不存在
+    EOUR_EXIST                  = 0x00000003;   // 单元已在线
+    EOUR_COUNT_LIMIT            = 0x00000004;   // 数量已达上限
+    EOUR_CENTER_CAN_NOT_REACH   = 0x00000005;   // 中央服务器不可达
+}
+
+enum E_CHAPTER_GIFT_TAKE_FALG
+{
+    ECGTF_NOTPASSED             = 0;   // 未通关
+    ECGTF_PASSED_NOTTAKE        = 1;   // 已通关且未领取
+    ECGTF_PASSED_TAKE           = 2;   // 已通关已领取
+}
+
+enum E_GMAE_DATA_TYPE
+{
+    EGDT_SKILL_BOOK_SHOP_BUY     =  1;  // 技能书商店购买道具
+    EGDT_SKILL_BOOK_SHOP_REFRESH =  2;  // 技能书商店刷新
+    EGDT_MINI_GAME_SHOP_REFRESH  =  3;  // 小游戏厅商店刷新
+    EGDT_ARENA_COUNT_BUY         =  4;  // 水管竞技场次数购买
+    EGDT_ARENA_CLEAN_CD          =  5;  // 水管竞技场秒cd
+    EGDT_SIGN_RETROACTIVE        =  6;  // 签到补签
+    EGDT_PARK_CAR_SHOP_BUY       =  7;  // 抢车位商店购买道具
+    EGDT_PARK_CAR_SHOP_REFRESH   =  8;  // 抢车位商店刷新 
+    EGDT_PARK_CAR_FIX_CLEAN_CD   =  9;  // 抢车位车辆修理秒cd
+    EGDT_PARK_CAR_EXTEND         =  10; // 抢车位扩展车位
+    EGDT_FACE_SHOP_BUY           =  11; // 表情商店购买商品
+    EGDT_FACE_SHOP_REFRESH       =  12; // 表情商店刷新
+    EGDT_SUIT_SHOP_BUY           =  13; // 套装商店购买商品
+    EGDT_MONERY_BUY              =  14; // 充值购买
+    EGDT_ARENA_BUY               =  15; // 竞技场购买
+    EGDT_EQUIP_FAST_FIX          =  16; // 装备快速修理
+    EGDT_SHARE_WEIXIN            =  17; // 微信分享
+    EGDT_EXTEND_EQUIP_BAG_SIZE   =  18; // 扩充装备包裹
+
+
+    // 100 这个段被商店占用
+
+    EGDT_NIUDAN                  =  1000; // 抽扭蛋机
+    EGDT_SEVEN_DAY               =  1001; // 七天领取
+
+    EGDT_SOLD                    =  1002; // 商城推荐
+
+    EGDT_SELF_FACE               =  1003; //自定义表情花费
+
+    EGDT_BUY_STEMINA             =  1004; //购买体力
+
+    EGDT_POINT_GOD               =  1005; // 点金手
+
+
+
+
+}
+
+enum E_GMAE_ONLINE_NUM_TYPE
+{
+    EGOT_ROLE_ONLINE_TIME = 1;  // 在线时长
+    EGOT_ONLINE_TOTAL_NUM = 2;  // 在线人数 
+    EGOT_ONLINE_TOP_NUM   = 3;  // 当日最高在线人数 
+}
+
+enum E_GMAE_ONLINE_TYPE
+{
+    EGOT_ONLINE  = 1;  // 在线
+    EGOT_OFFLINE = 0;  // 离线
+}
+
+enum E_BATH_STATUS_TYPE
+{
+    EBST_TIME = 1;
+    EBST_NUM  = 2;
+}
+
+enum E_BATH_STATUS_ID
+{
+    EBSI_HANGUP_LAND = 1;  // 陆地挂机
+    EBSI_SHOWER      = 2;  // 淋浴
+    EBSI_RUB         = 3;  // 搓澡
+    EBSI_HANGUP_POOL = 4;  // 澡堂挂机
+}
+
+enum E_INTERACT_TOOL_TYPE
+{
+    EITT_WATER_BALL   = 1;
+    EITT_WATER_GUN    = 2;
+    EITT_WASHBASIN    = 3;
+    EITT_WATERSPALSH  = 4;
+};
+
+
+// 游戏定义
+enum E_ITEM_DEF
+{
+    GOLD_ID         = 1;    // 金币
+    ENDURANCE_ID    = 2;    // 体力
+    DIAMOND_COIN_ID = 3;    // 钻石
+    EXP_ID          = 4;    // 经验
+    SKILL_POIN_ID   = 5;    // 技能点
+    ARENASCROE_ID   = 6;    // 竞技场积分
+
+    ARENA_COUNT_ID  = 7;    //竞技场次数
+    SWORD_COUNT_ID  = 8;    //石中剑次数
+    VIP_EXP_ID      = 9;     // vip经验
+    ID_UNKNOWN3     = 10;    //预分配货币3
+    ID_UNKNOWN4     = 11;    //预分配货币3
+    ID_UNKNOWN5     = 12;    //预分配货币3
+
+    PACKAGE_MIN_ID  = 10001;
+    PACKAGE_MAX_ID  = 19999;
+
+    PROP_MIN_ID     = 20001;
+    PROP_MAX_ID     = 24999;
+
+    MATERIAL_MIN_ID = 25000;
+    MATERIAL_MAX_ID = 29999;
+
+    CARD_MIN_ID     = 30001;
+    CARD_MAX_ID     = 30999;
+
+    PET_MIN_ID      = 31001; // 宠物区段
+    PET_MAX_ID      = 31999; // 宠物区段
+
+    EQUIP_MIN_ID    = 40001; // 装备
+    EQUIP_MAX_ID    = 49999;
+
+    FACE_MIN_ID = 80001;        //表情
+	FACE_MAX_ID = 89999;        //
+
+	SUIT_MIN_ID = 90001;		//套装
+	SUIT_MAX_ID = 91999;        //
+
+	CAR_MIN_ID = 92001;	        //汽车
+	CAR_MAX_ID = 92999;         //
+
+	FURNITURE_MIN_ID = 93001; 	//家具
+	FURNITURE_MAX_ID = 95999;
+
+    INTERACT_BASE_MIN_ID = 100000; // 交互系统基础动作id
+    INTERACT_BASE_MAX_ID = 100999;
+
+    INTERACT_EX_MIN_ID = 101000;   // 交互系统扩展动作id
+    INTERACT_EX_MAX_ID = 104999;
+}
+
+// 物品类型
+enum E_GOODS_TYPE
+{
+    EGT_INVALID         = -1;
+
+    EGT_GOLD            = 1;    // 金币
+    EGT_ENDURANCE       = 2;    // 体力
+    EGT_DIAMOND_COIN    = 3;    // 钻石
+    EGT_EXP             = 4;    // 经验
+    EGT_SKILL_POINT     = 5;    // 技能点
+    EGT_ARENASCROE      = 6;    // 竞技场积分
+    EGT_ARENA_COUNT     = 7;    // 竞技场次数
+    EGT_SWORD_COUNT     = 8;    // 石中剑次数
+    EGT_VIP_EXP         = 9;    // VIP 经验
+
+
+    EGT_CARD            = 50;    // 卡牌
+
+    EGT_MATERIAL        = 100;  // 材料
+    EGT_PACKAGE         = 101;  // 礼包
+    EGT_PROP            = 102;  // 道具
+    EGT_EQUIP           = 103;  // 装备
+    EGT_PET             = 104;  // 宠物
+    EGT_FACE            = 105;  // 表情
+    EGT_SUIT            = 106;  // 套装
+    EGT_CAR             = 107;  // 汽车
+    EGT_FURNITURE       = 108;  // 家俱
+    EGT_INTERACT        = 109;  // 交互动作
+}
+
+// 装备部位类型
+enum E_EQUIP_SITE_TYPE
+{
+    EEST_HELMET     = 1; // 头盔
+    EEST_CLOTHES    = 2; // 衣服
+    EEST_SHOES      = 3; // 鞋子
+    EEST_ORNAMENTS  = 4; // 饰品
+    EEST_WEAPONS    = 5; // 武器
+    EEST_VEHICLE    = 6; // 载具
+}
+
+// 外观显示改变标识,前6个与E_EQUIP_SITE_TYPE必须一致
+enum E_ROLE_SHOW_SITE
+{
+    ERSS_HELMET     = 1; // 头盔
+    ERSS_CLOTHES    = 2; // 衣服
+    ERSS_SHOES      = 3; // 鞋子
+    ERSS_ORNAMENTS  = 4; // 饰品
+    ERSS_WEAPONS    = 5; // 武器
+    ERSS_VEHICLE    = 6; // 载具
+
+    ERSS_FACE       = 10; // 表情
+    ERSS_SUIT       = 11; // 套装
+}
+
+
+
+// 技能类型
+enum E_SKILL_TYPE
+{
+    EST_INVALID_SKILL   = -1;   // 无效技能
+    EST_TALENT_SKILL    = 1;    // 天赋技能
+    EST_BOOK_SKILL      = 2;    // 秘籍技能
+    EST_SUIT_SKILL      = 3;    // 武装技能
+}
+
+
+
+// 道具类型
+enum E_ITEM_TYPE
+{
+    ETT_INVALID        = -1;
+    ETT_PET_EGG             = 5;
+    ETT_TEST_WEAR_LIST_TYPE = 100;
+}
+
+// 场景类型
+enum E_SCENE_TYPE
+{
+    EST_CITY        = 1;  // 主城
+    EST_CYKJ        = 2;  // 次元空间
+    EST_BATHHOUSE   = 3;  // 澡堂
+    EST_MXFB        = 4;  // 冒险副本
+    EST_MGAME       = 5;  // 小游戏
+    EST_ARENA       = 6;  // 水管竞技
+    EST_PARK        = 7;  // 停车场
+    EST_DANMUKA     = 8;  // 弹幕广场
+    EST_WILD        = 9;  // 野处(目前是归于主城,没有独立出来)
+}
+
+// 小游戏场景类型
+enum E_MINIGAME_TYPE
+{
+    EMT_DOWNSTAIRS_MAN   = 1;  // 是男人下100层
+    EMT_WALKON_SWORD     = 2;  // 跳楼侠
+    EMT_FIGHT_TOWN       = 3;  // 大战三侠镇
+    EMT_GREEDY_SNAKE     = 4;  // 贪吃蛇
+}
+
+// 商店id
+enum E_COMMON_SHOP_ID
+{
+    ECSI_SKILL_BOOK     = 100;  // 技能书商店
+    ECSI_MINI_GAME      = 101;  // 小游戏商店
+    ECSI_PARK_SHOP      = 102;  // 抢车位
+    ECSI_ARENA_SHOP     = 103;  // 竞技场商店
+    ECSI_BLACK_SHOP     = 104;  // 黑市商店
+    ECSI_DiAMOND_SHOP   = 105;  // 棒棒糖商店
+    ECSI_NIUDAN_SHOP    = 106;  // 扭蛋机商店
+}
+
+enum E_FUNCTION_OPEN_ID
+{
+    EFOI_RISK				= 1    ;         //   冒险-副本
+    EFOI_TALENT				= 2    ;         //   天赋技能
+    EFOI_FRIEND				= 3    ;         //   好友
+    EFOI_CHAT				= 4    ;         //   聊天
+    EFOI_MINIGAME			= 5    ;	     //   小游戏厅
+    EFOI_MINIGAME_SHOP		= 6    ;		 //   小游戏商店
+    EFOI_CLOTHES_FACE		= 7    ;		 //   衣柜-表情
+    EFOI_FACE_SHOP			= 8    ;	     //   表情商店
+    EFOI_ARENA				= 9    ;         //   竞技场
+    EFOI_LANGYA				= 10    ;        //   琅琊榜
+    EFOI_BATHHOUSE			= 11    ;	     //   澡堂
+    EFOI_DAILY_TASK			= 12    ;	     //   日常任务
+    EFOI_CALIBURN			= 13    ;	     //   石中剑
+    EFOI_CLOTHES_SUIT		= 14    ;		 //   衣柜-套装
+    EFOI_SUIT_SHOP			= 15    ;	     //   套装商店
+    EFOI_SKILL_BOOK_SHOP	= 16    ;		 //   技能书商店
+    EFOI_GONGFU             = 17    ;        //   秘籍技能
+    EFOI_CLOTHES            = 18    ;        //   衣柜
+    EFOI_CYKJ               = 19    ;        //   二次园空间
+}
+
+// 网络消息_返回结果
+enum E_MSG_RET_CODE
+{
+    Msg_Ret_Code_Unknow                                 = 0x00000000;   // 未知错误
+    Msg_Ret_Code_OK                                     = 0x00000001;   // OK
+    Msg_Ret_Code_Username_To_Short                      = 0x00000002;   // 用户名过短
+    Msg_Ret_Code_Username_To_Long                       = 0x00000003;   // 用户名过长
+                                                        
+    Msg_Ret_Code_Username_Exist                         = 0x00000004;   // 用户名已存在
+    Msg_Ret_Code_Login_Failed                           = 0x00000005;   // 登录失败
+                                                        
+    Msg_Ret_Code_Nickname_Exist                         = 0x00000006;   // 昵称已存在
+    Msg_Ret_Code_CreateRole_Failed                      = 0x00000007;   // 创建角色失败
+                                                        
+    Msg_Ret_Code_EnterScene_Failed                      = 0x00000008;   // 进入场景失败
+                                                        
+    Msg_Ret_Code_Use_Item_Ok                            = 0x00000009;   // 使用道具成功
+    Msg_Ret_Code_Use_Item_Failed                        = 0x0000000A;   // 使用道具失败
+                                                        
+    Msg_Ret_Code_Dress_Equip_Failed                     = 0x0000000C;   // 穿装备失败
+                                                        
+    Msg_Ret_Code_TakeOff_Equip_Failed                   = 0x0000000E;   // 脱装备失败
+
+
+    Msg_Ret_Code_BuySuitInShop_Ok                       = 0x00000010;   // 购买套装成功
+    Msg_Ret_Code_BuySuitInShop_Exist_Permanent_Failed   = 0x00000011;   // 已经拥有永久的
+    Msg_Ret_Code_BuySuitInShop_Exist_Failed             = 0x00000012;   // 已经拥有
+    Msg_Ret_Code_BuySuitInShop_Unknow_Failed            = 0x00000014;   // 未知失败
+
+
+    Msg_Ret_Code_BuySuitInShop_Add_Suit_Failed          = 0x00000022;   // 购买套装时,添加套装失败
+    Msg_Ret_Code_BuySuitInShop_Shop_TimeOut             = 0x00000023;   // 购买套装时,商品超时,请重新请求
+    Msg_Ret_Code_DressSuit_Failed                       = 0x00000024;   // 穿套装失败
+    Msg_Ret_Code_TakeOffSuit_Failed                     = 0x00000025;   // 脱套装失败
+
+    Msg_Ret_Code_BuyFaceInShop_Ok                       = 0x00000040;   // 购买表情成功
+    Msg_Ret_Code_BuyFaceInShop_Exist_Permanent_Failed   = 0x00000041;   // 已经拥有永久的
+    Msg_Ret_Code_BuyFaceInShop_Exist_Failed             = 0x00000042;   // 已经拥有
+    Msg_Ret_Code_BuyFaceInShop_Unknow_Failed            = 0x00000044;   // 未知失败
+    Msg_Ret_Code_Face_Unconfirm_Failed                  = 0x00000045;   // 自定义表情正在审核请耐心等待
+    Msg_Ret_Code_Face_VipLevel_Invalid_Failed           = 0x00000046;   // vip等级达不到
+
+
+    Msg_Ret_Code_BuyFaceInShop_Add_Face_Failed          = 0x00000052;   // 购买表情时,添加套装失败
+    Msg_Ret_Code_BuyFaceInShop_Shop_TimeOut             = 0x00000053;   // 购买表情时,商品超时,请重新请求
+    Msg_Ret_Code_DressFace_Failed                       = 0x00000054;   // 穿表情失败
+    Msg_Ret_Code_TakeOffFace_Failed                     = 0x00000055;   // 脱表情失败
+    Msg_Ret_Code_ManualUpdateFace_Failed                = 0x00000056;   // 手动刷新表情失败
+    Msg_Ret_Code_ManualUpdateFace_Count_Limit           = 0x00000057;   // 手动刷新表情次数限制
+                                                        
+    Msg_Ret_Code_ReadyEnterSceneFailed                  = 0x00000100;   // 准备进入场景失败
+    Msg_Ret_Code_ReadyEnterRisk_Failed                  = 0x00000110;   // 准备冒险失败
+    Msg_Ret_Code_ChapterBoxIsOpened                     = 0x00000111;   // 章节宝箱已经开启过了
+    Msg_Ret_Code_NotPassChapter                         = 0x00000112;   // 章节未通关
+    Msg_Ret_Code_Passwd_Error                           = 0x00000113;   // 密码错误
+    Msg_Ret_Code_Username_Not_Exist                     = 0x00000114;   // 用户名不存在
+    Msg_Ret_Code_Username_Is_Invalid                    = 0x00000115;   // 用户名不合法
+    Msg_Ret_Code_Forbidden_Login_Forever                = 0x00000116;   // 被永久封号
+    Msg_Ret_Code_Forbidden_Login_Temporary              = 0x00000117;   // 被暂时封号
+    Msg_Ret_Code_Forbidden_Speak_Forever                = 0x00000118;   // 被永久禁言
+    Msg_Ret_Code_Forbidden_Speak_Temporary              = 0x00000119;   // 被暂时禁言                                        
+                                                     
+
+    Msg_Ret_Code_Not_Enough_Money                       = 0x00010000;   // 金币不足
+    Msg_Ret_Code_Not_Enough_Diamond                     = 0x00010001;   // 棒棒糖不足
+    Msg_Ret_Code_Not_Enough_Stimina                     = 0x00010002;   // 体力不足
+    Msg_Ret_Code_Not_Enough_Exp                         = 0x00010003;   // 经验不足
+    Msg_Ret_Code_Not_Enough_Material                    = 0x00010004;   // 材料不足
+    Msg_Ret_Code_Not_Exist_Prop                         = 0x00010005;   // 道具不存在
+    Msg_Ret_Code_Not_Exist_Equip                        = 0x00010006;   // 装备不存在
+    Msg_Ret_Code_Cannot_Use_Item                        = 0x00010007;   // 材料不可用
+    Msg_Ret_Code_Not_Exist_Face                         = 0x00010008;   // 表情不存在
+    Msg_Ret_Code_Not_Sell_Fail                          = 0x00010009;   // 不允许出售
+    Msg_Ret_Code_Not_Enough_Arena_Score                 = 0x00010010;   // 竞技场积分不足
+    Msg_Ret_Code_Not_Enough_Furniture                   = 0x00010011;   // 家俱个数不足
+                                                        
+    Msg_Ret_Code_No_Chapter                             = 0x00020001;   // 章节不存在
+    Msg_Ret_Code_No_Level                               = 0x00020002;   // 关卡不存在
+    Msg_Ret_Code_Need_Level                             = 0x00020003;   // 条件等级不够
+    Msg_Ret_Code_Need_PassDup                           = 0x00020004;   // 条件关卡未通关
+    Msg_Ret_Code_Need_More_Fight_Count                  = 0x00020005;   // 需要更多挑战次数
+
+    Msg_Ret_Code_Need_KillAllMonster                    = 0x00020101;   // 通关条件(需要杀死所有怪物)
+    Msg_Ret_Code_Need_KillTheMonster                    = 0x00020102;   // 通关条件(需要杀死指定怪物)
+                                                        
+    Msg_Ret_Code_FindFriend_NoExist                     = 0x00021001;   // 查无此人
+    Msg_Ret_Code_AddFriend_NoExist                      = 0x00021002;   // 要添加的好友不存在
+    Msg_Ret_Code_AddFriend_IsFriend                     = 0x00021003;   // 已经是好友
+    Msg_Ret_Code_AddFriend_Wait                         = 0x00021004;   // 等待对方确认
+    Msg_Ret_Code_AddFriend_SelfFriendsFull              = 0x00021005;   // 自己好友已达上限
+    Msg_Ret_Code_AddFriend_TarFriendsFull               = 0x00021006;   // 对方好友已达上限
+    Msg_Ret_Code_AddFriend_RequestQueueFull             = 0x00021007;   // 对方申请队列已满
+    Msg_Ret_Code_AddFriend_TarRefuse                    = 0x00021008;   // 对方拒绝添加好友
+    Msg_Ret_Code_Remove_Friend_NoExist                  = 0x00021009;   // 要删除的好友不存在
+    Msg_Ret_Code_AddFriend_IsOffLine                    = 0x00021010;   // 要添加的玩家不在线
+    Msg_Ret_Code_AddFriend_AlreadyRequest               = 0x00021011;   // 已申请待对方确认
+    Msg_Ret_Code_FriendFight_IsNotFriend                = 0x00021012;   // 好友不存在
+                               
+                                                        
+                                                        
+                                                        
+    Msg_Ret_Code_Skill_Study_Failed                     = 0x00022001;   // 请求学习技能失败
+    Msg_Ret_Code_Skill_LevelUp_Failed                   = 0x00022002;   // 请求升级技能失败
+    Msg_Ret_Code_Skill_DressTalent_Failed               = 0x00022003;   // 请求装备天赋技能失败
+    Msg_Ret_Code_Skill_TakeOffTalent_Failed             = 0x00022004;   // 请求脱下天赋技能失败
+    Msg_Ret_Code_Skill_DressBook_Failed                 = 0x00022005;   // 请求装备秘籍技能失败
+    Msg_Ret_Code_Skill_TakeOffBook_Failed               = 0x00022006;   // 请求脱下秘籍技能失败
+    Msg_Ret_Code_Skill_Site_Invalid_Failed              = 0x00022007;   // 技能坑位不合法,已开放过
+    Msg_Ret_Code_Skill_Site_Vip_Not_Reached             = 0x00022008;   // 技能坑位vip未达到
+                                                        
+                                                        
+    Msg_Ret_Code_Dress_Card_PVE_Failed                  = 0x00023001;   // 请求穿PVE卡牌失败
+    Msg_Ret_Code_TakeOff_Card_PVE_Failed                = 0x00023002;   // 请求脱PVE卡牌失败
+    Msg_Ret_Code_Dress_Card_PVP_Failed                  = 0x00023003;   // 请求穿PVP卡牌失败
+    Msg_Ret_Code_TakeOff_Card_PVP_Failed                = 0x00023004;   // 请求脱PVP卡牌失败
+                                                        
+    Msg_Ret_Code_GoMiniGame_Failed                      = 0x00024001;   // 进入小游戏失败
+                                                        
+                                                        
+    Msg_Ret_Code_ArenaFight_Failed                      = 0x00025001;   // 请求竞技挑战失败
+    Msg_Ret_Code_ArenaFight_Num_Failed                  = 0x00025002;   // 请求竞技次数不足
+    Msg_Ret_Code_ArenaFight_Cd_Failed                   = 0x00025003;    // 战败cd中
+    Msg_Ret_Code_Role_NoExist                           = 0x00025004;   // 查无此人,与好友区别
+
+    Msg_Ret_Code_ArenaFight_Verify_Fail                 = 0x00025005;    // 战斗校验失败
+
+    Msg_Ret_Code_Someone_Fight_With_You                 = 0x00025006;   // 有人正在与你竞技,匹配失败
+                                                        
+                                                        
+                                                        
+    Msg_Ret_Code_Sword_Failed                           = 0x00026001;   // 石中剑拔剑失败
+    Msg_Ret_Code_Sword_Num_Failed                       = 0x00026002;   // 石中剑次数不足
+                                                        
+                                                        
+    Msg_Ret_Code_Daily_Task_Condtion_Failed             = 0x00027001;   // 日常任务条件不足
+                                                        
+    Msg_Ret_Code_Not_Enough_Buy_Count                   = 0x00028001;   // 购买次数已达上限(适用各种购买条件)
+                                                        
+    Msg_Ret_Code_RequestShop_TimeOut                    = 0x00029001;   // 商店请求超时
+    Msg_Ret_Code_SkillBookShop_Not_Open_Time            = 0x00029002;   // 商店未到开放时间
+    Msg_Ret_Code_Request_Goods_Is_Not_Exist             = 0x00029003;   // 请求商品不存在
+    Msg_Ret_Code_Request_Goods_Is_Already_Sold          = 0x00029004;   // 请求商品已售出
+    Msg_Ret_Code_ForceRefresh_Num_Not_Enough            = 0x00029005;   // 刷新商店次数不足
+                                                        
+    Msg_Ret_Code_Player_Was_OnLine                      = 0x00030001;   // 玩家已在线
+                                                        
+    Msg_Ret_Code_Mail_Not_Exist                         = 0x00040001;   // 邮件不存在
+                                                        
+    // 签到                                             
+    Msg_Ret_Code_Signin_Failure                         = 0x00050100;   // 签到失败
+    Msg_Ret_Code_Signin_Repeated                        = 0x00050101;   // 重复签到
+    Msg_Ret_Code_Signin_Additional_Not_Enough           = 0x00050102;   // 补签次数不足
+                                                        
+    // 七天登录                                          
+    Msg_Ret_Code_GetCondition_Not_Enough                = 0x00060100;   // 领取条件不满足
+                                                        
+    Msg_Ret_Code_FunctionOpen_Condition_Fail            = 0x00060200;   // 功能开放条件不足
+                                                        
+    Msg_Ret_Code_Dress_Equip_Level_Failed               = 0x00060210;   // 穿戴装备等级条件不够
+                                                        
+    Msg_Ret_Code_Data_Failed                            = 0x00060220;   // 数据格式错
+                                                        
+    Msg_Ret_Code_Equip_Is_Top_Level                     = 0x00060225;   // 装备已达到最高星级
+                                                        
+    Msg_Ret_Code_Fix_Bag_Space_Full                     = 0x00060230;   // 装备修复包裹满了，目前策划限定为一个空格
+    Msg_Ret_Code_Cannot_Fix_Equip                       = 0x00060231;   // 装备无法修理（如耐久是满的，或已经满了，或正在被修理）
+    Msg_Ret_Code_Equip_Is_Fixing                        = 0x00060232;   // 装备正在修理中
+    Msg_Ret_Code_Equip_Endurance_Is_Zero                = 0x00060233;   // 装备耐久为0（描述策划来定）
+    Msg_Ret_Code_Equip_Cannot_Resolved                  = 0x00060234;   // 装备不可分解
+                                                        
+    Msg_Ret_Code_AcceptTask_Failed                      = 0x00070001;   // 接受任务失败
+    Msg_Ret_Code_AcceptTask_Num_Upper_Limit             = 0x00070011;   // 达到可接受任务数上限
+    Msg_Ret_Code_Task_Not_Exist                         = 0x00070012;   // 任务不存在
+    Msg_Ret_Code_CompleteTask_Failed                    = 0x00070020;   // 完成任务失败
+    Msg_Ret_Code_Task_Is_Complete_Failed                = 0x00070021;   // 任务已经完成(估计只会用在任务放弃功能上)
+    Msg_Ret_Code_Task_Matrial_Missed_Failed             = 0x00070022;   // 任务材料缺失(估计只会用在任务放弃功能上)
+    Msg_Ret_Code_Task_Not_Permit_GiveUp_Failed          = 0x00070023;   // 任务不可放弃
+                                                        
+    Msg_Ret_Code_Exchange_Num_Failed                    = 0x00070030;   // 兑换次数不足
+                                                        
+    Msg_Ret_Code_CdTime_Failed                          = 0x00070040;   // 处于冷却时间
+                                                        
+    Msg_Ret_Code_Please_More_Try                        = 0x00070050;   // （场景彩蛋未触发效果）请再次尝试
+                                                        
+    Msg_Ret_Code_Distance_failed                        = 0x00070060;   // 距离不够（交互动作）
+                                                        
+    Msg_Ret_Code_Got_By_Other                           = 0x00070070;   // 被其它玩家抢走了
+                                                        
+    Msg_Ret_RoomCreate_Failed                           = 0x00080010;   // 创建房间失败
+    Msg_Ret_RoomJoin_Failed                             = 0x00080020;   // 进入房间失败
+    Msg_Ret_RoomFastJoin_Failed                         = 0x00080030;   // 快速进入房间失败
+    Msg_Ret_RoomLeave_Failed                            = 0x00080040;   // 离开房间失败
+    Msg_Ret_RoomReady_Failed                            = 0x00080050;   // 准备失败
+    Msg_Ret_MasterKickPlayer_Failed                     = 0x00080060;   // 房主踢人失败
+                                                        
+    Msg_Ret_Car_Not_Exist_Failed                        = 0x00090000;   // 车不存在
+    Msg_Ret_Code_Cannot_Fix_Car                         = 0x00090010;   // 车无法修理（是否考虑与装备的修理共用一套, 如均叫物品无法修理）
+    Msg_Ret_Code_Car_Space_Full                         = 0x00090013;   // 车位空间不够（是否考虑与装备的修理共用一套, 如均叫物品无法修理）
+    Msg_Ret_Code_Car_Not_Broken                         = 0x00090015;   // 车未损坏（是否考虑与装备的修理共用一套, 如均叫物品无法修理）
+    Msg_Ret_Code_Car_Not_Good                           = 0x00090019;   // 车已损坏（是否考虑与装备的修理共用一套, 如均叫物品无法修理）
+    Msg_Ret_Code_Carport_Is_Protect                     = 0x00090021;   // 车位处于保护状态
+    Msg_Ret_Code_Action_Count_Not_Enough                = 0x00090023;   // 点赞,恶搞次数不足
+    Msg_Ret_Code_Get_Car_Too_Early                      = 0x00090025;   // 取车时间太早啦(啥意思请问老牟子)
+    Msg_Ret_Code_Park_Car_Too_Much                      = 0x00090027;   // 停车数量超限
+    Msg_Ret_Code_Out_Player_Num_Range                   = 0x00090029;   // 超出场景人数上限
+    Msg_Ret_Code_Must_Go_Special_Line                   = 0x00090031;   // 必须到指定线路操作
+    Msg_Ret_Code_System_Collect_Car                     = 0x00090033;   // 系统已自动收车
+    Msg_Ret_Code_Carport_Drink_Pnvu                     = 0x00090034;   // 车被保护,处于无敌状态
+                                                        
+                                                        
+    Msg_Ret_Code_SceneIndex_Is_Same_Fail                = 0x00090036;   // 目的分线号与当前分线号相同,不允许切换分线
+                                                        
+    Msg_Ret_Code_Hangup_Too_Fast_Fail                   = 0x00090100;   // 挂机操作太快
+    Msg_Ret_Code_Hangup_Time_Run_Out                    = 0x00090101;   // 挂机时间已用完
+                                                        
+                                                        
+    Msg_Ret_Code_Interact_Not_Exist_Fail                = 0x00090110;   // 交互动作不存在
+    Msg_Ret_Code_Interact_Was_Exist_Fail                = 0x00090111;   // 交互动作已存在
+    Msg_Ret_Code_Interact_Use_Count_Fail                = 0x00090115;   // 交互动作使用次数不足
+    Msg_Ret_Code_Interact_Reward_Got_Fail               = 0x00090116;   // 交互动作图鉴奖励已领取
+    Msg_Ret_Code_Interact_Energy_Count_Fail             = 0x00090117;   // 交互动作能量不足
+                                                        
+    Msg_Ret_Code_quality_Not_Same_Fail                  = 0x00090120;   // 待合成品质不一样
+    Msg_Ret_Code_quality_Top_Level_Fail                 = 0x00090121;   // 待合成品质已经是最高
+    Msg_Ret_Code_Compose_Rolelevel_Fail                 = 0x00090122;   // 合成条件之玩家等级不足
+                                                        
+    Msg_Ret_Code_Not_In_Rank_Fail                       = 0x00090132;   // 玩家不在榜上
+                                                        
+    Msg_Ret_Code_NpcInteract_Wait_And_Wait              = 0x00090140;   // npc交互请等一等
+                                                        
+    Msg_Ret_Code_Pet_Not_Exist                          = 0x00090200;   // 宠物不存在
+    Msg_Ret_Code_Pet_Level_Max_Limit_Fail               = 0x00090201;   // 宠物等级达到当前所允许的最大值
+    Msg_Ret_Code_Pet_Need_Evolve_Fail                   = 0x00090202;   // 宠物需要进化
+    Msg_Ret_Code_Pet_Attr_Is_Top_Fail                   = 0x00090203;   // 宠物属性已达上限(包括等级上限,三围上限)
+    Msg_Ret_Code_Pet_Was_Nab_Fail                       = 0x00090204;   // 宠物已经被抓完了
+    Msg_Ret_Code_Pet_Egg_Get_Nothing                    = 0x00090205;   // 宠物开蛋失败
+    Msg_Ret_Code_Set_Fight_Pet_Invalid                  = 0x00090206;   // 宠物重复出战
+    Msg_Ret_Code_Pet_Level_Reach_Role_Level             = 0x00090207;   // 宠物等级不能玩家等级
+
+    Msg_Ret_Code_Size_Is_Max_Size                       = 0x00090300;   // (房间或仓库)空间已扩充到最大空间
+    Msg_Ret_Code_Did_Not_Open_Home                      = 0x00090301;   // 该玩家未开通过自己的家园
+    Msg_Ret_Code_Home_Level_Not_Enough                  = 0x00090302;   // 玩家家园等级不够
+
+    Msg_Ret_Code_Server_Is_Full                         = 0x00090400;   // 服务器爆满
+    Msg_Ret_Code_Friend_Fight_Num_Not_Enough            = 0x00090501;   // 好友切磋次数不足
+
+    Msg_Ret_Code_Archieve_Not_Reached                   = 0x00090601;   // 成就未达成
+
+    Msg_Ret_Code_Not_Enough_Guadratic_Count             = 0x00090701;   // 二次园次数不足
+    Msg_Ret_Code_Not_Enough_Interact                    = 0x00090702;   // 没有装备足够的交互动作(二次园战斗需要玩家装备主动交互动作)
+    Msg_Ret_Code_Not_Guadratic_Enter_Time               = 0x00090703;   // 二次园没到开放时间
+
+    Msg_Ret_Code_Redeem_Not_Exist                       = 0x00090801;   // 兑换码不存在
+    Msg_Ret_Code_Redeem_Expire                          = 0x00090802;   // 兑换码不在有效期
+    Msg_Ret_Code_Redeem_Aleady_Get                      = 0x00090803;   // 兑换码奖励已领取过
+    Msg_Ret_Code_Redeem_ServerId_Error                  = 0x00090804;   // 请到指定服务器领取
+
+    Msg_Ret_Code_Stone_Not_Exist                        = 0x00090820;   // 要兑换的石头不存在
+
+
+    Msg_Ret_Code_First_Monery_Not_OK                    = 0x00090900;   // 首充奖励不可领取
+    Msg_Ret_Code_First_Monery_Aleady_Get                = 0x00090901;   // 首充奖励已领取
+
+    Msg_Ret_Code_Kick                                   = 0x00091001;   // 服务器踢人,断开连接
+    Msg_Ret_Code_Login_Again                            = 0x00091002;   // 玩家顶号,账号在其他设备登录
+
+    Msg_Ret_Code_Equip_Bag_Is_Full                      = 0x00092000;   // 装备背包已满
+    Msg_Ret_Code_Equip_Bag_Reach_Uplimit                = 0x00092001;   // 装备达到上限
+    Msg_Ret_Code_Equip_Bag_Full_Insert_Mail             = 0x00092002;   // 装备包裹满请清空包裹后查看从邮件中领取
+
+    Msg_Ret_Code_Activity_Not_Exist                     = 0x00093000;   // 活动不存在
+    Msg_Ret_Code_Activity_Reward_Get_Count_Limit        = 0x00093001;   // 活动奖励次数受限
+    Msg_Ret_Code_Activity_Aim_Not_Reach                 = 0x00093002;   // 活动奖励目标未达成
+
+
+    Msg_Ret_Code_Piano_Was_Playing                      = 0x00093100;   // 钢琴正在被弹
+    Msg_Ret_Code_Verify_PVE_Invalid_Data                = 0x00094100;   // PVE战斗校验输入数据非法
+    Msg_Ret_Code_Verify_PVE_Error                       = 0x00094101;   // PVE校验Lua运行出错
+    Msg_Ret_Code_Verify_PVE_Failed                      = 0x00094102;   // PVE校验失败
+    Msg_Ret_Code_Verify_PVE_Box_Failed                  = 0x00094103;   // PVE校验掉落宝箱失败
+    Msg_Ret_Code_Verify_PVE_Skill_Failed                = 0x00094104;   // PVE校验使用技能失败
+    Msg_Ret_Code_Verify_PVE_KillMonster_Failed          = 0x00094105;   // PVE校验杀死的怪物失败
+
+
+    Msg_Ret_Code_Not_Exist_Make_Id                      = 0x00095100;   // 装备制造id不存在
+
+
+
+}
+
+// 聊天类型
+enum E_CHAT_TYPE
+{
+    ECT_SCENE   = 0;    // 场景频道
+    ECT_GROUP   = 1;    // 群组
+    ECT_O2O     = 2;    // 点对点
+    ECT_WORLD   = 3;    // 世界聊天
+}
+
+// 七天登录标识类型
+enum E_SEVEN_DAY_TYPE
+{
+    ESDT_UNBALE = 0;    // 不可领取状态
+    ESDT_ABLE   = 1;    // 可领取状态
+    ESDT_OK     = 2;    // 已领取状态
+}
+
+
+// 表情商店类型枚举
+enum FACE_SHOP_TYPE
+{
+    FST_NORMAL      =   1;
+    FST_DISCOUNT    =   2;
+}
+
+// 请求好友的操作类型(删除与添加)
+enum E_REQ_FRIEND_TYPE
+{
+    E_MNG_FRIEND_DEL = 0;
+    E_MNG_FRIEND_ADD = 1;
+}
+
+
+// 山神时间类型
+enum E_MountainGodEvent_TYPE
+{
+    EMGET_INVALID = 0;  // 无效。
+    EMGET_RIGHT_1 = 1;  // 真是不诚实的骚年啊，下次再见吧。
+    EMGET_RIGHT_2 = 2;  // 下次可不要再乱丢弃咯，这次就还给你吧，再见了骚年。
+
+    EMGET_LEFT_1 = 3;   // 你确定这是你的吗？这是我的传家宝好不好，太不诚实了，再见。
+    EMGET_LEFT_2 = 4;   // 骚年你真会开玩笑，拿走你自己的武器吧，可不要在乱丢咯。
+    EMGET_LEFT_3 = 5;   // 你可真幸运，还好是被我捡到了，其他人捡到的话可不会还给你。
+
+    EMGET_BOTH_1 = 6;   // 真是诚实的骚年啊，那就把你的武器还给你吧。
+    EMGET_BOTH_2 = 7;   // 真是诚实的骚年啊，那我就走了，再见吧。
+    EMGET_BOTH_3 = 8;   // 真是诚实骚年啊，那我右手的武器就给你吧。
+    EMGET_BOTH_4 = 9;   // 真是诚实的骚年啊，这2把武器就都给你吧。
+}
+
+// 山神事件中装备类型
+enum E_CALIBURN_SELECT_TYPE
+{
+    ECS_LEFT_HAND       = 1;
+    ECS_RIGHT_HAND      = 2;
+    ECS_BOTH_NOT        = 3;  // 两者都不是
+    ECS_FIRST_SELECT    = 4;
+}
+
+// 山神事件结果类型
+enum E_CALIBURN_RESULT_TYPE
+{
+    ECR_LEFT_HAND       = 1;
+    ECR_RIGHT_HAND      = 2;
+    ECR_BOTH            = 3;  
+    ECR_FIRST_SELECT    = 4;
+    ECR_BOTH_NOT        = 5;
+}
+// 日常任务子类型
+enum E_DAILY_TASK_TYPE
+{
+    EDTT_TYPE_1 = 1;  // 战胜N次副本
+
+    EDTT_TYPE_2 = 2;  // 进入N次副本
+
+    EDTT_TYPE_3 = 3;  // 消耗N点体力
+
+    EDTT_TYPE_4 = 4;  // 进行N次Boss副本
+
+    EDTT_TYPE_5 = 5;  // 战胜N次熊猫副本
+
+    EDTT_TYPE_6 = 6;  // 使用N次主动交互
+
+    EDTT_TYPE_7 = 7;  // 主城使用N次主动交互
+
+    EDTT_TYPE_8 = 8;  // 澡堂使用N次主动交互
+
+    EDTT_TYPE_9 = 9;  // 水管竞技N次
+
+    EDTT_TYPE_10 = 10;  // 水管竞技胜利N次
+
+    EDTT_TYPE_11 = 11;  // 玩N次小游戏
+
+    EDTT_TYPE_12 = 12;  // 玩N次跳楼侠
+
+    EDTT_TYPE_13 = 13;  // 玩N次无下限
+
+    EDTT_TYPE_14 = 14;  // 玩跳楼侠达到N分
+
+    EDTT_TYPE_15 = 15;  // 玩无下限达到N分
+
+    EDTT_TYPE_16 = 16;  // 升级N次技能
+
+    EDTT_TYPE_17 = 17;  // 泡澡N次(进澡堂N次)
+
+    EDTT_TYPE_18 = 18;  // 拔剑N次
+
+    EDTT_TYPE_19 = 19;  // 拔剑成功N次
+
+    EDTT_TYPE_20 = 20;  // 玩大战三侠镇N次
+
+    EDTT_TYPE_21 = 21;  // 玩大战三侠镇达到N分
+
+    EDTT_TYPE_22 = 22;  // 进二次园达到N次
+    EDTT_TYPE_23 = 23;  // 使用点金手
+    EDTT_TYPE_24 = 24;  // 购买体力N次
+    EDTT_TYPE_25 = 25;  // 发弹幕N次
+    EDTT_TYPE_26 = 26;  // 抽扭蛋机
+    EDTT_TYPE_27 = 27;  // 合成载具
+    EDTT_TYPE_28 = 28;  // 装备升星N次
+    EDTT_TYPE_29 = 29;  // 购买技能书N次
+    EDTT_TYPE_30 = 30;  // 兑换氪星石N次
+    EDTT_TYPE_31 = 31;  // 使用老司机N次
+
+}
+
+// 日常活跃度类型
+enum E_DAILY_ACTIVITY_LEVEL
+{
+   EDDAT_LEVEL_1 = 1;    // 活跃度1级
+   EDDAT_LEVEL_2 = 2;    // 活跃度2级
+   EDDAT_LEVEL_3 = 3;    // 活跃度3级
+   EDDAT_LEVEL_4 = 4;    // 活跃度4级
+   EDDAT_LEVEL_5 = 5;    // 活跃度5级
+}
+
+// 套装商店id
+enum E_SUIT_FACE_SHOP_ID
+{
+   ESFSI_FACE = 1; // 表情商店
+   ESFSI_SUIT = 2; // 套装商店
+}
+
+// 家园
+// 装饰类型
+enum E_ROOM_DECORATE_TYPE
+{
+    ERDT_FLOOR_TILE     = 1; // 地板
+    ERDT_FLOOR_DECORATE = 2; // 装饰
+    ERDT_WALL_PAPER     = 3; // 墙纸
+    ERDT_WALL_DECORATE  = 4; // 墙饰
+}
+// 方向
+enum E_ROOM_DECORATE_DIRECTION
+{
+    ERDD_RIGHT = 1; // 朝右
+    ERDD_LEFT  = 2; // 朝左
+    ERDD_UP    = 3; // 朝下
+    ERDD_DOWN  = 4; // 朝上
+}
+
+
+// 任务类型
+enum MAIN_TASK_TYPE
+{
+    EMTT_MONSTER_NUM           = 1;   // 击败数量的怪物（没有防作弊）
+    EMTT_INTERACT_NUM          = 2;   // 使用某个交互动作的次数
+    EMTT_INTERACTED_NUM        = 3;   // 使用某个交互动作命中多少人（没有防作弊）
+    EMTT_PASS_RISK             = 4;   // 完成指定副本
+    EMTT_ONLINE_TIME_TOTAL     = 5;   // 在线累积游戏时长
+    EMTT_MINIGAME_SCORE        = 6;   // 某个小游戏最高达到多少分数
+    EMTT_TALK_NPC              = 7;   // 对话NPC,次数
+    EMTT_ARENA_KILL_LIST       = 8;   // 持剑穿人数增长一定数量
+    EMTT_MINIGAME_TIME         = 9;   // 玩某个小游戏一定次数
+    EMTT_SWORD_TIME            = 10;  // 在石中剑系统里拔剑一定次数
+    EMTT_SWORD_SUCCESS_TIME    = 11;  // 在石中剑系统里拔剑成功一定次数
+    EMTT_ARENA_TIME            = 12;  // 在水管竞技场里战斗一定次数
+    EMTT_ARENA_SUCCESS_TIME    = 13;  // 在水管竞技场里战斗胜利一定次数
+    EMTT_EQUIP_STRENGTHEN      = 14;  // 在装备强化模块装备升星一定次数
+    EMTT_EQUIP_RESOLVE         = 15;  // 在装备强化模块分解装备一定次数
+    EMTT_AUTO_COMPLETE         = 16;  // 接受任务直接完成
+    EMTT_SEND_DANMAKU_TIME     = 17;  // 在弹幕广场发弹幕一定数量
+    EMTT_EQUIP_RESOLVE_NUM     = 18;  // 在装备强化模块分解装备一定件数
+    EMTT_EASTER_EGG_TOUCH_TIME = 19;  // 和某彩蛋交互X次
+    EMTT_DRESS_SKILL           = 20;  // 装备某技能
+    EMTT_BUY_FACE_TIME         = 21;  // 购买表情次数
+    EMTT_USE_FAST_TRANSFER     = 22;  // 使用X次老司机功能
+    EMTT_USE_ITEM_TIME         = 23;  // 使用某种物品X次
+    EMTT_BATH_INTERACT_TIME    = 24;  // 澡堂交互X次
+    EMTT_COST_SOME_ITEM_NUM    = 25;  // 消耗某种物品数量
+    EMTT_SAVE_MONERY_ONCE      = 26;  // 单次充值达到金额
+    EMTT_MAKE_FRIENDS_NUM      = 27;  // 拥有好友数量
+    EMTT_REPAIR_EQUIP_NUM      = 28;  // 修理装备x次
+    EMTT_PLAY_FACILITY_NUM     = 29;  // 玩游乐设施x次
+    EMTT_SHOPPING_TIME_IN_SHOP = 30;  // 在指定商店购买x次
+    EMTT_COLLECT_SOME_ITEMS    = 31;  // 收集X个某道具
+    EMTT_HISTORY_SAVE_MONERY   = 32;  // 历史充值达到金额(包括当前)
+    EMTT_ENTER_SCENE           = 33;  // 到达某个场景
+    EMTT_LEVEL_REACH           = 34;  // 等级达到
+    EMTT_FIGHT_VALUE_REACH     = 35;  // 战斗力达到
+    EMTT_PLAY_NIUDAN           = 36;  // 抽扭蛋一定次数
+    EMTT_EQUIP_MAKE            = 37;  // 打造指定部位的装备一定数量    部位ID（-1任意部位）    数量
+
+    EMTT_SWORD_GOD_TIME     = 999;  // 在石中剑系统里拔剑遇到山神次数, 策划没加,这里保留,避免哪天策划想要
+};
+
+//  抢车位定义
+enum E_PARK_LOT_STATUS
+{
+    EPLS_NO_PARK = 0; // 0:无人停车
+    EPLS_PARKED  = 1; // 1,已停车
+}
+
+enum E_CAR_STATUS
+{
+    ECS_NORMAL       = 1; // 正常
+    ECS_PARK         = 2; // 停车
+    ECS_REPAIR       = 3; // 修理
+}
+
+
+enum E_PARK_LOT_EVENT
+{
+    EPLE_POLICE       = 1; // 交警
+    EPLE_BEAR_KID     = 2; // 熊孩子
+    EPLE_BLACK_SOCITE = 3; // 黑涩会
+}
+
+enum E_ACT_CAR_TYPE
+{
+    EACT_DESTORY = 1;  // 恶搞
+    EACT_SAY_YES = 2;  // 点赞
+}
+
+enum E_PARK_EFFECT_TYPE
+{
+    EPET_RECOVERY_AT_ONCE = 1; // 立刻恢复装甲
+    EACT_EXTRA_ARMOR      = 2; // 额外装甲
+    EACT_OUTPUT_ADD       = 3; // 收益增加
+    EACT_DESTORY_FAIL     = 4; // 作恶失败
+    EACT_PROTECT          = 5; // 保护状态
+    EACT_ADD_BOTH         = 6; // 时间奖励增加，对方也增加奖励
+}
+
+enum E_PARK_TICK_EVENT
+{
+    EPTE_TIMEOUT = 1; // 停车时间到了
+    EPTE_BROKEN  = 2; // 被人破坏
+    EPTE_POLICE  = 3; // 警察发现了
+}
+
+enum E_PARK_REFRESH_EVENT
+{
+    EPRE_MOVE       = 1; // 需要同步,车需要被移到保管所
+    EPRE_DATA_SYNC  = 2; // 数据同步,不需要移动保管所
+    EPRE_NOTHING    = 3; // 数据无同步
+}
+
+
+// 多人游戏类型
+enum MG_TYPE
+{
+    MGT_TEST_GAME   = 1;
+};
+
+// 多人游戏房间类型
+enum MG_ROOM_TYPE
+{
+    MGRT_PUBLIC     = 1;
+    MGRT_PRIVATE    = 2;
+};
+
+// 弹幕挂机状态
+enum E_DANMAKU_HANGUP
+{
+    EDH_INIT    = 0; // 挂机初始状态(未挂机)
+    EDH_HANGING = 1; // 挂机中
+    EDH_STOP    = 2; // 挂机中止
+};
+
+// 交互动作解锁条件类型
+enum E_INTERACT_UNLOCK_CONDITION_TYPE
+{
+    EIUCT_ACT_NUM    = 1; // 交互动作
+    EIUCT_ITEM       = 2; // 需要道具
+    EIUCT_ROLE_LEVEL = 3; // 需要玩家等级
+}
+
+// 交互动作的主被动类型
+enum E_INTERACT_ACTIVE_TYPE
+{
+    EIAT_ACTIVE = 1; // 主动交互动作
+    EIAT_AUTO   = 2; // 被动交互动作
+}
+
+
+// 小面板提示更新枚举
+enum E_LITTLE_TIPS_TYPE
+{
+    ELTT_LEVEL         = 1; // 等级达到
+    ELTT_ACCEPT_TASK   = 2; // 接取任务ID
+    ELTT_COMPLETE_TASK = 3; // 完成任务ID
+    ELTT_RISK          = 4; // 完成副本ID
+}
+
+// PHP返回错误码
+enum E_PHP_ERROR_CODE
+{
+    EPEC_OK                 = 0; // OK
+    EPEC_NO_FOUND_PLAYER    = 1; // 没有找到此玩家
+    EPEC_MAIL_SEND_FAILED   = 2; // 邮件发送失败
+}
+
+enum E_PET_PILL_TYPE
+{
+    EPPT_EXP   = 1; // 宠物经验
+    EPPT_ATK   = 2; // 宠物攻击
+    EPPT_DEF   = 3; // 宠物防御
+    EPPT_HP    = 4; // 宠物血量
+}
+
+enum E_DEFINE_FACE_TYPE
+{
+    EDFT_INIT      = 0; // 初始状态
+    EDFT_UNCONFIRM = 1; // 客户端上传文件成功,审核中
+    EDFT_OK        = 2; // 审核通过
+    EDFT_FAIL      = 3; // 审核未通过
+}
+
+enum E_DEFINE_FACE_USE_TYPE
+{
+    EDFUT_NONE   = 0; // 未装备表情
+    EDFUT_MINOS  = 1; // 米诺斯表情
+    EDFUT_CUSTOM = 2; // 玩家上传表情
+}
+
+enum E_PET_REFRESH_STATUS
+{
+    EPRS_NONE   = 0; // 没有宠物刷新
+    EPRS_ACTIVE = 1; // 刷新点激活状态中
+    EPRS_GOT    = 2; // 宠物被玩家捉走了,但未到刷新点
+}
+
+enum E_PARK_DESTORY_EFFECT
+{
+    EPDE_SUCCESS = 1; // 破坏成功
+    EPDE_PROTECT = 2; // 破坏失败,受保护
+}
+
+
+enum E_HORSE_LIGHT_TYPE
+{
+    EHLT_CALIBURN_WEAPON_COLOR = 1; // 石中剑: 抽到橙色品质武器
+    EHLT_ARENA_RANK_CHANGER    = 2; // 竞技场: 第X名发生改变时
+    EHLT_MINIGAME_RANK_CHANGER = 3; // 小游戏: 获得第几名
+    EHLT_VEHICLE_COMPOSE_COLOR = 4; // 载具合成: 相应颜色
+    EHLT_CYKJ_OPEN             = 5; // 二次园开放
+    EHLT_NIUDAN_GET            = 6; // 扭蛋机获得稀有物品
+    EHLT_EQUIP_BIG_MAKE        = 7; // 装备大制造成功
+}
+
+enum E_TEMPLETE_MAIL_ID
+{
+    ETMI_GIVEBACK_DEFINE_FACE = 1; // 自定义表情返还花费
+    ETMI_PASS_DEFINE_FACE     = 2; // 表情审核通过通知
+}
+
+// 成就类型
+enum E_SUCCESS_TYPE
+{
+    EST_GOLD_MAN          = 1;   // 拥有x金币
+    EST_SAVE_MONERY_TOTAL = 2;   // 商城累计充值
+    EST_REACH_LEVEL_MAN   = 3;   // 等级达到
+    EST_ARENA_WIN_COUNT   = 4;   // 竞技场胜利x次
+    EST_MANY_FRIENDS      = 5;   // 拥有x好友
+    EST_PRANK_OTHERS      = 6;   // 恶搞其它人
+    EST_RESEARCH_INTERACT = 7;   // 研究主动交互动作
+    EST_RESEARCH_SELF_HI  = 8;   // 研究被动交互动作
+    EST_FIGHT_VALUE       = 9;    // 战力达到
+    EST_STUDY_SKILL       = 10;   // 学会技能书
+    EST_KILL_MAN          = 11;    // 串人
+    EST_HAVE_HATS         = 12;    // 拥有帽子
+    EST_HAVE_CLOTHES      = 13;    // 拥有衣服
+    EST_HAVE_SHOES        = 14;    // 拥有鞋子
+    EST_HAVE_WEAPONS      = 15;    // 拥有武器
+    EST_HAVE_WINGS        = 16;    // 拥有饰品(翅膀)
+    EST_HAVE_BIKE         = 17;    // 拥有坐骑
+    EST_CALIBURN_RED      = 18;    // 在石中剑系统抽到红色武器
+    EST_SEND_DANMAKU      = 19;    // 在弹幕广场弹幕
+    EST_PLAY_MINIGAME     = 20;    // 小游戏厅累积玩的次数
+    EST_USE_POINTGOLD     = 21;    // 使用点金手
+    EST_TESHUFUWU         = 22;    // 在澡堂叫了特叔服务
+    EST_GET_SEVEN_DAY     = 23;    // 领取7天登录礼包
+    EST_USE_DEFINE_FACE   = 24;    // 使用自定义表情
+    EST_WEAPON_STAR_UP    = 25;   // 武器强化到x星
+    EST_WEAPON_RESLOVE    = 26;   // 装备分解
+    EST_WEAPON_FIX        = 27;   // 装备维修
+    EST_COLLECT_FACES     = 28;   // 收集包子脸
+}
+
+// 澡堂交互id
+enum E_BATH_ACT_ID
+{
+    EBAI_CUOZAO = 916;  // 搓澡
+    EBAI_LINYU  = 917;  // 淋浴
+
+}
+
+// 装备品质与颜色对应
+enum E_EQUIP_QUALITY_COLOR
+{
+    EEQC_GREEN  = 1;
+    EEQC_BLUE   = 2;
+    EEQC_PURPLE = 3;
+    EEQC_ORANGE = 4;
+    EEQC_RED    = 5;
+
+}
+
+// 兑换码帐号类型
+enum E_REDEEM_ACCOUNT_TYPE
+{
+    ERAT_MULTIPLE = 1;  // 1.多账号兑换 
+    ERAT_SINGLE   = 2;  // 2.单账号兑换 
+}
+
+// 兑换码服务器规则
+enum E_REDEEM_SERVER_RULE
+{
+    ERSR_ANY_ALL  = 1;  // 1.所有服务器均可领取一次
+    ERSR_ONLY_ONE = 2;  // 2.指定服务器兑换
+    ERSR_ANY_ONE  = 3;  // 3.任意一个服务器兑换
+}
+
+// 首充标识
+enum E_FIRST_SAVE_FLAG
+{
+    EFSF_NONE = 0;  // 0 : 不能领取, 1:可领取, 2:已领取
+    EFSF_CAN  = 1;  // 0 : 不能领取, 1:可领取, 2:已领取
+    EFSF_GOT  = 2;  // 0 : 不能领取, 1:可领取, 2:已领取
+}
+
+// 排行榜id
+enum E_RANK_INDEX_ID
+{
+    ERII_DOWNSTAIRS_MAN   = 1;  // 是男人下100层(无下限)
+    ERII_WALKON_SWORD     = 2;  // 跳楼侠
+    ERII_FIGHT_TOWN       = 3;  // 大战三侠镇
+    ERII_FIGHT_SNAKE      = 4;  // 贪吃蛇
+
+    ERII_LEVEL_RANK       = 101; // 等级榜
+    ERII_KILL_RANK        = 102; // 杀人榜
+    ERII_DIAMOND          = 103; // 元宝消耗
+    ERII_ARENA            = 104; // 竞技场
+}
+
+
+enum E_BOSS_ENTER_TYPE
+{
+    JUMP_ENTER = 1;
+    RUN_ENTER = 2;
+}
+
+// 活动类型
+enum E_ACTIVITY_TYPE
+{
+    FIRST_SAVE           = 1;   // 首冲类
+    DAY_SINGLE_SAVE      = 2;   // 每日单笔充值类
+    DAY_TOTAL_SAVE       = 3;   // 每日累积充值类
+    MULTI_DAY_TOTAL_SAVE = 4;   // 多日累积充值类
+    DAY_TOTAL_COST       = 5;   // 每日累积消费类
+    MULTI_DAY_TOTAL_COST = 6;   // 多日累积消费类
+    RED_RANK_LIST        = 7;   // 冲榜类
+    LEVEL_TOP            = 8;   // 等级类
+    TASK_AIM             = 9;   // 任务目标类
+    MINIGAME_RED_LIST    = 10;  // 小游戏榜单类
+    DAY_TOTAL_INTERACT   = 11;  // 日累积整蛊类
+}
+
+// 活动子类型
+enum E_ACTIVITY_SUB_TYPE
+{
+    PASS_RISK           = 1;  // 通关指定副本一定次数
+    ARENA_RANK          = 2;  // 竞技场排名达到多少名
+    PLAY_MINIGAME       = 3;  // 指定小游戏参与一定次数
+    JOIN_CALIBURN       = 4;  // 石中剑抽取一定次数
+    SKILL_UP_COUNT      = 5;  // 技能升级一定次数
+    FRIEND_NUM          = 6;  // 拥有一定数量好友
+    GOOD_EQUIP_NUM      = 7;  // 某个品质装备达到一定星数有一定数量
+    HAVE_FACE           = 8;  // 表情包拥有一定数量
+    PLAY_NIUDAN         = 9;  // 扭蛋机抽取一定次数
+    INTERACT_PLAYER     = 10; // 整蛊玩家一定次数
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

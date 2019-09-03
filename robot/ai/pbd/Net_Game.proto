@@ -1,0 +1,3675 @@
+syntax = "proto2";
+package pbd;
+import "EnumDef.proto";
+import "ProtoDef.proto";
+import "Sql_Login.proto";
+
+// 底层
+message C2S_HeartBeat
+{
+
+}
+
+// 获取区服id
+message C2S_GetServerId
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_GetServerId
+{
+    required sint32 server_id = 1;
+}
+
+// 检查账号是否存在
+message C2S_CheckAccount
+{
+    required bytes  account         = 1;
+    optional sint64 ret_unitindex   = 2;
+    optional sint64 ret_intaddr     = 3;
+}
+
+message S2C_CheckAccount
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required bytes          account     = 2;
+}
+
+// 登录
+message C2S_Login
+{
+    required bytes  account         = 1;
+    required bytes  password        = 2;
+    optional sint64 ret_unitindex   = 3;
+    optional sint64 ret_intaddr     = 4;
+}
+
+message S2C_Login
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required bytes          account     = 2;
+    optional sint64         server_time = 3;
+    optional sint64         forbidden_time = 4;
+}
+
+// 注册
+message C2S_Register
+{
+    required bytes  account         = 1;
+    required bytes  password        = 2;
+    optional sint64 ret_unitindex   = 3;
+    optional sint64 ret_intaddr     = 4;
+}
+message S2C_Register
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required bytes          account     = 2;
+}
+
+// 角色数量
+message C2S_RoleSum
+{
+    required bytes  account         = 1;
+    optional sint64 ret_unitindex   = 2;
+    optional sint64 ret_intaddr     = 3;
+}
+message S2C_RoleSum
+{
+    required bytes          account         = 1;
+    repeated sint64         list_role_index = 2;
+}
+
+// 清空角色
+message C2S_ClearRole
+{
+    required bytes  account         = 1;
+    optional sint64 ret_unitindex   = 2;
+    optional sint64 ret_intaddr     = 3;
+}
+message S2C_ClearRole
+{
+    required bytes          account = 1;
+    required bool           is_ok   = 2;
+}
+
+// 请求随机昵称
+message C2S_RandNickName
+{
+    required bytes  account         = 1;
+    optional sint64 ret_unitindex   = 2;
+    optional sint64 ret_intaddr     = 3;
+}
+
+message S2C_RandNickName
+{
+    required bytes  account         = 1;
+    repeated bytes  list_nick_name  = 2;
+}
+
+// 创建角色
+message C2S_CreateRole
+{
+    required bytes                  nick_name       = 1;    // 昵称
+    required bytes                  account         = 2;    // 账号
+    required bytes                  device_key      = 3;    // 设备唯一标示
+    required bytes                  device_token    = 4;    // 设备推送标示
+    required bytes                  device_type     = 5;    // 设备类型
+    required bytes                  platform_type   = 6;    // 平台类型
+    required sint32                 helmet_id       = 7;    // 头盔
+    required sint32                 face_id         = 8;    // 表情
+    required sint32                 weapon_id       = 9;    // 武器
+    required sint32                 ornaments_id    = 10;   // 装饰
+    required sint32                 egg_id          = 11;   // 蛋id
+    required sint32                 gender          = 12;   // 性别
+    required bytes                  channel         = 13;   // 渠道名
+
+    optional sql_result_roleinfo    role_info       = 30;
+    optional sint64                 ret_unitindex   = 31;
+    optional sint64                 ret_intaddr     = 32;
+    optional bool                   is_test_vip     = 33;   // 是否属于测试VIP
+}
+
+message S2C_CreateRole
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required bytes          nick_name   = 2;
+    required bytes          account     = 3;
+}
+
+// 角色信息
+message C2S_RoleInfo
+{
+    required bytes  account                 = 1;
+    required sint64 role_index              = 2;
+    optional sint64 ret_unitindex           = 3;
+    optional sint64 ret_intaddr             = 4;
+    optional bool   force_apply_role_info   = 5;
+}
+
+message S2C_RoleInfo
+{
+    required bytes                  account             = 1;
+    required sint64                 role_index          = 2;
+    optional sql_result_roleinfo    role_info           = 3;
+    optional sint64                 login_intaddr       = 4;
+    optional sint64                 scene_intaddr       = 5;
+    optional sint64                 scene_instance_id   = 6;
+    required E_MSG_RET_CODE         ret_code            = 7;
+}
+
+// 准备进入场景
+message C2S_ReadyEnterScene
+{
+    required sint64 role_index                  = 1;
+    optional sint64 login_intaddr               = 2;
+    optional sql_result_roleinfo s2s_role_info  = 3;
+}
+
+message S2C_ReadyEnterScene                                     
+{
+    required E_MSG_RET_CODE ret_code        = 1;
+    required sint64 role_index              = 2;
+    required sint32 scene_id                = 3;
+    required sint32 scene_index             = 4;
+    required sint64 scene_intaddr           = 5;
+    required sint64 scene_instance_id       = 6;
+    required sint32 map_id                  = 7;
+    required E_SCENE_TYPE scene_type        = 8;
+}
+
+// 进入场景
+message C2S_EnterScene
+{
+    required sint64 role_index          = 1;
+    required sint64 scene_instance_id   = 2;
+}
+
+message S2C_EnterScene
+{
+    required E_MSG_RET_CODE   ret_code      = 1;
+    required sint64 role_index              = 2;
+    required sint64 scene_instance_id       = 3;
+}
+
+// 通知服务器出生特效ok
+message C2S_BornEnterSceneOK
+{
+    required sint64 role_index          = 1;
+}
+
+message S2C_BornEnterSceneOK
+{
+
+}
+
+
+// 准备进入场景
+message S2S_ReadyChangeScene
+{
+    required sint64 role_index                  = 1;
+    required bytes  account                     = 2;
+    required bytes  nick_name                   = 3;
+    required sint32 scene_id                    = 4;
+    required sint64 scene_instance_id           = 5;
+    optional sint64 login_intaddr               = 6;
+    optional sint64 old_scene_intaddr           = 7;
+    optional sint64 old_scene_instance_id       = 8;
+    optional sql_result_roleinfo s2s_role_info  = 9;
+}
+
+// 通知角色下线
+message S2C_OffLine
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required bytes  account          = 2;
+    required bytes  reason           = 3;
+}
+
+// 通知服务器,终端是否试用UTF8编码
+message C2S_Charset
+{   
+    required bool   utf_8       = 1;
+    required sint32 msg_version = 2;
+}
+
+// 心跳
+message C2S_Heartbeat
+{
+    required sint64 time    = 1;
+}
+message S2C_Heartbeat
+{
+    required sint64 time    = 1;
+}
+
+// 材料不足
+message S2C_MaterialNotEnough
+{
+    required sint32 item_id = 1;
+}
+
+// 游戏币
+message C2S_GameCoin
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_GameCoin
+{
+    required sint64 role_index      = 1;
+    required sint64 game_coin       = 2;
+    repeated sint64 diff_game_coin  = 3;
+}
+
+// 钻石币
+message C2S_DiamondCoin
+{
+    required sint64 role_index      = 1;
+}
+message S2C_DiamondCoin
+{
+    required sint64 role_index          = 1;
+    required sint64 diamond_coin        = 2;
+    repeated sint64 diff_diamond_coin   = 3;
+}
+
+// 体力
+message C2S_Endurance
+{
+    required sint64 role_index      = 1;
+}
+
+message S2C_Endurance
+{
+    required sint64           role_index              = 1;
+    required sint64           endurance               = 2;
+    repeated sint64           diff_endurance          = 3;
+    required db_stamina_info  stamina_info            = 4;
+}
+
+message S2C_RecoveryEndurance
+{
+    required sint64           role_index              = 1;
+    required sint64           endurance               = 2;
+    repeated sint64           diff_endurance          = 3;
+    required db_stamina_info  stamina_info            = 4;
+}
+
+// 经验
+message C2S_Exp
+{
+    required sint64 role_index      = 1;
+}
+message S2C_Exp
+{
+    required sint64 role_index  = 1;
+    required sint64 exp         = 2;
+    repeated sint64 diff_exp    = 3;
+}
+
+// 等级
+message C2S_Level
+{
+    required sint64 role_index      = 1;
+}
+message S2C_Level
+{
+    required sint64 role_index      = 1;
+    required sint32 level           = 2;
+}
+
+// 技能点
+message C2S_SkillPoint
+{
+    required sint64 role_index      = 1;
+}
+message S2C_SkillPoint
+{
+    required sint64 role_index          = 1;
+    required sint64 skill_point         = 2;
+    repeated sint64 diff_skill_point    = 3;
+}
+
+message S2C_ArenaScore
+{
+    required sint64 role_index          = 1;
+    required sint64 arena_score         = 2;
+    repeated sint64 diff_arena_score    = 3;
+}
+
+// vip等级
+message S2C_Vip
+{
+    required sint64 role_index = 1;
+    required sint32 vip        = 2;
+    repeated sint32 diff_vip   = 3;
+    optional sint64 vip_exp    = 4;
+}
+
+// 城市场景
+
+// 携带全角色信息进入场景
+message S2C_RoleInfo_EnterScene
+{
+    required E_MSG_RET_CODE         ret_code            = 1;
+    required sql_result_roleinfo    role_info           = 2;
+    required sint64                 scene_instance_id   = 3;
+    required sint32                 begin_x             = 4;
+    required sint32                 begin_y             = 5;
+}
+
+// 玩家出生进场景
+message S2C_BornRoleInfo_EnterScene
+{
+    required S2C_RoleInfo_EnterScene role_info = 1;
+    required sint32                  egg_id    = 2;   
+}
+
+// 其他角色进入场景
+message S2C_OtherRoleInfo_EnterScene
+{
+    required scene_roleinfo     role_info         = 1;
+    required sint64             scene_instance_id = 2;
+    required sint32             begin_x           = 3;
+    required sint32             begin_y           = 4;
+}
+
+// 批量玩家入场景
+message S2C_ManyOtherRoleInfo_EnterScene
+{
+    repeated  S2C_OtherRoleInfo_EnterScene role_info = 1;
+}
+
+
+// 同步场景角色信息
+message S2C_SyncRoleShowInfo
+{
+    required scene_roleinfo     role_info         = 1;
+    required sint32             begin_x           = 2;
+    required sint32             begin_y           = 3;
+    required sint32             change_flag       = 4;
+}
+
+// 其他角色信息
+message scene_roleinfo
+{
+    required sint64             role_index     = 1; 
+    optional sint32             move_speed     = 2;   // 场景移动速度
+    optional visiting_card_info db_card_info   = 3;   // 名片信息
+    optional temp_info_in_memory memory_info   = 4;   // 特殊道具标示
+    optional bool                to_left       = 5;   // 玩家出生方向
+}
+
+// 广播角色显示信息
+message S2C_BroadcastRoleShowInfo
+{
+    required sint64 role_index                          = 1;
+    required player_show_info       player_info         = 2;    // 玩家显示信息
+    required sint64                 scene_instance_id   = 3;
+    required sint32                 begin_x             = 4;
+    required sint32                 begin_y             = 5;
+
+}
+
+// 携带全角色信息离开场景
+message S2C_RoleInfo_LeaveScene
+{
+    required E_MSG_RET_CODE     ret_code            = 1;
+    required sint64             role_index          = 2;
+    required sint64             scene_instance_id   = 3;
+}
+
+// 请求移动
+message C2S_Request_Move
+{
+    required sint64 role_index          = 1;
+    required sint64 scene_instance_id   = 2;
+    required sint32 begin_x             = 3;
+    required sint32 begin_y             = 4;
+    required sint32 end_x               = 5;
+    required sint32 end_y               = 6;
+}
+message S2C_Request_Move
+{
+    required sint64 role_index          = 1;
+    required sint64 scene_instance_id   = 2;
+    required sint32 begin_x             = 3;
+    required sint32 begin_y             = 4;
+    required sint32 end_x               = 5;
+    required sint32 end_y               = 6;
+}
+
+// 发送聊天
+message C2S_Chat
+{
+    required sint64 role_index          = 1;
+    required sint64 scene_instance_id   = 2;
+    required E_CHAT_TYPE chat_type      = 3;
+    required bytes  msg                 = 4;
+    optional sint64 tar_role_index      = 5;    // 点对点私聊对方的角色ID
+    optional sint32 group_id            = 6;    // 聊天群组ID
+}
+// 回复聊天
+message S2C_Chat
+{   
+    required E_MSG_RET_CODE ret_code            = 1;
+    optional sint64 src_role_index              = 2;    // 消息发出者的角色ID
+    optional sint64 tar_role_index              = 3;    // 消息接受者的角色ID(服务器点对点时使用)
+    optional sint64 scene_instance_id           = 4;
+    optional E_CHAT_TYPE chat_type              = 5;
+    optional bytes  msg                         = 6;
+    optional bool is_gm                         = 7;    // 是否系统管理员    
+    optional sint32 group_id                    = 8;    // 聊天群组ID
+    optional visiting_card_info src_visit_info  = 9;    // 聊天消息发送者的名片
+    optional sint64 forbidden_time              = 10;
+}
+
+// 特殊道具使用
+message C2S_Use_SPItem
+{
+    required sint64 role_index  = 1;
+    required sint64 item_index  = 2;
+    required sint32 sp_id       = 3;
+    optional sint64 stamp       = 4;
+}
+
+// 广播特殊道具使用
+message S2C_Use_SPItem
+{   
+    required sint64  role_index = 1;
+    repeated sp_info info       = 2;
+}
+
+// 切换场景
+message C2S_Change_Scene
+{
+    required sint64 role_index              = 1;
+    required uint32 tar_scene_id            = 2;
+    optional sint64 gw_intaddr              = 3;
+    optional bool   default_flag            = 4;
+}
+
+// 查询场景分线
+message C2S_QuerySceneLineInfo
+{
+    required sint64 role_index = 1;
+    required sint32 scene_id   = 2;
+}
+
+message S2C_QuerySceneLineInfo
+{
+    required sint32 scene_id    = 1;
+    repeated sint32 scene_index = 2;
+    repeated sint32 loads       = 3;
+}
+
+// 切换分线
+message C2S_ChangeSceneLine
+{
+    required sint64 role_index      = 1;
+    required uint32 tar_scene_id    = 2;
+    required uint32 tar_scene_index = 3;
+}
+
+message S2C_ChangeSceneLine
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+}
+
+// 请求传送点切换场景
+message C2S_TransPortChangeScene
+{
+    required sint64 role_index      = 1;
+    required sint32 transport_id    = 2;
+    optional sint64 gw_intaddr      = 3;
+}
+
+// 请求传送点切换场景
+message S2C_TransPortChangeScene
+{
+    required E_MSG_RET_CODE ret     = 1;
+    required sint64 role_index      = 2;
+    required sint32 transport_id    = 3;
+}
+
+// 请求NPC切换场景
+message C2S_NPC_ChangeScene
+{
+    required sint64 role_index      = 1;
+    required sint32 npc_id          = 2;
+    required sint32 scene_type      = 3;
+    required sint32 trans_info_id   = 4;
+    optional sint64 gw_intaddr      = 5;
+}
+
+// 请求NPC切换场景
+message S2C_NPC_ChangeScene
+{
+    required E_MSG_RET_CODE ret     = 1;
+    required sint64 role_index      = 2;
+    required sint32 npc_id          = 3;
+    required sint32 scene_type      = 4;
+}
+
+// 请求,回复背包道具
+message C2S_Bag_Item
+{
+    required sint64 role_index = 1;
+}
+message S2C_Bag_Item
+{
+    required list_db_bag_items      items   = 1;
+}
+
+message C2S_Use_Item
+{
+    required sint64 role_index  = 1;
+    required sint64 item_index  = 2;
+    required sint32 item_count  = 3;
+}
+
+message S2C_Use_Item
+{
+    required E_MSG_RET_CODE ret_code            = 1;
+    required sint64         item_index          = 2;
+    optional db_bag_item    new_item_info       = 3;
+    optional sint32         item_type           = 4;
+    repeated db_bag_equip   insert_item         = 5;
+    repeated db_bag_equip   remove_item         = 6;
+    repeated db_role_equip  dress_item          = 7;
+}
+
+// 卖道具
+message C2S_Sell_Item
+{
+    required sint64 role_index  = 1;
+    required sint64 item_index  = 2;
+    required sint32 item_count  = 3;
+}
+
+message S2C_Sell_Item
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint64 item_index       = 2;
+    optional sint32 item_count       = 3;
+}
+
+//卖装备
+message C2S_Sell_Equip
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+
+message S2C_Sell_Equip
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    optional sint64         equip_index = 2;
+}
+
+
+// 请求,回复背包装备
+message C2S_Bag_Equip
+{
+    required sint64 role_index = 1;
+}
+message S2C_Bag_Equip
+{
+    required list_db_bag_equips     equips  = 1;
+}
+message C2S_Dress_Equip
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+message S2C_Dress_Equip
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required sint64         equip_index = 2;
+    optional db_role_equip  equip_info  = 3;
+}
+
+// 请求,回复角色装备
+message C2S_Role_Equip
+{
+    required sint64 role_index = 1;
+}
+message S2C_Role_Equip
+{
+    required list_db_role_equips    equips  = 1;
+}
+message C2S_TakeOff_Equip
+{
+    required sint64             role_index  = 1;
+    required sint64             equip_index = 2;
+    required E_EQUIP_SITE_TYPE  site_type   = 3;
+}
+message S2C_TakeOff_Equip
+{
+    required E_MSG_RET_CODE     ret_code    = 1;
+    required sint64             equip_index = 2;
+    required E_EQUIP_SITE_TYPE  site_type   = 3;
+    optional db_role_equip      equip_info  = 4;
+}
+
+// 通知背包物品变更
+message S2C_Bag_Item_Insert
+{
+    required db_bag_item    item_info   = 1;
+}
+message S2C_Bag_Item_Remove
+{
+    required db_bag_item    item_info   = 1;
+}
+
+// 通知背包装备变更
+message S2C_Bag_Equip_Insert
+{
+    repeated db_bag_equip   equip_info  = 1;
+}
+message S2C_Bag_Equip_Remove
+{
+    repeated db_bag_equip   equip_info  = 1;
+}
+
+// 通知client包裹增加道具
+message S2C_Bag_Item_Add
+{
+    required db_bag_item   item_info  = 1;
+    repeated sint32        count_diff = 2;
+}
+
+// 通知client包裹增加一件装备
+message S2C_Bag_Equip_Add
+{
+    repeated db_bag_equip   equip_info  = 1;
+}
+
+// 通知client包裹指定装备更新
+message S2C_Bag_Equip_Update
+{
+    repeated db_bag_equip   equip_info  = 1;
+}
+
+// 通知client玩家身上装备更新
+message S2C_Role_Equip_Update
+{
+    required db_role_equip role_equip = 1;
+}
+
+// 请求套装商店信息
+message C2S_SuitShopInfo
+{
+    required sint64 role_index  = 1;
+}
+message S2C_SuitShopInfo
+{
+    required sint64 role_index                      = 1;
+    repeated suit_goods_info buy_suit               = 2;
+    required sint64 suit_shop_surplus_update_time   = 3;
+}
+// 请求购买套装
+message C2S_BuySuitInShop
+{
+    required sint64 role_index      = 1;    // 角色索引
+    required sint32 suit_shop_id    = 2;    // 商店Id
+    required sint32 suit_duration   = 3;    // 套装时限
+}
+message S2C_BuySuitInShop
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 购买结果
+    required sint64 role_index          = 2;    // 角色索引
+    required sint32 suit_shop_id        = 3;    // 商店Id
+    required sint32 suit_duration       = 4;    // 套装时限
+}
+// 请求套装信息
+message C2S_RoleSuitInfo
+{
+    required sint64 role_index  = 1;    // 角色索引
+}
+message S2C_RoleSuitInfo
+{
+    required sint64 role_index                      = 1;    // 角色索引
+    required list_db_role_suit_info role_suit_info  = 3;    // 套装
+}
+// 请求穿套装
+message C2S_DressSuit
+{
+    required sint64 role_index  = 1;    // 角色索引
+    required sint32 suit_id     = 2;    // 套装Id
+}
+message S2C_DressSuit
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    required sint64 role_index          = 2;    // 角色索引
+    required sint32 suit_id             = 3;    // 套装Id
+}
+// 请求脱套装
+message C2S_TakeOffSuit
+{
+    required sint64 role_index  = 1;    // 角色索引
+    required sint32 suit_id     = 2;    // 套装Id
+}
+message S2C_TakeOffSuit
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    required sint64 role_index          = 2;    // 角色索引
+    required sint32 suit_id             = 3;    // 套装Id
+}
+
+
+
+
+// 请求表情商店信息
+message C2S_FaceShopInfo
+{
+    required sint64 role_index  = 1;
+}
+message S2C_FaceShopInfo
+{
+    required sint64 role_index                      = 1;
+    repeated face_goods_info original_buy_face      = 2;
+    repeated face_goods_info discount_buy_face      = 3;
+    required sint32 face_shop_surplus_update_time   = 4;
+}
+
+// 请求购买表情
+message C2S_BuyFaceInShop
+{
+    required sint64 role_index      = 1;    // 角色索引
+    required sint32 face_shop_id    = 2;    // 商店Id
+    required sint32 face_duration   = 3;    // 表情时限
+    required bool   face_isdiscount = 4;    // 表情是否属于打折
+}
+
+message S2C_BuyFaceInShop
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 购买结果
+    required sint64 role_index          = 2;    // 角色索引
+    required sint32 face_shop_id        = 3;    // 商店Id
+    required sint32 face_duration       = 4;    // 表情时限
+}
+// 请求表情信息
+message C2S_RoleFaceInfo
+{
+    required sint64 role_index  = 1;    // 角色索引
+}
+
+message S2C_RoleFaceInfo
+{
+    required sint64 role_index                      = 1;    // 角色索引
+    required list_db_role_face_info role_face_info  = 3;    // 表情
+}
+
+// 请求穿表情
+message C2S_DressFace
+{
+    required sint64 role_index  = 1;    // 角色索引
+    required sint32 face_id     = 2;    // 表情Id
+}
+message S2C_DressFace
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    required sint64 role_index          = 2;    // 角色索引
+    required sint32 face_id             = 3;    // 表情Id
+}
+// 请求脱表情
+message C2S_TakeOffFace
+{
+    required sint64 role_index  = 1;    // 角色索引
+    required sint32 face_id     = 2;    // 表情Id
+}
+message S2C_TakeOffFace
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    required sint64 role_index          = 2;    // 角色索引
+    required sint32 face_id             = 3;    // 表情Id
+}
+// 手动刷新表情商店
+message C2S_ManualUpdateFaceShop
+{
+    required sint64 role_index  = 1;    // 角色索引
+}
+message S2C_ManualUpdateFaceShop
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    required sint64 role_index          = 2;    // 角色索引
+}
+
+message kill_monster
+{
+    required sint32 id    = 1;
+    required sint32 count = 2;
+}
+
+// 副本相关
+message C2S_PassRisk
+{
+    required sint64 role_index              = 1;
+    required bool passed                    = 2;
+    required sint32 chap_id                 = 3;
+    required sint32 level_id                = 4;
+    repeated SkillUseInfo skill_use_infos   = 5;    // 战斗中技能使用的次数
+    required sint32 box_count               = 6;    // 冒险掉落宝箱数量
+    repeated kill_monster monster_info      = 7;    // 杀死的小怪信息（小怪id，杀死数量）
+    optional bytes randomseed               = 8;    // 战斗随机数种子
+    optional bool is_use_compose_skill      = 9;    // 是否使用了合体技能
+}
+
+message S2C_PassRisk
+{
+    required E_MSG_RET_CODE ret_code    = 1[default = Msg_Ret_Code_Unknow]; // 结果
+    repeated reward_info    reward      = 2;    // 奖励信息
+    optional sint32         chapter_reward = 3;    // 0:未通关,1:已通关未领取,2:已通关已领取
+}
+
+// 开章节奖励宝箱
+message C2S_OpenChapterBox
+{
+    required sint64 role_index = 1;
+    required sint32 chap_id    = 2;
+    optional bool   danger     = 3;    
+}
+
+message S2C_OpenChapterBox
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    repeated reward_info    reward      = 2;    //奖励信息
+}
+
+// 开章时空宝箱
+message C2S_OpenRiskBox
+{
+    required sint64 role_index              = 1;
+}
+
+message S2C_OpenRiskBox
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    repeated reward_info    reward      = 2;    //奖励信息
+}
+
+// 重置精英副本已打斗次数
+message C2S_ResetRiskFightCount
+{
+    required sint64 role_index  = 1;
+    required sint32 chap_id     = 2;
+    required sint32 risk_id     = 3;
+}
+
+message S2C_ResetRiskFightCount
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+}
+
+// 准备进入冒险
+message C2S_ReadyEnterRisk
+{
+    required sint64 role_index      = 1;
+    required sint32 chap_id         = 2;
+    required sint32 risk_id         = 3;
+    required sint32 npc_id          = 4;
+    required sint32 scene_id        = 5;
+    required sint32 scene_type      = 6;
+    required sint32 trans_info_id   = 7;
+    optional sint64 friend_id       = 8;
+    optional sint64 gw_intaddr      = 9;
+    optional bool   danger          = 10;
+}
+
+message S2C_ReadyEnterRisk
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint64 role_index       = 2;
+    required sint32 risk_id          = 3;
+    required sint32 npc_id           = 4;
+    required sint32 scene_id         = 5;
+    required sint32 trans_info_id    = 6;
+}
+
+// 通知好友助战冷却信息
+message S2C_FriendAssistTime
+{
+    required sint32 left_assist_time = 1;
+    required sint64 friend_index     = 2;
+}
+
+// 增加NPC记录队列
+message S2C_NPC_Add_RecordQueue
+{
+    required sint32           npc_id     = 1;
+    required sint64           role_index = 2;
+    required player_show_info show_info  = 3; 
+}
+
+// 移除NPC记录队列
+message S2C_NPC_Go_RecordQueue
+{
+    required sint32 npc_id          = 1;
+    required sint64 role_index      = 2;
+}
+
+// 查询推荐好友
+message C2S_Select_Recommend_Friends
+{
+    required sint64 role_index          = 1;
+    optional sint64 ret_unitindex       = 2;
+    optional sint64 ret_intaddr         = 3;
+    optional sint32 friends_cnt         = 4;
+    optional sint32 min_lvl             = 5;
+    optional sint32 max_lvl             = 6;
+    repeated sint64 friend_info_index   = 7;
+    optional sint32 friend_num_limit    = 8;
+
+}
+message S2C_Select_Recommend_Friends
+{
+    required E_MSG_RET_CODE ret_code        = 1;
+    repeated db_friend_info friend_infos    = 2;
+}
+
+// 好友上下线通知
+message C2S_FindFriend
+{
+    required sint64             role_index      = 1;
+    required bytes              nick_name       = 2;
+    optional sint64             ret_unitindex   = 3;
+    optional sint64             ret_intaddr     = 4;
+}
+message S2C_FindFriend
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    optional db_friend_info friend_info = 2;
+}
+
+// 加好友
+message C2S_Add_Friend
+{
+    required sint64 role_index               = 1;
+    required sint64 tar_role_index           = 2;
+    optional sint64 ret_unitindex            = 3;
+    optional sint64 ret_intaddr              = 4;
+    optional visiting_card_info card_info    = 5;
+
+}
+message S2C_Add_Friend
+{
+    required sint64         tar_role_index  = 1;
+    required E_MSG_RET_CODE ret_code        = 2;
+    optional db_friend_info tar_friend_info = 3;
+    optional sint64         tar_scene_addr  = 4;
+}
+
+// 对方给自己的反馈,需要中心服务器透传
+message S2S_Add_Friend_Ret
+{
+    required sint64         ans_role_index  = 1;
+    required sint64         tar_role_index  = 2;
+    required E_MSG_RET_CODE ret_code        = 3;
+}
+
+
+// 删好友
+message C2S_Remove_Friend
+{
+    required sint64 role_index      = 1;
+    required sint64 tar_role_index  = 2;
+}
+message S2C_Remove_Friend
+{
+    required sint64 tar_role_index      = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+}
+
+message S2S_Remove_Friend
+{
+    required sint64 role_index      = 1;
+    required sint64 src_role_index      = 2;
+}
+
+
+
+// 请求确认好友
+message S2C_Request_Add_Friend
+{
+    required sint64 src_role_index          = 1;
+    required db_friend_info src_friend_info = 2;
+}
+message C2S_Request_Add_Friend
+{
+    required sint64 role_index      = 1;
+    required sint64 src_role_index  = 2;
+    required bool   is_refuse       = 3;
+}
+
+// 好友上下线通知
+
+message S2S_Friend_Online
+{
+    required sint64         friend_role_index       = 1; 
+    required db_friend_info src_friend_info         = 2;
+    optional bool           first_enter_game        = 3;
+    optional sint64         ret_unitindex           = 4;
+    optional sint64         ret_intaddr             = 5;
+}
+
+message S2C_Friend_Online
+{
+    optional bool           is_aleady_online        = 1;
+    required sint64         friend_role_index       = 2;
+    required db_friend_info src_friend_info         = 3;
+}
+
+message S2C_Friend_Offline
+{
+    required sint64         role_index              = 1;
+    required sint64         friend_role_index       = 2;
+    optional db_friend_info friend_info             = 3;
+}
+
+message C2S_ReadyEnterFriendFightScene
+{
+    required sint64 role_index      = 1;
+    required sint32 scene_id        = 2;
+    optional sint64 gw_intaddr      = 3;
+}
+
+message S2C_ReadyEnterFriendFightScene
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+
+// 好友切磋
+message C2S_Friend_Fight
+{
+      required sint64 role_index         = 1;
+      required sint64 friend_role_index  = 2;
+	  optional sint64 ret_unitindex      = 3;
+	  optional sint64 ret_intaddr        = 4;
+}
+
+message S2C_Friend_Fight
+{
+    required E_MSG_RET_CODE     ret_code            = 1;
+    repeated battle_player_info self_player_info    = 2;
+    repeated battle_player_info friend_player_info  = 3;
+}
+
+
+// 请求个人通用商店
+message C2S_CommonShopGoodsInfo
+{
+    required sint64 role_index  = 1;
+    required sint32 shop_id     = 2;
+    optional bool   is_manual   = 3;
+}
+
+// 通用商店协议
+message S2C_CommonShopGoodsInfo
+{
+    required E_MSG_RET_CODE         ret_code                       = 1;
+    required sint32                 shop_id                        = 2;
+    repeated common_shop_goods_info goods_info                     = 3;
+    optional sint32                 next_refresh_price             = 4;
+    optional sint32                 manual_refresh_count           = 5;
+    optional sint32                 manual_total_refresh_count     = 6;
+}
+
+// 请求抢车位商店信息
+message C2S_ParkShop
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_ParkShop
+{
+    required E_MSG_RET_CODE         ret_code   = 1;
+    repeated common_shop_goods_info goods_list = 2;
+}
+
+
+//// 技能书商店信息
+//message S2C_SkillBookShopInfo
+//{
+//    required E_MSG_RET_CODE         ret_code                       = 1;
+//    repeated common_shop_goods_info goods_info                     = 2;
+//    optional sint32                 next_refresh_price             = 3;
+//    optional sint32                 manual_refresh_count           = 4;
+//    optional sint32                 manual_total_refresh_count     = 5;
+//}
+//
+//// 小游戏商店信息
+//message S2C_MiniGameShopInfo
+//{
+//    required E_MSG_RET_CODE         ret_code                       = 1;
+//    repeated common_shop_goods_info goods_info                     = 2;
+//    optional sint32                 next_refresh_price             = 3;
+//    optional sint32                 manual_refresh_count           = 4;
+//    optional sint32                 manual_total_refresh_count     = 5;
+//}
+//
+//// 竞技场商店
+//message S2C_ArenaShopInfo
+//{
+//    required E_MSG_RET_CODE         ret_code                       = 1;
+//    repeated common_shop_goods_info goods_info                     = 2;
+//    optional sint32                 next_refresh_price             = 3;
+//    optional sint32                 manual_refresh_count           = 4;
+//    optional sint32                 manual_total_refresh_count     = 5;
+//}
+//
+//// 黑市商店
+//message S2C_BlackShopInfo
+//{
+//    required E_MSG_RET_CODE         ret_code                       = 1;
+//    repeated common_shop_goods_info goods_info                     = 2;
+//    optional sint32                 next_refresh_price             = 3;
+//    optional sint32                 manual_refresh_count           = 4;
+//    optional sint32                 manual_total_refresh_count     = 5;
+//}
+
+
+// 购买技能书商店物品
+message C2S_BuyCommonShopGoods
+{
+    required sint64 role_index  = 1;
+    required sint32 shop_id     = 2;
+    required sint32 shop_index  = 3;            // 商店物品坐标
+}
+message S2C_BuyCommonShopGoods
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+
+// 请求学习技能
+message C2S_Skill_Study
+{
+    required sint64 role_index  = 1;
+    required sint32 skill_id    = 2;
+}
+message S2C_Skill_Study
+{
+    required sint64 role_index          = 1;
+    required sint32 skill_id            = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+}
+
+// 请求升级技能
+message C2S_Skill_LevelUp
+{
+    required sint64 role_index  = 1;
+    required sint32 skill_id    = 2;
+    optional bool   is_excharge = 3;
+}
+message S2C_Skill_LevelUp
+{
+    required sint64 role_index          = 1;
+    required sint32 skill_id            = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+}
+
+// 请求装备天赋技能
+message C2S_Skill_DressTalent
+{
+    required sint64 role_index  = 1;
+    required sint32 skill_id    = 2;
+}
+message S2C_Skill_DressTalent
+{
+    required sint64 role_index          = 1;
+    required sint32 skill_id            = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+}
+
+// 请求脱下天赋技能
+message C2S_Skill_TakeOffTalent
+{
+    required sint64 role_index  = 1;
+    required sint32 skill_id    = 2;
+}
+message S2C_Skill_TakeOffTalent
+{
+    required sint64 role_index          = 1;
+    required sint32 skill_id            = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+}
+
+// 请求装备秘籍技能
+message C2S_Skill_DressBook
+{
+    required sint64 role_index  = 1;
+    required sint32 skill_id    = 2;
+    required sint32 site        = 3;
+   
+}
+message S2C_Skill_DressBook
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32 skill_id         = 2;
+    required sint32 site             = 3;
+}
+
+// 请求脱下秘籍技能
+message C2S_Skill_TakeOffBook
+{
+    required sint64 role_index  = 1;
+    required sint32 skill_id    = 2;
+    required sint32 site        = 3;
+
+}
+message S2C_Skill_TakeOffBook
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32 skill_id         = 2;
+    required sint32 site             = 3;
+}
+
+// 请求更换技能
+message C2S_Skill_ChangeBook
+{
+    required sint64 role_index   = 1;
+    required sint32 old_skill_id = 2;
+    required sint32 new_skill_id = 3;
+    required sint32 site         = 4;
+
+}
+
+message S2C_Skill_ChangeBook
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32 old_skill_id     = 2;
+    required sint32 new_skill_id     = 3;
+    required sint32 site             = 4;
+}
+
+// 小游戏相关
+message C2S_PassMiniGame
+{
+    required sint64 role_index          = 1;
+    required sint32 passed              = 2;
+    required sint32 chap_id             = 3;
+    required sint32 level_id            = 4;
+}
+
+message S2C_PassMiniGame
+{
+    required E_MSG_RET_CODE ret_code    = 1;    // 结果
+    repeated reward_info    reward      = 2;    //奖励信息
+}
+
+
+// 查询小游戏排行榜
+message C2S_QueryMiniGameRank
+{
+    required sint64 role_index          = 1;
+    required sint32 mini_game_id        = 2;
+	optional sint64 login_addr = 3;
+	optional sint64 login_index = 4;
+}
+
+message S2C_QueryMiniGameRank
+{
+    required E_MSG_RET_CODE     ret_code      = 1;
+    required sint32             mini_game_id  = 2;
+    repeated RankInfo           rank_infos    = 3;
+}
+
+// 查询小游戏个人排行榜
+message C2S_QuerySelfGameRank
+{
+    required sint64 role_index          = 1;
+    required sint32 mini_game_id        = 2;
+	optional sint32	history_max_score   = 3;
+	optional sint64	login_addr			= 4;
+	optional sint64	login_index			= 5;
+}
+
+message S2C_QuerySelfGameRank
+{
+    required E_MSG_RET_CODE ret_code          = 1;
+    required sint32         mini_game_id      = 2;
+    optional sint32         curr_rank         = 3;
+    optional sint32         history_max_score = 4;
+}
+
+// 再玩一次小游戏
+message C2S_PlayMiniGameAgain
+{
+    required sint64 role_index          = 1;
+    required sint32 mini_game_id        = 2;
+}
+
+message S2C_PlayMiniGameAgain
+{
+    required E_MSG_RET_CODE ret_code        = 1;    // 结果
+}
+
+// 小游戏相关
+message C2S_SubmitMiniGameScore
+{
+    required sint64 role_index          = 1;
+    required sint32 mini_game_id        = 2;
+    required sint32 score               = 3;
+}
+
+message S2C_SubmitMiniGameScore
+{
+    required E_MSG_RET_CODE ret_code            = 1;    // 结果
+    repeated reward_info    reward              = 2;    //奖励信息
+    optional sint32         history_max_score   = 3;
+    optional sint32         curr_score          = 4;
+    optional sint32         fight_percent       = 5;
+}
+
+// 准备进入小游戏
+message C2S_ReadyEnterMiniGame
+{
+    required sint64 role_index      = 1;
+    required sint32 mini_game_id    = 2;
+    required sint32 npc_id          = 3;
+    required sint32 scene_id        = 4;
+    required sint32 scene_type      = 5;
+    required sint32 trans_info_id   = 6;
+    optional sint64 gw_intaddr      = 7;
+}
+
+message S2C_ReadyEnterMiniGame
+{
+    required E_MSG_RET_CODE ret_code= 1;
+    required sint64 role_index      = 2;
+    required sint32 mini_game_id    = 3;
+    required sint32 npc_id          = 4;
+    required sint32 scene_id        = 5;
+    required sint32 trans_info_id   = 6;
+}
+
+// 表情交互
+message C2S_InteractAct
+{
+    required sint64 role_index      = 1;
+    required sint32 act_id          = 2;
+    repeated sint64 tar_role_index  = 3;
+    required sint32 tar_x           = 4;
+    required sint32 tar_y           = 5;
+}
+message S2C_InteractAct
+{
+    required sint64 src_role_index  = 1;
+    required sint32 act_id          = 2;
+    repeated sint64 tar_role_index  = 3;
+    required E_MSG_RET_CODE ret_code= 4;
+}
+
+// 刚刚的自嗨动作
+message C2S_SelfHiAct
+{
+    required sint64 role_index      = 1;
+    required sint32 act_id          = 2;
+}
+message S2C_SelfHiAct
+{
+    required sint64 src_role_index  = 1;
+    required sint32 act_id          = 2;
+    required E_MSG_RET_CODE ret_code= 3;
+
+}
+
+// 澡堂交互
+message C2S_BathroomInteract
+{
+    required sint64 role_index      = 1;
+    required sint32 scene_id        = 2;
+    required sint32 act_id          = 3;
+    repeated sint64 tar_role_index  = 4;
+    required sint32 tar_x           = 5;
+    required sint32 tar_y           = 6;
+    required sint32 direction       = 7;
+    optional sint32 left_time       = 8;
+}
+
+message S2C_BathroomInteract
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint64 src_role_index   = 2;
+    optional sint32 act_id           = 3;
+    repeated sint64 tar_role_index   = 4;
+    optional sint32 left_time        = 5;
+}
+
+// 转发交互
+message S2S_BathroomInteract
+{
+    required sint64 src_role_index = 1;
+    required sint64 tar_role_index = 2;
+    required sint32 act_id         = 3;
+}
+
+// 穿脱PVE卡牌
+message C2S_Dress_Card_PVE
+{
+    required sint64 role_index  = 1;
+    required sint32 card_id     = 2;
+}
+message S2C_Dress_Card_PVE
+{
+    required sint64 role_index          = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+    required sint32 card_id             = 3;
+}
+message C2S_TakeOff_Card_PVE
+{
+    required sint64 role_index  = 1;
+    required sint32 card_id     = 2;
+}
+message S2C_TakeOff_Card_PVE
+{
+    required sint64 role_index          = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+    required sint32 card_id             = 3;
+}
+
+
+// 穿脱PVP卡牌
+message C2S_Dress_Card_PVP
+{
+    required sint64 role_index  = 1;
+    required sint32 card_id     = 2;
+}
+message S2C_Dress_Card_PVP
+{
+    required sint64 role_index          = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+    required sint32 card_id             = 3;
+}
+message C2S_TakeOff_Card_PVP
+{
+    required sint64 role_index  = 1;
+    required sint32 card_id     = 2;
+}
+message S2C_TakeOff_Card_PVP
+{
+    required sint64 role_index          = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+    required sint32 card_id             = 3;
+}
+
+// 竞技场相关
+// 请求竞技场玩家列表
+message C2S_ArenaPlayers
+{
+    optional sint64             role_index          = 1;
+    optional sint64             ret_unitindex       = 2;
+    optional sint64             ret_intaddr         = 3;
+    optional sint64             ret_loginaddr       = 4;
+    optional battle_player_info self_battle_info    = 5;
+}
+
+message S2C_ArenaPlayers
+{
+    required E_MSG_RET_CODE     ret_code    = 1;
+    optional arena_battle_info  self_battle = 2;
+    repeated arena_battle_info  players     = 3;
+
+}
+message C2S_StopArena
+{
+    required sint64             role_index  = 1;
+}
+message C2S_Arena_NearSelf
+{
+    required sint64             role_index = 1;
+    optional arena_player_info  self_info  = 2;
+    optional sint64             login_addr = 3;
+    optional sint64             login_index = 4;
+
+}
+
+message S2C_Arena_NearSelf
+{
+    repeated arena_player_info  players     = 1;
+}
+
+// 准备进入竞技场
+message C2S_ReadyEnterArenaScene
+{
+    required sint64 role_index      = 1;
+    required sint32 scene_id        = 2;
+    optional sint64 gw_intaddr      = 3;
+}
+
+message S2C_ReadyEnterArenaScene
+{
+    required E_MSG_RET_CODE ret_code= 1;
+}
+
+// 刷新竞技场玩家列表
+message C2S_RefreshArena
+{
+    required sint64 role_index  = 1;
+}
+message S2C_RefreshArena
+{
+    repeated arena_player_info players  = 1;
+}
+
+// 请求竞技场信息
+message C2S_ArenaInfo
+{
+    required sint64 role_index  = 1;
+}
+message S2C_ArenaInfo
+{
+    required E_MSG_RET_CODE     ret_code       = 1;
+    optional db_arena_info      arena_info     = 2;
+}
+
+// 请求竞技
+message C2S_ArenaFight
+{
+    required sint64 role_index      = 1;
+    optional sint64 tar_role_index  = 2;
+    optional sint32 tar_arena_rank  = 3;
+    optional sint64 ret_addr        = 4;
+}
+
+//message S2C_ArenaFight
+//{
+//    required E_MSG_RET_CODE ret_code                    = 1;
+//    repeated battle_player_info src_battle_player_info  = 2;
+//    repeated battle_player_info tar_battle_player_info  = 3;
+//    optional db_arena_info      arena_info              = 4;
+//}
+
+message S2C_ArenaFight
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint64 tar_role_index   = 2;
+    optional sint32 tar_arena_rank   = 3;
+}
+
+
+// 竞技结果
+message C2S_ArenaFightEnd
+{
+    required sint64 role_index              = 1;
+    required sint64 tar_role_index          = 2;
+    required bool   passed                  = 3;
+    repeated SkillUseInfo skill_use_infos   = 4;    // 战斗中技能使用的次数
+}
+
+message S2C_ArenaFightEnd
+{
+    required E_MSG_RET_CODE ret_code     = 1;    // 结果
+    repeated reward_info    reward       = 2;    // 奖励信息
+    optional sint32         atk_old_rank = 3;  
+    optional sint32         def_old_rank = 4;  
+}
+
+// 好友切磋竞技结果
+message C2S_FriendFightEnd
+{
+    required sint64 role_index              = 1;
+    required sint64 tar_role_index          = 2;
+    required bool   passed                  = 3;
+    repeated SkillUseInfo skill_use_infos   = 4;    // 战斗中技能使用的次数
+}
+
+message S2C_FriendFightEnd
+{
+    required E_MSG_RET_CODE ret_code        = 1;    // 结果
+    repeated reward_info    reward          = 2;    // 奖励信息
+}
+
+// 历史排名上升奖励，仅服务器推送
+message S2C_HistoryRankReward
+{
+    repeated reward_info    reward       = 1;    // 奖励信息
+    required sint32         curr_rank    = 2;    // 当前名次
+    required sint32         history_rank = 3;    // 历史名次
+}
+
+// 竞技场杀人榜信息
+message C2S_KillListInfo
+{
+    required sint64 role_index              = 1;
+    required sint64 tar_role_index          = 2;
+}
+
+message S2C_KillListInfo
+{
+    required E_MSG_RET_CODE      ret_code      = 1;    // 结果
+    optional player_show_info    show_myself   = 2;    // 自己的显示信息
+    repeated db_arena_kill_info  kill_list     = 3;    // 杀人信息
+    optional sint32              total_num     = 4;    // 杀人总人数
+}
+// 请求名片
+message C2S_VisitingCard
+{
+    required sint64 role_index      = 1;
+    required sint64 tar_role_index  = 2;
+    optional sint64 ret_unitindex   = 3;
+    optional sint64 ret_intaddr     = 4;
+}
+message S2C_VisitingCard
+{
+    required E_MSG_RET_CODE      ret_code       = 1;    // 结果
+    optional visiting_card_info  db_card_info   = 2;    // 名片
+}
+
+
+// 购买竞技场次数
+message C2S_BuyArenaCount
+{
+    required sint64 role_index  = 1;
+}
+message S2C_BuyArenaCount
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    optional sint32 buy_count           = 2;
+    optional sint32 total_count         = 3;
+    optional sint32 left_count          = 4;
+}
+
+
+// 清理竞技场CD时间
+message C2S_ClearArenaCD
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_ClearArenaCD
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+}
+
+// 琅琊榜
+message C2S_OpenStar
+{
+    required sint64 role_index  = 1;
+	optional sint64 login_addr = 2;
+	optional sint64 login_index = 3;
+}
+
+message S2C_OpenStar
+{
+    required E_MSG_RET_CODE ret_code            = 1;
+    optional player_show_info risen_play_info   = 2;    // 等级排行榜第一名信息
+    optional player_show_info arena_play_info   = 3;    // 竞技排行榜第一名信息
+    optional player_show_info diamond_play_info = 4;    // 土豪排行榜第一名信息
+    optional player_show_info kill_play_info    = 5;    // 杀人排行榜第一名信息
+}
+
+// 崛起星排行查询
+message C2S_QueryRisenStar
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_QueryRisenStar
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    repeated RankInfo rank_infos      = 2;
+    optional sint32 history_top_rank  = 3;
+}
+
+// 崛起星排行查询(等级排行改版协议)
+message C2S_QueryLevelRankListInfo
+{
+    required sint64 role_index = 1;
+    required sint32 page_num   = 2;
+    optional RankInfo self_info  = 3;
+	optional sint64 login_addr = 4;
+	optional sint64 login_index = 5;
+}
+
+message S2C_QueryLevelRankListInfo
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    required bool           is_end     = 2;
+    required sint32         page_num   = 3;
+    required RankInfo       self_info  = 4;    
+    optional RankInfo       the_one    = 5;    
+    repeated RankInfo       rank_list  = 6;
+}
+
+// 定位自己所在排行页
+message C2S_LevelRankLocationSelf
+{
+    required sint64 role_index = 1;
+    optional RankInfo self_info  = 2;
+	optional sint64 login_addr = 3;
+	optional sint64 login_index = 4;
+
+}
+
+message S2C_LevelRankLocationSelf
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    required bool           is_end     = 2;
+    required sint32         page_num   = 3;
+    required RankInfo       self_info  = 4;    
+    optional RankInfo       the_one    = 5;    
+    repeated RankInfo       rank_list = 6;
+}
+
+
+// 水管星排行查询
+message C2S_QueryArenaStar
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_QueryArenaStar
+{
+    required E_MSG_RET_CODE     ret_code     = 1;
+    repeated RankInfo rank_infos        = 2;
+    //required sint32 history_top_rank  = 2;
+    //required sint32 current_rank      = 3;
+}
+
+// 新排行榜协议
+// 按页码查询排行榜信息
+message C2S_QueryArenaRankListInfo
+{
+    required sint64 role_index = 1;
+    required sint32 page_num   = 2;
+    optional RankInfo self_info  = 3;
+	optional sint64 login_addr  = 4;
+	optional sint64 login_index  = 5;
+}
+
+message S2C_QueryArenaRankListInfo
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    required bool           is_end     = 2;
+    required sint32         page_num   = 3;
+    required RankInfo       self_info  = 4;    
+    optional RankInfo       the_one    = 5;    
+    repeated RankInfo       rank_list  = 6;
+}
+
+// 定位自己所在排行页
+message C2S_ArenaRankLocationSelf
+{
+    required sint64 role_index      = 1;
+    optional RankInfo self_info     = 2;
+    optional sint32   self_rank     = 3;
+    optional sint32   self_seq_rank = 4;
+    optional sint32   total_num     = 5;
+    optional sint32   the_one_rank  = 6;
+	optional sint64	  login_addr    = 7;
+	optional sint64	  login_index   = 8;
+}
+
+message S2C_ArenaRankLocationSelf
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    required bool           is_end    = 2;
+    required sint32         page_num  = 3;
+    required RankInfo       self_info = 4;    
+    optional RankInfo       the_one   = 5;    
+    repeated RankInfo       rank_list = 6;
+}
+
+// 土豪榜排行
+message C2S_QueryDiamondRankInfo
+{
+    required sint64 role_index = 1;
+    required sint32 page_num   = 2;
+    optional RankInfo self_info  = 3;
+	optional sint64 login_addr = 4;
+	optional sint64 login_index = 5;
+}
+
+message S2C_QueryDiamondRankInfo
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    required bool           is_end    = 2;
+    required sint32         page_num  = 3;
+    required RankInfo       self_info = 4;    
+    optional RankInfo       the_one   = 5;    
+    repeated RankInfo       rank_list = 6;
+}
+
+// 定位自己所在排行页
+message C2S_DiamondRankLocationInfo
+{
+    required sint64 role_index = 1;
+    optional RankInfo self_info  = 2;
+	optional sint64 login_addr = 3;
+	optional sint64 login_index = 4;
+}
+
+message S2C_DiamondRankLocationInfo
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    required bool           is_end    = 2;
+    required sint32         page_num  = 3;
+    required RankInfo       self_info = 4;    
+    optional RankInfo       the_one   = 5;    
+    repeated RankInfo       rank_list = 6;
+}
+
+// 杀人榜排行
+message C2S_QueryKillRankInfo
+{
+    required sint64 role_index = 1;
+    required sint32 page_num   = 2;
+    optional RankInfo self_info  = 3;
+	optional sint64 login_addr = 4;
+	optional sint64 login_index = 5;
+}
+
+message S2C_QueryKillRankInfo
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    required bool           is_end    = 2;
+    required sint32         page_num  = 3;
+    required RankInfo       self_info = 4;    
+    optional RankInfo       the_one   = 5;    
+    repeated RankInfo       rank_list = 6;
+}
+
+// 定位自己所在排行页
+message C2S_KillRankLocationInfo
+{
+    required sint64 role_index = 1;
+    optional RankInfo self_info  = 2;
+	optional sint64 login_addr = 3;
+	optional sint64 login_index = 4;
+
+}
+
+message S2C_KillRankLocationInfo
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    required bool           is_end    = 2;
+    required sint32         page_num  = 3;
+    required RankInfo       self_info = 4;    
+    optional RankInfo       the_one   = 5;    
+    repeated RankInfo       rank_list = 6;
+}
+
+// 石中剑
+// 请求石中剑
+message C2S_SwordInfo
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_SwordInfo
+{
+    required E_MSG_RET_CODE     ret             = 1;
+    optional db_sword_info      sword_info   = 2;
+}
+
+message C2S_AddSwordCount
+{
+    required sint64 role_index = 1;
+    required sint32 item_id    = 2;
+}
+
+message S2C_AddSwordCount
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+message S2C_SyncSwordCount
+{
+    required sint64 role_index  = 1;
+    required sint64 total_count = 2;
+    required sint64 left_count  = 3;
+    repeated sint64 diff_count  = 4;
+}
+
+// 拔剑结束
+message C2S_SwordEnd
+{
+    required sint64 role_index  = 1;
+    required bool is_success    = 2;             
+}
+
+message S2C_SwordEnd
+{
+    required E_MSG_RET_CODE     ret             = 1;
+    optional db_sword_info      caliburn_info   = 2;
+    optional db_bag_equip       equip_info      = 3;    
+}
+
+// 拔出武器是否要
+message C2S_SelectSwordEquip
+{
+    required sint64 role_index  = 1;
+    required bool is_select     = 2;
+}
+
+message S2C_SelectSwordEquip
+{
+    required E_MSG_RET_CODE ret                 = 1;
+    optional bool           is_event            = 2;
+    optional db_bag_equip   left_equip_info     = 3;
+    optional db_bag_equip   right_equip_info    = 4;
+}
+
+// 选择山神左右手武器或两者不是
+message C2S_SelectMountainGodEquip
+{
+    required sint64 role_index  = 1;
+    required sint32 pos         = 2;
+}
+
+message S2C_SelectMountainGodEquip
+{
+    required E_MSG_RET_CODE ret                     = 1;
+    optional E_MountainGodEvent_TYPE event_type     = 2[default = EMGET_INVALID];
+    repeated db_bag_equip equip_info                = 3;
+}
+
+// 请求日常任务信息
+message C2S_DailyTask
+{
+    required sint64 role_index  = 1;
+}
+
+// 应答日常任务信息
+message S2C_DailyTask
+{
+    required E_MSG_RET_CODE         ret               = 1;
+    repeated db_daily_task_info     task_info_list    = 2;
+}
+
+// 日常任务领取奖励请求
+message C2S_DailyTaskReward
+{
+    required sint64                role_index         = 1;
+    required db_daily_task_info    daily_task_info    = 2;
+}
+
+// 日常任务领取奖励应答
+message S2C_DailyTaskReward
+{
+    required E_MSG_RET_CODE             ret            = 1;
+    optional daily_activity_change_info activity_value = 2;
+}
+
+
+
+// 请求日常活跃度信息
+message C2S_DailyActivity
+{
+    required sint64 role_index  = 1;
+}
+
+// 日常活跃度信息应答
+message S2C_DailyActivity
+{
+    required E_MSG_RET_CODE           ret              = 1;
+    optional db_daily_activity_info   activity_info    = 2;
+}
+
+// 服务器推送活跃值变化
+message S2C_DailyActivityValue
+{
+    required daily_activity_change_info change_info = 1;
+}
+
+
+// 日常活跃度奖励领取请求
+message C2S_DailyActivityReward
+{
+    required sint64 role_index      = 1;
+    required sint32 activity_id     = 2;
+    required sint32 total_activity  = 3;
+}
+
+// 日常活跃度奖励领取应答
+message S2C_DailyActivityReward
+{
+    required E_MSG_RET_CODE         ret             = 1;
+    optional db_daily_activity_info activity_info   = 2;
+}
+
+// 购买体力值
+message C2S_BuyStamina
+{
+    required sint64 role_index      = 1;
+}
+
+message S2C_BuyStamina
+{
+    required E_MSG_RET_CODE ret_code        = 1;
+}
+
+// 邮件系统
+message S2C_Mail_Have_New
+{
+    required sint64 role_index  = 1;
+}
+message C2S_Mail_Title
+{
+    required sint64 role_index  = 1;
+    optional sint64 int_addr    = 2;
+}
+
+message S2C_Mail_Title
+{
+    required sint64 role_index              = 1;
+    repeated minos_mail_title mail_titles    = 2;
+}
+
+message C2S_Mail_Full
+{
+    required sint64 role_index  = 1;
+    required sint64 mail_index  = 2;
+    optional sint64 int_addr    = 3;
+}
+
+message S2C_Mail_Full
+{
+    required sint64 role_index          = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+    optional minos_mail mail_full       = 3;
+}
+
+// 
+message S2S_Mail_Full
+{
+    required sint64 role_index  = 1;
+    required sint64 mail_index  = 2;
+    optional sint64 int_addr    = 3;
+    optional minos_mail mail_full = 4;
+}
+
+message C2S_Mail_Read
+{
+    required sint64 role_index  = 1;
+    required sint64 mail_index  = 2;
+    optional sint64 int_addr    = 3;
+}
+message S2C_Mail_Read
+{
+    required sint64 role_index          = 1;
+    required E_MSG_RET_CODE ret_code    = 2;
+}
+
+
+// 签到信息
+
+// 签到信息
+message C2S_TodaySign
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_TodaySign
+{
+    required bool   today_sign = 1;     // 今日是否已签到 True:已签,False:未签
+}
+
+message C2S_SignInfo
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_SignInfo
+{
+    required E_MSG_RET_CODE ret_code           = 1;
+    optional sint32 sign_month                 = 2;     // 第几月
+    optional sint32 month_total_days           = 3;     // 该月总天数
+    optional sint32 sign_count                 = 4;     // 已签到次数
+    optional sint32 retroactive_count          = 5;     // 已补签次数
+    optional sint32 miss_count                 = 6;     // 缺失次数
+    optional sint32 lottery_count              = 7;     // 可抽奖次数
+    optional bool   today_sign                 = 8;     // 今日是否已签到 True:已签,False:未签
+    optional sint32 retroactive_left           = 9;     // 剩余补签次数
+}
+
+// 签到
+message C2S_SignAction
+{
+    required sint64 role_index  = 1;
+    required bool   is_miss     = 2;           // True : 补签  False : 正常签到
+}
+
+message S2C_SignAction
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 签到抽奖
+message C2S_SignLottery
+{
+    required sint64 role_index    = 1;
+}
+
+message S2C_SignLottery
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    optional reward_info    reward    = 2; 
+    optional sint32 lottery_count     = 3;     // 可抽奖次数
+}
+
+// 签到抽奖请求展示奖励
+message C2S_SignLotteryShow
+{
+    required sint64 role_index    = 1;
+}
+
+message S2C_SignLotteryShow
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+}
+
+// 七天登录信息
+message C2S_SevenDayInfo
+{
+    required sint64 role_index          = 1;
+}
+
+message S2C_SevenDayInfo
+{
+    required E_MSG_RET_CODE   ret_code         = 1;
+    repeated seven_day_detail day_tail         = 2;
+    optional sint32           total_login_days = 3;
+}
+
+// 领取指定天登录奖励
+message C2S_GetSevenDayReward
+{
+    required sint64 role_index          = 1;
+    required sint32 the_day             = 2;
+}
+
+message S2C_GetSevenDayReward
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         the_day  = 2;
+}
+
+// GM功能
+message C2S_GMSetLevel
+{
+    required sint64 role_index = 1;
+    required sint32 value      = 2;
+}
+
+message S2C_GMSetLevel
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+
+message C2S_GMAddItem
+{
+    required sint64 role_index = 1;
+    required item_config item  = 2;
+}
+
+message S2C_GMAddItem
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddCoin
+{
+    required sint64 role_index = 1;
+    required sint32 value       = 2;
+}
+
+message S2C_GMAddCoin
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddStimina
+{
+    required sint64 role_index = 1;
+    required sint32 value   = 2;
+}
+
+message S2C_GMAddStimina
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddDiamond
+{
+    required sint64 role_index = 1;
+    required sint32 value   = 2;
+}
+
+message S2C_GMAddDiamond
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddCaliburnCount
+{
+    required sint64 role_index = 1;
+    required sint32 value   = 2;
+}
+
+message S2C_GMAddCaliburnCount
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddArenaCount
+{
+    required sint64 role_index = 1;
+    required sint32 value   = 2;
+}
+
+message S2C_GMAddArenaCount
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddFace
+{
+    required sint64 role_index = 1;
+    required face_config face  = 2;
+}
+
+message S2C_GMAddFace
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddSuit
+{
+    required sint64 role_index = 1;
+    required suit_config suit  = 2;
+}
+
+message S2C_GMAddSuit
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_GMAddEquip
+{
+    required sint64 role_index = 1;
+    required sint32 equip_id   = 2;
+}
+
+message S2C_GMAddEquip
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message S2C_FunctionOpen
+{
+    required sint32 function_id = 1;
+}
+
+message C2S_FastTransfer
+{
+    required sint64 role_index = 1;
+    required sint32 scene_id   = 2;
+}
+
+message S2C_FastTransfer
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+message C2S_EasterEggTransfer
+{
+    required sint64 role_index  = 1;
+    required sint32 egg_id      = 2;
+    required sint32 scene_id    = 3;
+}
+
+message S2S_GetEasterEggTransfer
+{
+    required sint32 egg_id          = 1;
+    required sint32 scene_id        = 2;
+    optional sint64 ret_unitindex   = 3;
+    optional sint64 ret_intaddr     = 4;
+    optional sint32 left_cd_time    = 5;
+}
+
+message S2C_EasterEggTransfer
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+// 装备强化
+message C2S_EquipStrongthen
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+
+message S2C_EquipStrongthen
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    optional db_bag_equip   equip_info = 2;
+}
+
+// 强化身上装备
+message C2S_EquipStrongthenEquiped
+{
+    required sint64 role_index              = 1;
+    required E_EQUIP_SITE_TYPE  site_type   = 3;
+}
+
+message S2C_EquipStrongthenEquiped
+{
+    required E_MSG_RET_CODE  ret_code   = 1;
+    optional db_role_equip   equip_info = 2;
+}
+
+// 装备分解
+message C2S_EquipResolve
+{
+    required sint64 role_index  = 1;
+    repeated sint64 equip_index = 2;
+}
+
+message S2C_EquipResolve
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    repeated item_config    item_list = 2;
+}
+
+// 装备修复
+message C2S_EquipFix
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+
+message S2C_EquipFix
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    optional db_bag_equip   equip_info = 2;
+}
+
+// 修复身上装备
+message C2S_EquipFixEquiped
+{
+    required sint64 role_index              = 1;
+    required E_EQUIP_SITE_TYPE  site_type   = 2;
+}
+
+message S2C_EquipFixEquiped
+{
+    required E_MSG_RET_CODE  ret_code  = 1;
+    optional db_role_equip   equip_info = 2;
+}
+
+// 请求装备修复背包信息
+message C2S_AskFixEquipsInfo
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_AskFixEquipsInfo
+{
+    required E_MSG_RET_CODE ret_code       = 1;
+    optional list_db_fix_equips fix_equips = 2;
+}
+
+// 装备快速修复
+message C2S_EquipFastFix
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+
+message S2C_EquipFastFix
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    optional db_fix_equip  equip_info = 2;
+}
+
+// 已修理装备领取
+message C2S_GetFixedEquip
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+
+message S2C_GetFixedEquip
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    optional db_bag_equip  equip_info = 2;
+}
+
+message C2S_PointGoldInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_PointGoldInfo
+{
+    required E_MSG_RET_CODE ret_code        = 1;
+    optional sint32         exchanged_count = 2;  // 已兑换次数
+}
+
+// 点金手（棒棒糖换金币）
+message C2S_PointGold
+{
+    required sint64 role_index = 1;
+}
+
+// 点金手（棒棒糖换金币）
+message S2C_PointGold
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 获取个人彩蛋信息
+//message C2S_PersonEasterEggInfo
+//{
+//    required sint64 role_index    = 1;
+//}
+//
+//// 获取彩蛋信息
+//message S2C_PersonEasterEggInfo
+//{
+//    required list_person_easter_egg person_egg_info = 1;
+//}
+
+// 触发个人彩蛋
+message C2S_TouchPersonEasterEgg
+{
+    required sint64 role_index    = 1;
+    required sint32 easter_egg_id = 2;
+}
+
+// 触发个人彩蛋
+message S2C_TouchPersonEasterEgg
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32 easter_egg_id    = 2;
+    required sint32 left_cd_time     = 3;
+    required sint32 day_get_count    = 4;
+}
+
+// 重置个人彩蛋
+message S2C_ResetPersonEasterEgg
+{
+    required sint32 easter_egg_id = 1;
+}
+
+
+// 请求全服彩蛋信息(服务器自用)
+message S2S_GlobalEasterEggInfo
+{
+    required sint64 role_index    = 1;
+    required sint32 easter_egg_id = 2;
+    optional sint64 ret_unitindex = 3;
+    optional sint64 ret_intaddr   = 4;
+}
+
+// 推送全服彩蛋信息
+message S2C_GlobalEasterEggInfo
+{
+    required sint32 easter_egg_id    = 1;
+    required sint32 left_cd_time     = 2;
+}
+
+// 触发全服彩蛋
+message C2S_TouchGlobalEasterEgg
+{
+    required sint64 role_index    = 1;
+    required sint32 easter_egg_id = 2;
+    optional sint64 ret_unitindex = 3;
+    optional sint64 ret_intaddr   = 4;
+    optional sint32 scene_id      = 5;
+}
+
+// 触发全服彩蛋
+message S2C_TouchGlobalEasterEgg
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32 easter_egg_id    = 2;
+    required sint32 left_cd_time     = 3;
+    optional sint32 scene_id         = 4;
+}
+
+// 获取vip信息
+message C2S_RechargeMoneyInfo
+{
+    required sint64 role_index  = 1;
+}
+
+// 获取vip信息
+message S2C_RechargeMoneyInfo
+{
+    required recharge_money_info recharge_info = 1;
+}
+
+// 购买商品
+message C2S_RechargeMoney
+{
+    required sint64 role_index  = 1;
+    required sint32 recharge_id = 2;
+}
+
+// 购买商品
+message S2C_RechargeMoney
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required sint32         recharge_id = 2;
+}
+
+// 推送因vip等级提升引起当日奖励领取标识重置状态
+message S2C_VipDailyRewardFlag
+{
+    required sint64 role_index      = 1;
+    required bool daily_reward_flag = 2;
+}
+
+// 领取当前vip每日奖励
+message C2S_GetVipDailyReward
+{
+    required sint64 role_index  = 1;
+}
+
+// 领取当前vip每日奖励
+message S2C_GetVipDailyReward
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 领取当前vip永久奖励
+message C2S_GetSpecialVipReward
+{
+    required sint64 role_index  = 1;
+    required sint32 vip_level   = 2;
+}
+
+// 领取当前vip永久奖励
+message S2C_GetSpecialVipReward
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 澡堂大战相关协议
+
+// 澡堂新增加一个交互道具
+message S2C_AddInterActTool
+{
+    repeated bathhouse_tool tool_info = 1;
+}
+
+// 澡堂指定交互道具消失
+message S2C_RemoveInterActTool
+{
+    required sint32 tool_id = 1;     
+}
+
+//message new_owner_tool
+//{
+//    required sint64         role_index = 1;
+//    required bathhouse_tool tool_info  = 2;
+//}
+//
+//// 澡堂玩家身上拥有指定交互道具
+//message S2C_NewOwnerTool
+//{
+//    repeated new_owner_tool new_owner = 1;
+//}
+
+// 澡堂玩家身上交互道具移除
+message S2C_RemoveOwnerTool
+{
+    required sint64 role_index = 1;
+}
+
+// 通知澡堂大战结束
+message S2C_BathhouseFightEnd
+{
+    required sint64 role_index = 1;
+}
+
+// 玩家点击黑衣人
+message C2S_TouchManInBlack
+{
+    required sint64 role_index = 1;
+}
+
+// 玩家点击黑衣人
+message S2C_TouchManInBlack
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         cd_time  = 2;
+}
+
+// (服务器用)使用交互道具
+message S2S_UseInterActTool
+{
+    required sint64 role_index = 1;
+    required sint32 tool_type  = 2;
+}
+
+// 澡堂玩家捡起指定交互道具
+message C2S_PickUpInterActTool
+{
+    required sint64 role_index = 1;
+    required sint32 tool_id    = 2;
+}
+
+// 澡堂玩家捡起指定交互道具
+message S2C_PickUpInterActTool
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    optional bathhouse_tool tool_info = 2;
+}
+
+// 同步澡堂大战阶段
+message S2C_BathFightStepInfo
+{
+    required sint32 bath_fight_step = 1;
+}
+
+// 同步澡堂是否能泼水
+message S2C_CanPlayWaterBall
+{
+    required bool can_play_water_ball = 1;
+}
+
+// 澡堂状态改变
+message C2S_BathStatusChange
+{
+    required sint64 role_index = 1;
+    required sint32 status_id  = 2; // 目的状态id
+}
+
+// 同步澡堂状态
+message S2C_SyncBathPlayerInfo
+{
+    required sint32 bath_fullness      = 1;
+    required sint32 bath_stamina       = 2;
+    required sint32 today_bath_stamina = 3;
+}
+
+// 将表情设置为偏好
+message C2S_PreferFace
+{
+    required sint64 role_index = 1;
+    required sint32 face_id    = 2;
+}
+
+message S2C_PreferFace
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32 face_id          = 2;
+    required bool   is_prefer        = 3;
+}
+
+// 同步表情偏好信息
+message C2S_FacePreferInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_FacePreferInfo
+{
+    required bool face_random_onoff = 1;    // 服务器默认打开
+    repeated sint32 face_id_list    = 2;
+}
+
+// 打开或关闭表情随机功能
+message C2S_OnOffFaceRandom
+{
+    required sint64 role_index = 1;
+}
+
+// 同步交互能量
+message S2C_InteractEnergy
+{
+    required sint32 energy      = 1;
+    repeated sint32 energy_diff = 2;
+}
+
+// 请求交互系统信息
+message C2S_InterActInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_InterActInfo
+{
+    required role_interact_info interact_info = 1;
+}
+
+// 查询指定动作的解锁条件信息
+message C2S_QueryUnlockInfo
+{
+    required sint64 role_index = 1;
+    required sint32 act_id     = 2;
+}
+
+
+
+message S2C_QueryUnlockInfo
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    repeated item_need     interact  = 2;  
+    repeated item_need     item      = 3;  
+    repeated level_need    level     = 4;  
+}
+
+// 解锁指定交互动作
+message C2S_UnlockInteract
+{
+    required sint64 role_index = 1;
+    required sint32 act_id     = 2;
+}
+
+message S2C_UnlockInteract
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         act_id   = 2;
+}
+
+// 装备交互动作
+message C2S_DressInteract
+{
+    required sint64 role_index = 1;
+    required sint32 act_id     = 2;
+    required sint32 site       = 3; // 位置,从左到右,1,2,3
+}
+
+message S2C_DressInteract
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         act_id   = 2;
+    required sint32         site     = 3; // 位置,从左到右,1,2,3
+    repeated sint32         effect_act_list = 4;
+}
+
+// 卸下交互动作
+message C2S_TakeOffInteract
+{
+    required sint64 role_index = 1;
+    required sint32 act_id     = 2;
+    required sint32 site       = 3; // 位置,从左到右,1,2,3
+}
+
+message S2C_TakeOffInteract
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         act_id   = 2;
+    required sint32         site     = 3; // 位置,从左到右,1,2,3
+    repeated sint32         effect_act_list = 4;
+}
+
+message C2S_ExChangeInteractHole
+{
+    required sint64 role_index = 1;
+    required sint32 hole_1     = 2;
+    required sint32 hole_2     = 3;
+    required sint32 act_type   = 4;
+}
+
+message S2C_ExChangeInteractHole
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    repeated sint32         effect_act_list = 2;
+
+}
+
+// 获取图鉴奖励信息
+message C2S_InterActManualRewardInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_InterActManualRewardInfo
+{
+    required bool        is_new_reward = 1; // 是否有奖励未领取
+    required sint32      num           = 2; // 奖励id
+    optional item_config reward        = 3; // 奖励对应id(当is_new_reward为false时,此id标识下一次成就达到时能领取的id)
+}
+
+// 领取交互图鉴数量奖励
+message C2S_GetInterActManualReward
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_GetInterActManualReward
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 截具合成
+message C2S_VehicleCompose
+{
+    required sint64 role_index           = 1;
+    required sint64 main_vehicle_index   = 2; // 主截具
+    repeated sint64 consume_vehicle_list = 3; // 被消耗的截具
+}
+
+message S2C_VehicleCompose
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    optional db_bag_equip   new_vehicle = 2;
+}
+
+// 请求装备图鉴奖励信息
+message C2S_EquipManualInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_EquipManualInfo
+{
+    required sint32      can_get       = 1; 
+    repeated sint32      equip_id_list = 2; // 所有历史所得装备id
+    required sint32      rate          = 3; // 当前进度(0-10)
+    optional item_config reward        = 4; // 
+}
+
+// 领取装备图鉴奖励
+message C2S_GetEquipManualReward
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_GetEquipManualReward
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+}
+
+// 家园互动
+message C2S_NPCInteract
+{
+    required sint64 role_index = 1;
+    required sint32 npc_id     = 2;
+}
+
+message S2C_NPCInteract
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required sint64         role_index  = 2;
+    required sint32         npc_id      = 3;
+}
+
+message C2S_InteractRedPoint
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_InteractRedPoint
+{
+    repeated sint32 can_unlock_act_list = 1; // 可解锁交互动作
+}
+
+// 请求好友战斗信息
+message C2S_FriendFightInfo
+{
+    required sint64 role_index    = 1;
+    required sint64 friend_index  = 2;
+    optional sint64 ret_unitindex = 3;
+    optional sint64 ret_intaddr   = 4;
+}
+
+message S2C_FriendFightInfo
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    optional battle_player_info battle = 2;
+}
+
+// 万能技能书兑换指定技能书
+//message C2S_ExchargeSkillBook
+//{
+//    required sint64 role_index = 1;
+//    required sint32 item_id    = 2;
+//    required sint32 count      = 3;
+//}
+//
+//message S2C_ExchargeSkillBook
+//{
+//    required E_MSG_RET_CODE ret_code   = 1;
+//}
+// 上送玩家配置信息存盘
+message C2S_UploadSystemConfig
+{
+    required sint64                role_index = 1;
+    required db_role_system_config config     = 2;   
+}
+
+// 摸装备
+message C2S_TouchEquip
+{
+    required sint64 role_index  = 1;
+    required sint64 equip_index = 2;
+}
+
+// 摸道具
+message C2S_TouchItem
+{
+    required sint64 role_index = 1;
+    required sint64 item_index = 2;
+}
+
+// 更新强制引导索引
+message C2S_UploadForceGuideInfo
+{
+    required sint64 role_index  = 1;
+    required sint32 guide_index = 2;
+}
+
+// 更新小面板引导
+message S2C_UpdateFindwayGuideIndex
+{
+    required sint32 find_guid_index = 1;
+}
+
+// 消耗相应物品扩充技能坑位
+message C2S_ExtendSkillHole
+{
+    required sint64 role_index  = 1;
+    required sint32 site        = 2;  // 扩充位置编号 1 ~ n
+}
+
+message S2C_ExtendSkillHole
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         site     = 2;  // 扩充位置编号 1 ~ n
+}
+
+// 推送当前技能坑位信息
+message S2C_RoleCurrentSkills
+{
+    repeated sint32 current_skills = 1; // 角色当前装备技能信息
+}
+
+
+// 装备耐久掉0通知
+message S2C_EquipBroken
+{
+    repeated sint32 equip_id = 1;
+}
+
+// 请求自定义表情信息
+message  C2S_CustomFaceInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_CustomFaceInfo
+{
+    repeated role_custom_face custom_list  = 1; // 自定义表情列表
+    required role_face        current_face = 2;
+    required bool             forever_free = 3; // true: 永久免费, false : 不是永久免费
+}
+
+// 请求是否可以上传
+message C2S_CanUploadImage
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2; // 1: 左边 2:右边
+    optional bool   buy_free   = 3; // true: 购买一次性免费服务; false: 单次购买
+}
+
+message S2C_CanUploadImage
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    required sint32         image_id    = 2; // 1: 左边 2:右边
+    optional bytes          unique_key  = 3;  
+    optional sint32         platform_id = 4;
+    optional sint32         server_id   = 6;
+}
+
+// 照片文件上传服务器成功后发送此协议
+message C2S_UploadImageInfo
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2; // 1: 左边 2:右边
+    required bytes  unique_key = 3; // 照片的key
+}
+
+message S2S_UploadImageInfo
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2; // 1: 左边 2:右边
+    required bytes  unique_key = 3; // 照片的key
+}
+
+message S2C_UploadImageInfo
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+// 穿戴自定义表情
+message C2S_DressCustomFace
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2; // 1: 左边 2:右边
+}
+
+message S2C_DressCustomFace
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint32         image_id = 2; // 1: 左边 2:右边
+    optional role_face      current_face = 3;
+}
+
+// 脱自定义表情
+message C2S_TakeOffCustomFace
+{
+    required sint64 role_index = 1;
+    optional sint32 image_id   = 2; // 1: 左边 2:右边
+}
+
+message S2C_TakeOffCustomFace
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint32         image_id = 2; // 1: 左边 2:右边
+    optional role_face      current_face = 3;
+}
+
+// 删除自定义表情
+message C2S_DelelteCustomFace
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2;
+}
+
+message S2C_DelelteCustomFace
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint32         image_id = 2;
+    optional role_face      current_face = 3;
+}
+
+// 自定义表情审核结果通知
+message S2C_CustomFaceAuditResult
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2;
+    required sint32 status     = 3;  // 审核结果 
+}
+
+// 自定义表情审核结果通知
+message S2C_FaceUploadSuccess
+{
+    required sint64 role_index = 1;
+    required sint32 image_id   = 2;
+}
+
+
+
+
+// 请求宠物信息
+message C2S_RolePetInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_RolePetInfo
+{
+    required db_role_pet_info pet_info = 1;
+}
+
+// 设置指定宠物出战状态
+message C2S_SetPetFightStatus
+{
+    required sint64 role_index = 1;
+    required sint32 pet_id     = 2;
+}
+
+message S2C_SetPetFightStatus
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    required sint32         pet_id   = 2;
+    required bool           status   = 3; // true : 设置出战状态， false : 取消出战状态
+}
+
+// 宠物进化
+message C2S_PetEvolve
+{
+    required sint64 role_index = 1;
+    required sint32 pet_id     = 2;
+}
+
+message S2C_PetEvolve
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    optional sint32         old_pet_id = 2;
+    optional pet_info       new_pet    = 3;
+}
+
+// 宠物技能重修
+message C2S_PetTalentRebuild
+{
+    required sint64 role_index     = 1;
+    required sint32 pet_id         = 2;
+    required sint32 site           = 3; // 技能坑号
+}
+
+message S2C_PetTalentRebuild
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+    required sint32 new_passive_id     = 2; // 重修后新被动技能id
+} 
+
+// 培养宠物,增加宠物经验
+message C2S_FosterPet
+{
+    required sint64 role_index      = 1;
+    required sint32 pet_id          = 2;
+    repeated item_config  item_list = 3;
+}
+
+message S2C_FosterPet
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint32         level    = 2;  // 宠物等级
+    optional sint64         exp      = 3;  // 经验
+}
+
+// 同步宠物增加
+message S2C_PetAdd
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    repeated pet_info       pet_list = 2;
+}
+
+// 同步宠物更新
+message S2C_PetUpdate
+{
+    repeated pet_info pet_list = 1;
+}
+
+// 同步宠物经验
+message S2C_SyncPetLevel
+{
+    required sint32 pet_id   = 1;
+    required sint32 level    = 2;
+    required sint64 exp      = 3;
+    repeated sint64 exp_diff = 4;
+}
+
+// 宠物吃仙丹,增加三围
+message C2S_PetEatPill
+{
+    required sint64 role_index      = 1;
+    required sint32 pet_id          = 2;
+    repeated item_config  item_list = 3;
+}
+
+message S2C_PetEatPill
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    optional pet_base_fight new_attr    = 2;  // 额外增加的属性
+}
+
+// 推送宠物刷新
+message S2C_PetRefreshInfo
+{
+    required lua_pos born_pos = 1;
+    required sint32  pet_id   = 2;
+}
+
+// 捉到宠物了
+message C2S_RoleNabPet
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_RoleNabPet
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 走马灯推送
+message S2C_HorseLight
+{
+    repeated horse_light_info horse_Light_list = 1;
+}
+
+// 阅读小助手信息请求,获取已领取过的奖励id
+message C2S_AssistantTipInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_AssistantTipInfo
+{
+    repeated sint32 tip_read_id_list  = 3;   // 小面板阅读历史id
+}
+
+// 阅读小助手
+message C2S_AssistantTipRead
+{
+    required sint64 role_index = 1;
+    required sint32 tip_id = 2;
+}
+
+// 扭蛋机信息
+message C2S_NiuDanInfo
+{
+    required sint64 role_index  = 1;
+    required sint32 niudan_id   = 2;
+}
+
+message S2C_NiuDanInfo
+{
+    required sint32    niudan_id   = 1;
+    required button_cd button_info = 2;
+}
+
+
+// touch扭蛋机
+message C2S_TouchNiuDan
+{
+    required sint64 role_index = 1;
+    required sint32 niudan_id  = 2;  // 扭蛋机id(1,2,3)
+    required sint32 button_id  = 3;  // 按钮id, 左:1,右为2
+}
+
+message S2C_TouchNiuDan
+{
+    required E_MSG_RET_CODE ret_code         = 1; // 结果
+    required sint32         niudan_id        = 2;  // 扭蛋机id(1,2,3)
+    required sint32         button_id        = 3;  // 按钮id, 左:1,右为2
+    required sint64         left_time        = 4;
+    repeated reward_info    reward           = 5; // 奖励信息
+    repeated reward_info    must_reward_list = 6;
+}
+
+//兑换码
+message C2S_ExchangeCode
+{
+    required sint64 role_index = 1;
+    required bytes code        = 2;
+}
+
+message S2C_ExchangeCode
+{
+    required E_MSG_RET_CODE ret_code    = 1; // 兑换结果
+}
+
+// 通知成就完成
+message S2C_ArchieveFinish
+{
+    repeated sint32 id = 1;
+}
+
+// 领取指定成就奖励
+message C2S_GetArchieveReward
+{
+    required sint64 role_index = 1;
+    required sint32 id         = 2;
+}
+
+message S2C_GetArchieveReward
+{
+    required E_MSG_RET_CODE ret_code    = 1; 
+    required sint32 id                  = 2;
+}
+
+// 获取玩家成就信息
+message C2S_ArchieveInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_ArchieveInfo
+{
+    required list_db_role_success_info info = 1;
+}
+
+// 准备进入二次园
+message C2S_ReadyEnterGuadratic
+{
+    required sint64 role_index      = 1;
+    required sint32 scene_id        = 2;
+    optional sint64 gw_intaddr      = 3;
+}
+
+message S2C_ReadyEnterGuadratic
+{
+    required E_MSG_RET_CODE ret_code= 1;
+    required sint32 scene_id        = 2;
+}
+
+// 二次园进入
+message S2C_EnterGuadratic
+{
+    required E_MSG_RET_CODE ret_code        = 1;
+    required sint64 role_index              = 2;
+    required sint32 scene_id                = 3;
+    required sint32 scene_index             = 4;
+    required sint64 scene_intaddr           = 5;
+    required sint64 scene_instance_id       = 6;
+    required sint32 map_id                  = 7; 
+
+    required sint32 dup_id                  = 8;   
+
+}
+
+// 二次园人满倒计时
+message S2C_GuadraticReady
+{
+
+}
+
+// 通知下一关
+message S2C_NextGuadraticDup
+{
+    required sint64 dup_id                 = 1; 
+    repeated guadratic_role_info role_list = 2;
+}
+
+// 二次园结束
+message S2C_GuadraticEnd
+{
+    repeated guadratic_result result_list = 1;
+}
+
+// 二次园广播玩家血量
+message S2C_SyncGuadraticRoleHP
+{
+    repeated guadratic_role_hp role_hp_list = 1;
+}
+
+// 二次园广播玩家CD
+message S2C_SyncGuadraticRoleCD
+{
+    repeated guadratic_role_cd role_cd_list = 1;
+}
+
+// 二次园boss入场通知
+message S2C_GuadraticBossEnter
+{
+    required sint32  boss_index = 1;
+    required sint32  boss_id = 2;
+    required lua_pos pos     = 3;
+    required lua_pos_rect  hurt_rect = 4;
+}
+
+// 二次园boss技能伤害
+message S2C_GuadraticBossUseSkill
+{
+    required sint32 boss_index = 1;
+    required sint32 boss_id    = 2;
+    required sint32 skill_id   = 3;
+    required sint32 hurt       = 4;
+    required lua_pos_rect  hurt_rect = 5;
+}
+
+message C2S_SellBagThing
+{
+    required sint64 role_index    = 1;
+	repeated sell_info equip_list = 2; 
+	repeated sell_info item_list  = 3; 
+}
+
+message S2C_SellBagThing
+{
+    required E_MSG_RET_CODE ret_code        = 1;
+}
+
+// 氪石兑换
+message C2S_StoneExchange
+{
+    required sint64 role_index = 1;
+    required item_config want  = 2;  // 想要兑换的石头与数量
+}
+
+message S2C_StoneExchange
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 首充信息
+message C2S_FirstMonery
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_FirstMonery
+{
+    required sint32 first_flag       = 1; // 0:不可领取, 1:可领取, 2:已领取过
+    repeated item_config reward_list = 2; // 奖励列表
+}
+
+// 领取首充礼包
+message C2S_GetFirstMonery
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_GetFirstMonery
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 限时活动
+message S2C_OtherRechargeInfo
+{
+    repeated item_config reward_list = 1;
+    repeated item_config cost_list   = 2;
+    optional sint64 start_time       = 3;
+    optional sint64 end_time         = 4;
+}
+
+// 获取限时活动奖励
+message C2S_GetOtherRechargeReward
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_GetOtherRechargeReward
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+
+// 微信分享奖励
+message C2S_ShareToWeixin
+{
+    required sint64 role_index = 1;
+    required sint32 chapter_id = 2;
+    required sint32 risk_id    = 3;
+}
+
+// 查询是否可以分享
+message C2S_IfShareRisk
+{
+    required sint64 role_index = 1;
+    required sint32 chapter_id = 2;
+    required sint32 risk_id    = 3;
+}
+
+message S2C_IfShareRisk
+{
+    optional bool result = 1; // true:可分享,false:不可分享
+}
+
+// 客户端发协议null
+message S2C_AreYouKidding
+{
+    required bytes data = 1;
+}
+
+
+//-------------------------------------------------------
+
+message BattlePlayerGroup
+{
+    repeated battle_player_info player_list = 1;
+}
+
+// PVE战斗数据
+message BattlePVEData
+{   
+    required uint32 version                      = 1; // 战斗数据版本号(0x00010001)
+    required bytes randomseed                    = 2; // 战斗随机数种子
+    required uint32 chapterID                    = 3; // 战斗章节ID
+    required uint32 riskID                       = 4; // 战斗关卡ID
+    required battle_player_info main_hero        = 5; // 主角信息
+    optional battle_player_info friend           = 6; // 好友信息
+    optional pet_info pet                        = 7; // 宠物信息
+    required uint32 face_count                   = 8; // 战斗方的表情总数量
+    repeated uint32 face_list                    = 9; // 战斗方带的表情数量(目前最多带12个,最嘴炮技能显示的表情数量目前最多是12个)
+    required C2S_PassRisk pass_risk_data         = 10;// 战斗结束后客户端发给服务器的数据(放在这里的目的是让lua校验战斗合法性)
+}
+
+message BattlePVEVerifyResult
+{
+    required E_MSG_RET_CODE ret_code             = 1; // 校验错误码(校验数据格式错误/战斗作弊)
+//    optional bytes md5                           = 2; // 战斗结束校验md5值(战斗结束之后对某些重要数据进行md5强校验)
+//    optional bool is_win                         = 3; // 战斗结果
+//    repeated SkillUseInfo skill_use_infos        = 4; // 战斗中技能使用的次数
+//    optional sint32 box_count                    = 5; // 冒险掉落宝箱数量
+//    repeated kill_monster monster_info           = 6; // 杀死的小怪信息（小怪id，杀死数量）
+}
+
+// 扩充装备背包上限
+message C2S_ExtendEquipBag
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_ExtendEquipBag
+{
+    required E_MSG_RET_CODE ret_code          = 1;
+    required sint32         curr_bag_size     = 2;
+    required sint32         curr_extend_count = 3;   
+}
+
+// 请求活动信息
+message C2S_ActivityInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_ActivityInfo
+{
+    repeated  activity_info activity_list = 1;
+}
+
+// 获取相应活动奖励
+message C2S_GetActivityReward
+{
+    required sint64 role_index = 1;
+    required sint32 id         = 2; // 活动id
+    required sint32 position   = 3; // 活动下具体规则下标
+}
+
+message S2C_GetActivityReward
+{
+    required E_MSG_RET_CODE ret_code          = 1;
+}
+
+// 指定活动进度更新
+message S2C_ActivityInfoUpdate
+{
+    repeated  activity_info activity_list = 1;  // 进度有更新的列表.
+}
+
+
+//抢钢琴座位
+message C2S_PianoStart
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_PianoStart
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint64 role_index       = 2;
+}
+
+
+//弹奏钢琴
+message C2S_PianoPlay
+{
+    required sint64 role_index = 1;
+    required sint32 note_id    = 2; // 音符id
+}
+
+message S2C_PianoPlay
+{
+    required sint32 note_id    = 2; // 音符id
+}
+
+//自己从钢琴的座位下来
+message C2S_PianoEnd
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_PianoEnd
+{
+    required sint64 role_index = 1;
+}
+
+//下水道查询玩钢琴的玩家
+message C2S_AskPianoStatus
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_AskPianoStatus
+{
+    optional sint64 role_index = 1;
+}
+
+// 包裹满的提示
+message S2C_RoleBagFull
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 装备制造
+message C2S_EquipMake
+{
+    required sint64 role_index = 1; 
+    required sint32 make_id    = 2; // 装备制造id
+    optional sint32 case_id    = 3; // 方案id  0: 方案1; 1:方案2
+}
+
+message S2C_EquipMake
+{
+    required E_MSG_RET_CODE ret_code    = 1;
+    optional sint32 new_equip_id        = 2;    // 打造的装备id
+}
+
+// 查询小游戏购买相关信息
+message C2S_GetMinigameBuyInfo
+{
+    required sint64 role_index = 1; 
+}
+
+message S2C_GetMinigameBuyInfo
+{
+    optional sint32 day_buy_count = 1;
+    optional sint32 get_flag      = 2; // 0: 未领取过; 1 : 领取过一次
+}
+
+// 领取每日bit币
+message C2S_GetDailyBitCoin
+{
+    required sint64 role_index = 1; 
+}
+
+message S2C_GetDailyBitCoin
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+}
+
+// 买bit币
+message C2S_BuyBitCoin
+{
+    required sint64 role_index = 1; 
+}
+
+message S2C_BuyBitCoin
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    optional sint32 day_buy_count     = 2;
+}

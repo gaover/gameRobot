@@ -1,0 +1,205 @@
+syntax = "proto2";
+package pbd;
+import "ProtoDef.proto";
+
+
+
+// rgba
+message lua_rgba
+{  
+    required sint32 r   = 1;
+    required sint32 g   = 2;
+    required sint32 b   = 3;
+    required float  a   = 4;
+}
+
+// 范围大小
+message lua_size
+{  
+    required sint32 width  = 1;
+    required sint32 height = 2;
+}
+
+message lua_arena_rect
+{
+    required sint32 low = 1;
+    required sint32 hig = 2;
+}
+
+//通关关卡
+message open_dup_config
+{
+    required sint32     chapID  = 1;
+    required sint32     dupID   = 2;
+}
+
+//事件参数列表
+message lua_event_arg_list
+{
+    optional sint32 percent = 1;
+}
+
+message shop_random_section
+{
+    required sint32 minId = 1;
+    required sint32 maxId = 2;
+}
+
+message shop_random_section_list
+{
+    repeated shop_random_section sectionList = 1;
+}
+
+// 澡堂道具通用message
+message bath_interact_tool
+{
+    required sint32 type = 1 ;
+    required sint32 num  = 2 ;
+}
+
+message sign_day_reward
+{
+    required sint32 item_id     = 1;
+    required sint32 item_count  = 2;
+    required sint32 vip_double  = 3;
+}
+
+message lua_package_item_weight
+{
+    required sint32 reward_id = 1;
+    required sint32 weight    = 2;
+    required sint32 count     = 3;
+    required sint32 clean     = 4;
+}
+
+message functionopen_risk_info
+{
+    required sint32 chapid = 1 ;
+    required sint32 dupid  = 2 ;
+}
+
+message equip_lasting_decline                      
+{                                                  
+    required sint32 total_value = 1;   // 每次副本完扣耐久的累计最大值          
+    required sint32 select_num  = 2;   // 扣耐久装备选定数量
+    required sint32 decline_num = 3;   // 当人物装备数大于选定数量时, 此字段决定实际扣耐久的装备数
+    required sint32 decline_min = 4;   // 每次扣耐久的最小值            
+    required sint32 decline_max = 5;   // 每次扣耐久的最大值             
+}
+
+
+
+message equip_resolve_item
+{
+    required sint32 item_id = 1;
+    required sint32 min_num = 2;
+    required sint32 max_num = 3;
+    required sint32 rate    = 4;
+}
+
+// 副本章节关卡
+message chapter_risk
+{
+    required sint32 chapter_id  = 1;
+    required sint32 risk_id     = 2;
+}
+
+message equip_endurance_cost
+{
+    required sint32 min_cost = 1;
+    required sint32 max_cost = 2;
+}
+
+// 技能震屏
+message shake_config
+{
+    required float time      = 1;
+    required sint32 shake_id = 2;   
+}
+
+message niudan_button_info
+{
+    repeated item_config cost              = 1;
+    repeated item_config must_output_list  = 2;
+    required sint32      cd                = 3;
+    repeated item_config first_output_list = 4;
+}
+
+message exchange_gold_item
+{
+    required sint32 level = 1;
+    required sint32 gold  = 2;
+}
+
+// 随机个数区间
+message random_section
+{
+    required sint32 min_num = 1;
+    required sint32 max_num = 2;
+}
+
+// 具体的百分比属性
+message extra_per_section
+{
+    repeated random_section per_section = 1;
+}
+
+//时间区间
+message time_range
+{
+    required sint32 start_time = 1;
+    required sint32 end_time   = 2;
+}
+
+// 澡堂体力一次性恢复时间区间
+message bath_once_stimina
+{
+    required int32 begin_time = 1;
+    required int32 end_time   = 2;
+    required int32 value      = 3;
+}
+
+//Boss出场信息
+message boss_enter
+{
+    required sint32 time  = 1;
+    required sint32 id    = 2;
+    required sint32 count = 3;
+}
+
+// 小游戏等级奖励
+message minigame_level_reward
+{
+    required sint32 exp  = 1;
+    required sint32 gold = 2;
+}
+
+message minigame_score_reward_
+{
+    required sint32 item_id  = 1;
+    required sint32 min_num  = 2;
+    required sint32 max_num  = 3;
+}
+
+message minigame_score_reward
+{
+    required sint32 display_percent  = 1;
+    required minigame_score_reward_ reward = 2;
+}
+
+// 小游戏排行
+message minigame_rank_info
+{
+    required sint32 diff     = 1;
+    required sint32 display  = 2;
+    required sint32 defeat   = 3;
+}
+
+// 通用商店物品价格信息
+message common_good_price
+{
+	required sint32 item_id     = 1;  // 物品ID
+	required sint32 num         = 2;  // 数量
+	required sint32 cost_type   = 3;  // 购买消耗类型
+	required sint32 price       = 4;  // 总价
+}

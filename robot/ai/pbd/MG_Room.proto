@@ -1,0 +1,173 @@
+syntax = "proto2";
+package pbd;
+import "ProtoDef.proto";
+import "EnumDef.proto";
+
+
+
+// 房间位置信息
+message room_seat_info
+{
+    required sint32             seat_id     = 1;    // 座位Id
+    required bool               is_master   = 2;    // 是否房主
+    required bool               is_ready    = 3;    // 是否准备
+    required sint64             role_index  = 4;
+    required player_show_info   show_player = 5;
+}
+
+// 房间信息
+message mg_room_info
+{
+    required sint32         room_id         = 1;
+    required MG_ROOM_TYPE   room_type       = 2;
+    required sint32         room_scene_id   = 3;
+    required sint32         room_max_player = 4;
+    repeated room_seat_info room_seat       = 5;
+}
+
+// 同步房间信息
+message S2C_MG_RoomInfo
+{
+    required mg_room_info room_info  = 1;
+}
+
+
+// 创建房间
+message C2S_MG_CreateRoom
+{
+    required MG_ROOM_TYPE room_type = 1;
+    required sint32 room_scene_id   = 2;
+    required sint64 role_index      = 3;
+}
+
+// 回复创建房间
+message S2C_MG_CreateRoom
+{
+    required MG_ROOM_TYPE room_type     = 1;
+    required sint32 room_scene_id       = 2;
+    required sint64 role_index          = 3;
+    required E_MSG_RET_CODE  ret_code   = 4;
+    optional mg_room_info room_info     = 5;
+}
+
+// 请求加入
+message C2S_MG_JoinRoom
+{
+    required sint64 role_index  = 1;
+    required sint32 room_id     = 2;
+}
+
+// 快速加入
+message C2S_MG_FastJoinRoom
+{
+    required sint64 role_index      = 1;
+    required MG_ROOM_TYPE room_type = 2;
+    required sint32 room_scene_id   = 3;
+}
+
+// 回复加入房间
+message S2C_MG_JoinRoom
+{
+    required sint64 role_index          = 1;
+    required sint32 room_id             = 2;
+    required E_MSG_RET_CODE  ret_code   = 3;
+    optional mg_room_info room_info     = 4;
+}
+
+
+// 离开房间
+message C2S_MG_LeaveRoom
+{
+    required sint64 role_index  = 1;
+    required sint32 room_id     = 2;
+}
+
+// 回复离开房间
+message S2C_MG_LeaveRoom
+{
+    required sint64 role_index          = 1;
+    required sint32 room_id             = 2;
+    required E_MSG_RET_CODE  ret_code   = 3;
+}
+
+// 切换准备
+message C2S_MG_Ready
+{
+    required sint64 role_index  = 1;
+    required sint32 room_id     = 2;
+    required bool   is_ready    = 3;
+}
+
+// 回复准备
+message S2C_MG_Ready
+{
+    required sint64 role_index          = 1;
+    required sint32 room_id             = 2;
+    required E_MSG_RET_CODE  ret_code   = 3;
+}
+
+// 同步房间座位信息
+message S2C_MG_SyncReady
+{
+    repeated room_seat_info room_seat       = 1;
+    repeated sint32         empty_room_seat = 2;
+}
+
+// 同步房间倒计时
+message S2C_MG_SyncCountDown
+{
+    required sint32 count_down  = 1;
+}
+
+// 房主请求踢人
+message C2S_MG_MasterKickPlayer
+{
+    required sint64 role_index      = 1;
+    required sint32 room_id         = 2;
+    required sint64 tar_role_index  = 3;
+}
+
+// 回复房主踢人
+message S2C_MG_MasterKickPlayer
+{
+    required sint64 role_index          = 1;
+    required sint32 room_id             = 2;
+    required sint64 tar_role_index      = 3;
+    required E_MSG_RET_CODE  ret_code   = 4;
+}
+
+// 请求扔蛋
+message C2S_MG_ThrowJBEgg
+{
+    required sint64 role_index      = 1;
+    required sint32 room_id         = 2;
+
+    required sint64 src_role_index  = 3;
+    required sint32 src_seat_id     = 4;
+    required sint64 tar_role_index  = 5;
+    required sint32 tar_seat_id     = 6;
+
+    required bytes egg_type         = 7;
+}
+
+// 回复扔蛋
+message S2C_MG_ThrowJBEgg
+{
+    required sint32 room_id         = 1;
+
+    required sint64 src_role_index  = 2;
+    required sint32 src_seat_id     = 3;
+    required sint64 tar_role_index  = 4;
+    required sint32 tar_seat_id     = 5;
+
+    required bytes egg_type         = 6;
+}
+
+// 回复倒计时
+message S2C_MG_Count_down
+{
+    required sint32 room_id         = 1;
+    required sint32 count_down      = 2;
+    required bool   can_go          = 3;
+}
+

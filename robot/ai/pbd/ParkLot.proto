@@ -1,0 +1,432 @@
+syntax = "proto2";
+package pbd;
+import "ProtoDef.proto";
+import "EnumDef.proto";
+
+
+// 车信息
+message db_car_info
+{
+    required sint64 car_index    = 1;
+    required sint32 car_id       = 2;
+    required sint32 level        = 3;  // 等级
+    required sint32 armor        = 4;  // 装甲
+    required E_CAR_STATUS status = 5;  // 状态
+}
+
+// 修理中的汽车
+message db_fix_car
+{
+    required sint64     fix_timestamp = 1;
+    required sint32     need_time     = 2;
+    required db_car_info car          = 3;
+}
+
+// 玩家停车记录(停车场,停车位, 车index),
+message role_park_record
+{
+    required sint32 park_id        = 1;  
+    required sint32 port_id        = 2;
+    required sint32 car_id         = 3;
+    required sint64 car_index      = 4;
+    required sint64 park_timestamp = 5;
+    required sint64 left_park_time = 6;
+    optional park_car get_car = 7; //被干到保管所的车辆此字段才有值(车辆一旦被干到保管所需要维护该字段)
+}
+
+// 老司机信息(等级,经验)
+message old_driver
+{
+    required sint32 level                    = 1;  // 老司机等级
+    required sint32 exp                      = 2;  // 当前经验
+    required sint32 port_num                 = 3;  // 车位数信息(即玩家最多可以拥有车辆数)
+    required sint32 expand_count             = 4;  // 车位扩充次数
+    required sint32 repair_port_num          = 5;  // 修理车位数信息(即玩家最多可以拥有修理车辆数)
+    required sint32 repair_expand_count      = 6;  // 修理车位扩充次数
+    required sint32 actioned_count           = 7;  // 剩余的点赞,破坏行动次数
+    optional sint64 action_refresh_last_time = 8;
+    optional list_role_carport carport       = 9;  // 车库
+    repeated role_park_record  role_park     = 10;  // 玩家停车记录(该字段服务器使用,停车场,停车位, 车index),
+}
+
+// 玩家车车库信息
+message list_role_carport
+{
+    repeated db_car_info car_info    = 1;
+    repeated db_fix_car fix_car_info = 2;
+}
+
+// 对汽车使用道具效果列表
+message car_effect
+{
+    required sint32 id          = 1;  // 效果id
+    required sint32 type        = 2;  // 效果id
+    required sint64 last_time   = 3;  // 持续时间
+    required sint32 effect      = 4;  // 影响值
+    required sint64 begin_time  = 5;  // 影响开始时间
+}
+
+// 停车位的车信息
+message park_car
+{
+    required sint64 role_index       = 1;    // 车位主人index
+    required bytes nick_name         = 2;    // 车位主人昵称
+    required sint32 effect_time      = 3;    // 点赞对停车时间的累计影响值(减少停车时间)
+    optional sint64 begin_timestamp  = 4;    // 停车开始时间
+    optional sint64 park_time        = 5;    // 已经停车的时间
+    optional sint64 end_timestamp    = 6;    // 停车结束时间
+    optional float  effect_percent   = 7;    // 记录其它条件引起的收益打折(如收益减少25%,则此值为-0.25)
+    optional float  benefit_time     = 8;    // 道具增益倍数
+    repeated item_config output_item = 9;     // 中间产出
+    repeated car_effect good_effect  = 10;    // 增益效果
+    repeated car_effect bad_effect   = 11;    // 坏效果(目前不存在持续性坏效果.2016.12.07,均为一次性的)
+    required db_car_info car         = 12;   // 车信息
+    required sint32     extra_armor  = 13;   // 车子的额外护甲
+}
+
+// 车位信息
+message park_lot
+{
+    required sint32 port_id           = 1; // 车位号
+    required E_PARK_LOT_STATUS status = 2; // 0:无人停车,1,已停车
+    required sint32 protect_time      = 3; // 剩余保护时间
+    optional sint64 act_timestamp     = 4; // 操作时间戳
+    optional sint64 actor_index       = 5; // 操作(点赞,破坏)者index
+    optional park_car car_info        = 6; // 停车位的车信息
+}
+
+// 整个停车场管理信息(管理信息放在管理亭中:0号车位)
+message park_lot_manager_info
+{
+    required sint32 total_park_car_num       = 1;  // 累计停车数
+    required sint32 total_park_player_num    = 2;  // 累计停车的玩家数
+    required sint32 total_enter_player_num   = 3;  // 进入停车场玩家数
+    required sint32 total_system_car_num     = 4;  // 当前停车场系统车数量
+    required sint64 next_auto_park_timestamp = 5;  // 下一次系统放置车的时间戳
+}
+
+// 车辆概况信息结构
+message role_car_log
+{
+    required sint64 actor_index      = 1;
+    required bytes  nick_name        = 2;
+    required E_ACT_CAR_TYPE act_type = 3;  
+    required sint32 action_id        = 4;
+    required sint32 car_id           = 5;
+}
+
+// 抢车位商店物品信息
+message  park_goods_info
+{
+    required sint32 item_id             = 1;
+    required sint32 count               = 2;
+    required sint32 currency            = 3;
+    required sint32 price               = 4;
+    required bool   is_buy              = 5;
+    required sint32 shop_index          = 6;
+}
+
+
+
+// 推送当前停车场车位信息
+message S2C_ParkLotInfo
+{
+    repeated park_lot lot_list = 1;
+}
+
+// 切换到停车场场景
+message C2S_ReadyEnterParkScene
+{
+    required sint64 role_index = 1;
+    required sint32 scene_id   = 2;
+    required sint32 map_id     = 3;
+}
+
+message S2S_ReadyEnterParkScene
+{
+    required sint64 role_index       = 1;
+    required sint32 scene_id         = 2;
+    required sint32 map_id           = 3;
+    required E_SCENE_TYPE scene_type = 4;
+    required sint64 ret_unitindex    = 5;
+    required sint64 ret_intaddr      = 6;
+    optional E_MSG_RET_CODE ret_code = 7[default = Msg_Ret_Code_Unknow];
+}
+
+message S2C_ReadyEnterParkScene
+{
+    required E_MSG_RET_CODE ret_code   = 1[default = Msg_Ret_Code_Unknow];
+}
+
+message C2S_ParkCar
+{
+    required sint64 role_index = 1;
+    required sint64 car_index  = 2;
+    required sint32 port_id    = 3;
+}
+
+message S2C_ParkCar
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    optional sint64         car_index = 2;
+}
+
+// 对自己的车加道具
+message C2S_UseItemSelfCar
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2; // 车位号
+    required sint32 action_id  = 3; // 道具ID
+}
+
+message S2C_UseItemSelfCar
+{
+    required E_MSG_RET_CODE ret_code = 1[default = Msg_Ret_Code_Unknow];
+}
+
+// 恶搞请求行动id
+message C2S_DestoryAction
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2; // 车位号
+}
+
+message S2C_DestoryAction
+{
+    required E_MSG_RET_CODE ret_code  = 1[default = Msg_Ret_Code_Unknow];
+    optional sint32         action_id = 2; 
+}
+
+// 恶搞指定车位的车
+message C2S_DestoryTheCar
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2; // 车位号
+}
+
+// 最终装甲事件
+message S2C_FinalArmorEvent
+{
+    required sint32 port_id   = 1;
+    required sint32 action_id = 2;
+}
+
+// 客户端上报最终装甲事件结果
+message C2S_FinalArmorEventResult
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2;
+}
+
+message S2C_DestoryTheCar
+{
+    required E_MSG_RET_CODE ret_code = 1[default = Msg_Ret_Code_Unknow];
+    required sint32 port_id          = 2; // 车位号
+    required sint32 action_id        = 3;
+    repeated item_config reward_list = 4;
+    optional bool is_ok              = 5; // 最终护甲事件是否干爆了车
+    optional sint32 effect_id        = 6; // 保护效果id
+}
+
+// 点赞请求行动id
+message C2S_SayYesAction
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2; // 车位号
+}
+
+message S2C_SayYesAction
+{
+    required E_MSG_RET_CODE ret_code  = 1[default = Msg_Ret_Code_Unknow];
+    optional sint32         action_id = 2; 
+}
+
+// 点赞指定车位的车
+message C2S_SayYesTheCar
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2; // 车位号
+}
+
+// 时间乱流事件
+message S2C_TimeTurbulence
+{
+    required sint32 port_id = 1;
+}
+
+// 上报时间乱流结果
+message C2S_TimeTurbulenceResult
+{
+    required sint64 role_index = 1;
+    required sint32 port_id    = 2; // 车位号
+    required bool is_ok        = 3;
+}
+
+message S2C_SayYesTheCar
+{
+    required E_MSG_RET_CODE ret_code = 1[default = Msg_Ret_Code_Unknow];
+    required sint32 port_id          = 2; // 车位号
+    required sint32 action_id        = 3;
+    repeated item_config reward_list = 4;
+    optional bool is_ok              = 5; // 时间乱流是否成功
+}
+
+// 同步老司机信息
+message S2C_OldDriver
+{
+    required sint32 level           = 1;
+    required sint32 exp             = 2;
+    optional sint32 diff_exp        = 3;
+    required sint32 port_num        = 4;  // 车位数信息(即玩家最多可以拥有车辆数)
+    required sint32 actioned_count  = 5;  // 剩余的点赞,破坏行动次数
+}
+
+// 扩充车库(一次一个)
+message C2S_ExpandCarport
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_ExpandCarport
+{
+    required E_MSG_RET_CODE ret_code   = 1[default = Msg_Ret_Code_Unknow];
+}
+
+// 扩充修理车位
+message C2S_ExpandFixCarport
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_ExpandFixCarport
+{
+    required E_MSG_RET_CODE ret_code   = 1[default = Msg_Ret_Code_Unknow];
+}
+
+// 修理指定车
+message C2S_FixCar
+{
+    required sint64 role_index = 1;
+    required sint64 car_index  = 2;
+}
+
+message S2C_FixCar
+{
+    required E_MSG_RET_CODE ret_code = 1[default = Msg_Ret_Code_Unknow];
+    optional db_fix_car     car      = 2;
+}
+
+// 快速修理车(使用元宝)
+message C2S_FastFixRoleCar
+{
+    required sint64 role_index = 1;
+    required sint64 car_index  = 2;
+}
+
+message S2C_FastFixRoleCar
+{
+    required E_MSG_RET_CODE ret_code = 1[default = Msg_Ret_Code_Unknow];
+    optional db_car_info    car      = 2;
+}
+
+// 使用时间水晶修理车(减少cd时间)
+message C2S_FixRoleCarByCrtStal
+{
+    required sint64 role_index  = 1;
+    required sint64 car_index   = 2;
+    required sint32 crystal_num = 3;
+}
+
+message S2C_FixRoleCarByCrtStal
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint32         need_num = 2;
+    optional db_fix_car     car      = 3;
+}
+
+// 分解车
+message C2S_DecomposeCar
+{
+    required sint64 role_index  = 1;
+    required sint64 car_index   = 2;
+}
+
+message S2C_DecomposeCar
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    required sint64         car_index = 2;
+}
+
+// 从车辆动态中取车
+message C2S_TakeCar
+{
+    required sint64 role_index  = 1;
+    required sint64 car_index   = 2;
+}
+
+message S2C_TakeCar
+{
+    required E_MSG_RET_CODE ret_code  = 1;
+    optional db_car_info    car       = 2;
+}
+
+// 请求自己的概况信息
+message C2S_AskCarLog
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_AskCarLog
+{
+    repeated role_car_log log_list = 1;
+}
+
+// 车辆动态信息
+message C2S_AskCarParkInfo
+{
+    required sint64 role_index  = 1;
+}
+
+message S2C_AskCarParkInfo
+{
+    repeated park_car car_list = 1;
+}
+
+// 购买抢车位商店的商品
+message C2S_BuyParkShopGood
+{
+    required sint64 role_index  = 1;
+    required sint32 shop_index     = 2;
+}
+
+message S2C_BuyParkShopGood
+{
+    required E_MSG_RET_CODE ret_code   = 1;
+}
+
+// 增加一辆车
+message S2C_AddCar
+{
+    repeated db_car_info car_info    = 1;
+} 
+
+// 车是否修理完成
+message C2S_CheckFixCarIsOK
+{
+    required sint64 role_index  = 1;
+    required sint64 car_index   = 2;
+}
+
+message S2C_CheckFixCarIsOK
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional db_fix_car     car      = 2;
+}
+
+// 通知玩家车被移到车管所原因
+message S2C_ParkEventInform
+{
+    required E_PARK_TICK_EVENT event = 1;
+    required sint64 role_index       = 2;
+}
+

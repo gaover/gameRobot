@@ -1,0 +1,81 @@
+syntax = "proto2";
+package pbd;
+import "EnumDef.proto";
+
+// 弹幕广场挂机信息
+message danmaku_hangup
+{
+    required E_DANMAKU_HANGUP status = 1; // 挂机状态
+    required sint32 level            = 2; // 挂机开始时等级
+    required sint32 vip_level        = 3; // 挂机开始时vip等级
+    required sint64 begin_timestamp  = 4; // 开始时间
+    required sint64 left_time        = 5; // 挂机剩余时间
+    required sint64 get_exp          = 6; // 挂机经验所得
+    optional sint64 before_midnight_time = 7; // 对于挂机跨午夜，存储前一天挂机时间
+    optional sint64 today_hanguped_time = 8; // 今日已挂机领取过的挂机时间
+}
+
+// 弹幕广场相关信息
+message db_danmaku_info
+{
+    optional danmaku_hangup hangup_info = 1; // 挂机信息
+}
+
+// 发送弹幕
+message C2S_SendDanmaku
+{
+    required sint64               role_index = 1;
+    required sint32               color      = 2;
+    required sint32               layout     = 3;
+    optional bytes                nick_name  = 4;
+    required bytes                msg        = 5;
+    optional sint32               scene_id   = 6;
+    optional sint32               vip_level  = 7;
+}
+
+// 服务器转发弹幕
+message S2C_SendDanmaku
+{
+    required sint64               role_index = 1;
+    required sint32               color      = 2;
+    required sint32               layout     = 3;
+    required sint32               vip_level  = 4;
+    optional bytes                nick_name  = 5;
+    required bytes                msg        = 6;
+} 
+
+// 挂机开始
+message C2S_HangUpBegin
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_HangUpBegin
+{
+    required E_MSG_RET_CODE ret_code = 1;
+}
+
+// 挂机结束(领取经验)
+message C2S_HangUpEnd
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_HangUpEnd
+{
+    required E_MSG_RET_CODE ret_code = 1;
+    optional sint64         get_exp  = 2; // 最终所得经验
+}
+
+// 挂机信息查询
+message C2S_HangUpInfo
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_HangUpInfo
+{
+    required E_DANMAKU_HANGUP status = 1;    // 挂机状态(以下两字段在本字段为非初始状态时有效)
+    optional sint64 get_exp          = 2;    // 挂机所得经验
+    optional sint64 left_time        = 3;    // 挂机剩余时间
+}

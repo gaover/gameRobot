@@ -1,0 +1,663 @@
+syntax = "proto2";
+package pbd;
+import "ProtoDef.proto";
+import "Task.proto";
+import "ParkLot.proto";
+import "House.proto";
+import "Danmaku.proto";
+
+// 套装相关
+message suit_goods_info
+{
+    required sint32 can_buy_suit_shop_id = 1;
+    required bool   is_buy          = 2;
+}
+
+message suit_info
+{
+    required sint32 suit_id                      = 1;
+    required sint64 suit_unixtime_time_out_stamp = 2;
+    required sint32 suit_duration_type           = 3;
+    required sint64 get_timestamp                = 4;
+}
+
+message list_db_role_suit_info
+{
+    repeated suit_goods_info buy_suit           = 1;
+    required sint64 suit_shop_last_update_time  = 2;
+    optional suit_info current_suit             = 3;
+    repeated suit_info have_suits               = 4;
+}
+
+// 表情相关
+message face_goods_info
+{
+    required sint32 can_buy_face_shop_id    = 1;
+    required bool   is_buy                  = 2;
+    required sint32 face_shop_index         = 3;
+}
+
+message face_info
+{
+    required sint32 face_id                      = 1;
+    required sint64 face_unixtime_time_out_stamp = 2;
+    required sint32 face_duration_type           = 3;
+    required sint64 get_timestamp                = 4;
+}
+
+
+
+// 抢车位商店物品
+//message list_arena_shop_info
+//{
+//    optional common_shop_info shop_info = 1;
+//}
+//
+//// 技能书商店信息
+//message list_skill_book_shop_info
+//{
+//    optional common_shop_info shop_info = 1;
+//}
+//
+//// 小游戏商店信息
+//message list_minigame_shop_info
+//{
+//    optional common_shop_info shop_info = 1;
+//}
+//
+//// 抢车位商店物品
+//message list_park_shop_info
+//{
+//    optional common_shop_info shop_info = 1;
+//}
+//
+//// 黑市商店信息
+//message list_black_shop_info
+//{
+//    optional common_shop_info shop_info = 1;
+//}
+
+// 玩家通用商店商店
+message role_common_shop
+{
+    repeated common_shop_info shop_list = 1;
+}
+
+// 签到信息
+message list_sign_info
+{
+    required sint32 sign_year         = 1;     // 第几年的签到
+    required sint32 sign_month        = 2;     // 第几月的签到
+    required sint32 month_total_days  = 3;     // 该月总天数
+    required sint32 sign_begin_day    = 4;     // 本月第一次登录天
+    required sint32 next_sign_day     = 5;     // 下一次签到日
+    required sint32 sign_count        = 6;     // 已签到次数
+    required sint32 retroactive_count = 7;     // 已补签次数
+    required sint32 lottery_days      = 8;     // 可用于抽奖签到次数
+    required sint32 miss_count        = 9;     // 签到缺失次数
+    required sint32 refresh_month_day = 10;    // 签到刷新天,同一天只刷新一次
+    required bool   today_sign        = 11;    // 今日签到标识,false:未签到,true:已签到
+}
+
+message seven_day_detail
+{
+    required sint32 day       = 1;       // 第几天
+    required sint32 get_flag  = 2;       // 领取标识
+}
+
+// 七天登录奖励
+message seven_day_info
+{
+    required sint32             total_login_days       = 1;
+    repeated seven_day_detail   day_info               = 2;
+}
+
+// 副本相关
+// 关卡列表
+message risk_info
+{
+    required sint32             id          = 1;
+    required sint32             passed      = 2;
+    optional sint32             fight_count = 3;    
+    optional sint32             reset_count = 4;
+    optional sint32             share_flag  = 5; // 1:已分享过. 其它.未分享(用int原因是防止策划设计出一天能分享多次)
+}
+
+// 宝箱奖励
+message reward_box
+{
+    required sint32             id          = 1;
+    required sint32             get         = 2;
+}
+
+// 章节列表
+message chapter_info
+{
+    required sint32         id          = 1;
+    repeated risk_info      dup         = 2;
+    repeated reward_box     box         = 3;
+    required sint32         get_reward  = 4;    // 章节通关奖励标记(0:未通关,1:已通关未领取,2:已通关已领取)
+}
+
+// 玩家表情偏好信息
+message role_face_prefer_info
+{
+    required bool   auto_show_flag = 1;
+    repeated sint32 face_list      = 2;
+}
+
+message list_face_shop_info
+{
+    repeated face_goods_info original_buy_face        = 1;
+    repeated face_goods_info discount_buy_face        = 2;
+    required sint64 face_shop_last_update_time        = 3;
+    required sint64 face_shop_last_manual_update_time = 4;
+    required sint32 face_shop_manual_update_count     = 5;
+}
+
+message list_db_role_face_info
+{
+    repeated face_goods_info original_buy_face        = 1;
+    repeated face_goods_info discount_buy_face        = 2;
+    required sint64 face_shop_last_update_time        = 3;
+    required sint64 face_shop_last_manual_update_time = 4;
+    required sint32 face_shop_manual_update_count     = 5;
+
+    repeated face_info have_faces                     = 6;
+    optional role_face_prefer_info prefer_info        = 7;
+
+    repeated role_custom_face custom_list             = 8;  // 自定义表情列表
+    required role_face        current_face            = 9;  
+    optional bool             forever_free            = 10;  //  true: 永久免费, false : 不是永久免费
+}
+
+// 技能相关
+message db_skill_info
+{
+    required sint32 id      = 1;    // 技能Id
+    required sint32 level   = 2;    // 技能级别
+    required sint32 skilled = 3;    // 技能熟练度
+}
+
+// 竞技场信息
+message db_arena_info
+{
+    required sint32 buy_count                 = 1;    // 已购买的挑战次数
+    required sint32 total_count               = 2;    // 挑战总次数
+    required sint32 left_count                = 3;    // 挑战剩余次数
+    required sint64 cd_time_stamp             = 4;    // 挑战冷却时间戳
+    required sint64 cd_time                   = 5;    // 挑战冷却剩余时间
+    required sint64 score                     = 6;    // 竞技场积分
+    required sint32 history_top_rank          = 7;    // 历史最高排行
+    optional battle_player_info   battle_info = 8;
+    optional sint32 fight_rank                = 9;
+}
+
+// 石中剑信息
+message db_sword_info
+{
+    required sint32 total_count     = 1;    // 总次数
+    required sint32 failed_count    = 2;    // 连续失败次数
+    required sint32 left_count      = 3;    // 剩余次数
+    optional sint32 buy_count       = 4;    // 已购买的次数
+    optional sint64 cd_time         = 5;    // 冷却时间
+    optional sint32 join_count      = 6;    // 玩的次数
+
+}
+
+message list_db_role_talent_skill_info
+{
+    repeated db_skill_info have_skills  = 1;    // 拥有技能
+    repeated sint32 current_skills      = 2;    // 当前技能
+}
+
+message list_db_role_book_skill_info
+{
+    repeated db_skill_info have_skills  = 1;    // 拥有技能
+    repeated sint32 current_skills      = 2;    // 当前技能
+}
+
+message list_db_role_suit_skill_info
+{
+    repeated db_skill_info have_skills  = 1;    // 拥有技能
+    repeated sint32 current_skills      = 2;    // 当前技能
+}
+
+// 好友相关
+message list_db_role_friend_info
+{
+    repeated db_friend_info friends = 1;
+    optional sint32 fight_count     = 2;        
+}
+
+message list_db_role_risk_info
+{
+    repeated chapter_info       chaps        = 1; 
+    repeated chapter_info       chaps_danger = 2; 
+}
+
+// 任务相关
+message db_task
+{
+    repeated sint32 completed_task_list     = 1;
+    repeated task_info can_accept_task_list = 2;
+    repeated task_info accepted_task_list   = 3;
+}
+
+
+
+// 成就
+message list_db_role_success_info
+{
+    // 各个成就类型对应的计数,成就创建角色时就需要初始化.新的成就类型只能在已有的类型后面加1.成就类型对应的就是该字段的下标
+    repeated success_detail detail_list = 1;
+    // 已达成成就id list
+    repeated sint32 reach_id_list = 2;
+    // 已领取奖励成就id
+    repeated sint32 got_id_list   = 3;
+
+    optional sint64 point         = 4;  // 成就点数
+}
+
+message list_db_role_guide_info
+{
+    optional sint32 find_guid_index   = 1;   // 提示面板的步骤ID
+    optional sint32 force_guide_index = 2;   // 强制引导索引
+    repeated sint32 tip_read_id_list  = 3;   // 小面板阅读历史id
+}
+
+message db_role_system_config
+{
+    required sint32 language_id           = 1;  //语言ID(默认值:1)
+    required bool   music_enabled         = 2;  //是否播放背景音乐(默认值:true)
+    required bool   sound_enabled         = 3;  //是否播放音效(默认值:true)
+    required float  music_volume          = 4;  //背景音乐音量(0~1)(默认值:0.5)
+    required float  sound_volume          = 5;  //音效音量(0~1)(默认值:1.0)
+    required bool   helmet_visible        = 6;  //是否显示头盔(默认值:true)
+    required bool   other_player_visible  = 7;  //是否显示其他玩家(默认值:true)
+    required bool   rand_assist_friend    = 8;  //是否自动随机选取好友助战(默认值:true)
+    required bool   car_name_visible      = 9;  //是否在停车场显示车辆名字(默认值:true)
+    required bool   rock_enabled          = 10; //是否启用摇杆操作(默认值:false)
+    optional bool   battle_speed_enabled  = 11; //战斗是否加速(默认值:false)
+    optional sint32 bgm_id                = 12; //0:没有选中bgm,-1:随机bgm,其他为真实bgm的ID
+    optional bool   suit_head_visible     = 13; //是否显示套装脸
+}
+
+message list_db_role_time_stamp
+{
+    // 套装商店最后刷新时间
+    //optional sint64 suit_shop_last_update_time = 1;
+
+    // 表情商店最后刷新时间
+    optional sint64 face_shop_last_update_time = 2;
+
+
+}
+
+message db_login_role_time
+{
+    optional int32 last_day_first_login = 1;
+    optional int64 last_offline_time    = 2;
+    optional int64 current_login_time   = 3;
+    optional int64 total_online_time    = 4;
+    optional int32 total_login_days     = 5; // 累计登录天数
+    optional int32 total_login_count    = 6; // 累计登入游戏次数
+    optional int32 continuity_days      = 7; // 连续登录天数
+    optional int32 max_continuity_days  = 8; // 最大连续登录天数
+    optional int64 create_time          = 9;
+}
+
+message db_stamina_info
+{
+    required sint32 buy_stamina_count           = 1;     // 当天购买体力的次数  
+    required sint32 stamina_upper_limit         = 2;     // 当前体力上限
+    optional int32  stimina_left_time           = 3;     // 下一次体力恢复时间
+    optional int64  last_stamina_recv_stamp     = 4;     // 体力接收时间,客户端自己赋值
+    optional int64  last_stamina_tick_time      = 5;     // 上次体力恢复时间戳
+    optional int64  last_bath_stamina_tick_time = 6;     // 上次澡堂体力恢复时间戳
+    optional int32  bath_stamina_recovery_value = 7;     // 当日澡堂体力恢复时间累计值,隔日清零
+    repeated bool bath_once_time_recovery     = 8;     // 澡堂体力阶段性一次性恢复,每日重置
+}
+
+
+
+// 日常任务
+message list_daily_task_info
+{
+    repeated db_daily_task_info daily_task_info = 1;     // 日常任务
+}
+
+// 角色扩展属性1
+message roleinfo_extend_attr_1
+{
+    optional sint64 test_data   = 1;
+    optional sint32 egg_id      = 2;
+    repeated bytes  history_redeem_code = 3;
+    optional bool   weixin_share_flag   = 4;
+}
+
+// 澡堂道具
+message bathhouse_tool
+{
+    required sint32 tool_type = 1;
+    required sint32 tool_id   = 2;
+    required sint32 use_count = 3;
+}
+
+// 二次信息
+message guadratic_info
+{
+    required sint32 left_enter_count = 1; // 剩余进入次数
+
+}
+
+// 角色扩展属性2
+message roleinfo_extend_attr_2
+{
+    optional visiting_card_info  friend_fight_info = 1;
+    repeated task_progress_info progress_list     = 2;
+    repeated sint32             task_id_list      = 3;
+    repeated sint32             once_task_list    = 4;
+    repeated sint64             function_ptr      = 5;
+    repeated sint32             broken_list       = 6;
+}
+
+// 角色扩展属性3
+message roleinfo_extend_attr_3
+{
+    optional sint64 test_data   = 1;
+}
+
+// 角色扩展属性4
+message roleinfo_extend_attr_4
+{
+    optional sint64 test_data = 1;
+
+
+}
+
+// 角色扩展属性5
+message roleinfo_extend_attr_5
+{
+
+}
+
+// 卡牌
+message role_card_info
+{
+    repeated sint32 current_card_pve_list   = 1;
+    repeated sint32 current_card_pvp_list   = 2;
+    repeated sint32 have_card_list          = 3;
+}
+
+// 点金手信息存储
+message point_gold_info
+{
+    required int32 exchanged_count = 1;  // 已兑换次数
+}
+
+message friend_manager_info
+{
+    repeated sql_friend_mng_info friends = 1;     // 好友管理信息
+}
+
+message arena_kill_info
+{
+    repeated db_arena_kill_info kill_player = 1;     // 个人杀人榜信息
+}
+
+message friend_assist_info
+{
+    required sint64 role_index        = 1;
+    required sint32 left_assist_time  = 2;
+    required sint64 assist_time_stamp = 3;
+}
+
+// 好友助战信息列表
+message list_friend_assist_info
+{
+    repeated friend_assist_info assist_info = 1;     
+}
+
+message person_easter_egg_info
+{
+    required sint32 egg_id        = 1;
+    required sint32 cd_time       = 2;
+    required sint32 count         = 3;
+    required sint32 trigger_count = 4;
+    optional sint32 day_get_count = 5;
+    optional bool   first_touch   = 6;
+}
+
+message list_person_easter_egg
+{
+    required sint64 egg_time_stamp              = 1;
+    repeated person_easter_egg_info egg_info    = 2;
+}
+
+message recharge_money_info
+{
+    required sint64 total_money       = 1;  // 充值总金额
+    required sint64 curr_money_exp    = 2;  // 当前充值经验
+    required bool   daily_reward_flag = 3;  // 每日奖励获取标识
+    repeated sint32 sale_id           = 4;  // 购买过的商品id
+    repeated sint32 vip_level_flag    = 5;  // 已领取的vip奖励等级
+    optional sint64 total_get_diamond = 6;  // 累计从游戏中得到的diamond
+
+    optional role_recharge_get first_recharge = 7; // 首充相关
+    optional role_recharge_get other_recharge = 8; // 其它"充"相关
+}
+
+message role_show_flag
+{
+    required bool helmet_visible = 1;   
+    optional sint32 bgm_id       = 2; //0:没有选中bgm,-1:随机bgm,其他为真实bgm的ID   
+    optional bool   suit_head_visible     = 3; //是否显示套装脸
+}
+
+message temp_info_in_memory
+{
+    optional bool is_on_enter_game  = 1;
+    optional sint32 old_pos_x       = 2;
+    optional sint32 old_pos_y       = 3;
+    optional sint32 old_scene_id    = 4;
+    optional sint32 mg_room_id      = 5;
+    repeated sp_info big_big        = 6;
+    optional role_show_flag show_flag     = 7;   // 角色显示标识
+
+    optional fight_risk_info risk   = 8;         // 玩家副本信息, 请求打副本进入的都是同一个副本
+
+
+    optional sint32   is_utf8       = 50;   // 当前是否uft8编码
+
+}
+
+// 玩家宠物信息
+message db_role_pet_info
+{
+    repeated pet_info pet_list         = 1; // 宠物列表
+    repeated sint32   once_pet_id_list = 2; // 曾经获取的宠物id列表 
+    optional pet_refresh  refresh_info = 3; // 刷新信息
+    required sint32   fight_pet_id     = 4; // 出战宠物id
+}
+
+message role_server_mail
+{
+    optional sint32 mail_id = 1;
+}
+
+// 扭蛋机按键
+message button_cd
+{
+    repeated sint64 cd            = 1;   // -1: 表明不能免费,也没有cd, 0:说明可以免费使用一次, 大于0,说明正在cd中,值为剩余时间
+    repeated sint64 cd_timestamp  = 2;   // 服务器记录进入cd的时间戳, 之所有定义成这样是不想再定义一个message
+    repeated bool   first_touch   = 3;   // false都是第一次
+}
+
+// 网络分享信息
+message www_share_info
+{
+    repeated sint32 risk_id_list = 1;
+}
+
+// 服务器管理信息, 如禁言
+message server_gm_info
+{
+    optional sint32 can_speak       = 1;
+    optional sint64 next_speak_time = 2;
+
+}
+
+message server_update_info
+{
+    optional bool fight_init_bug = 1;   // 针对战斗力不统一的bug增加字段
+    optional bool fix_equip_exist_bug = 2; // 针对新的修理方案(无cd无修理包裹)
+
+}
+
+
+// 角色活动信息
+message role_activity_info
+{
+    repeated activity_info activity_list = 2; // 
+}
+
+
+
+// 获取角色信息
+message sql_result_roleinfo
+{
+    required sint64 role_index      = 1;
+    required bytes  account         = 2;
+    required sint32 gender          = 3;
+    required bytes  nick_name       = 4;
+    required sint32 level           = 5;
+    required sint32 scene_id        = 6;
+    required sint32 pos_x           = 7;
+    required sint32 pos_y           = 8;
+    required sint64 game_coin       = 9;    // 游戏货币(金币)
+    required sint64 endurance       = 10;   // 体力值(药丸)
+    required sint64 diamond_coin    = 11;   // 棒棒糖货币(钻石)
+    required sint64 exp             = 12;   // 经验
+    required sint64 skill_point     = 13;   // 技能点
+    optional sint32 vip_level       = 14;   // vip等级
+    optional bytes  player_id       = 15;   // 玩家ID
+    optional sint32 move_speed      = 16;   // 场景移动速度
+    optional bool   to_left         = 17;   // 场景玩家方向(true :左， false：右)
+
+    optional server_gm_info             gm_info                     = 50;
+    optional list_db_fix_equips         equip_fix_bag               = 51;
+    optional list_db_bag_items          bag_item_info               = 52;  // 背包道具
+    optional list_db_bag_equips         bag_equip_info              = 53;  // 背包装备
+    optional list_db_role_equips        equip_info                  = 54;  // 角色装备
+    optional list_db_role_suit_info     suit_info                   = 55;  // 套装列表
+    optional list_db_role_face_info     face_info                   = 56;  // 表情列表
+    optional list_db_role_talent_skill_info talent_skills           = 57;  // 天赋技能
+    optional list_db_role_book_skill_info   book_skills             = 58;  // 秘籍技能
+    optional list_db_role_suit_skill_info   suit_skills             = 59;  // 套装技能
+    optional list_db_role_friend_info    friend_info                = 60;  // 好友列表
+    optional db_role_pet_info            pet_info                   = 61;  // 宠物信息
+    optional list_db_role_risk_info      risk_info                  = 62;  // 冒险列表
+    optional db_task                     task_info                  = 63;  // 任务信息
+    optional list_db_role_success_info   success_info               = 64;  // 成就列表
+    optional list_db_role_guide_info     guide_info                 = 65;  // 指引列表
+    optional db_role_system_config       system_config              = 66;  // 系统配置
+    optional list_db_role_time_stamp     role_time_stamp_list       = 67;  // 时间戳表
+    optional visiting_card_info          db_card_info               = 68;  // 在角色信息中冗余名片信息
+    optional role_card_info              card_info                  = 69;  // 卡牌
+    optional arena_kill_info             arena_kill                 = 70;  // 个人杀人榜信息
+    optional db_arena_info               arena_info                 = 71;  // 竞技场
+    optional db_sword_info               sword_info                 = 72;  // 石中剑
+    optional list_daily_task_info        daily_task_info            = 73;  // 日常任务
+    optional db_daily_activity_info      activity_info              = 74;  // 日常活跃度
+    optional db_login_role_time          login_time_info            = 75;  // 登录退出时间相关
+    optional minigame_play_info          minigame_info              = 76;  // 小游戏相关
+    optional db_stamina_info             stamina_info               = 77;  // 体力相关
+    optional friend_manager_info         manager_friend             = 78;  // 好友管理信息
+    optional list_sign_info              sign_info                  = 79;  // 签到
+    optional seven_day_info              seven_day                  = 80;  // 七天
+    optional point_gold_info             point_gold                 = 81;  // 点金手  
+    optional list_friend_assist_info     friend_assist              = 82;  // 好友助战信息列表  
+    optional list_person_easter_egg      person_easter_egg          = 83;  // 个人彩蛋  
+    optional recharge_money_info         recharge_money             = 84;  // 充值信息
+    optional old_driver                  old_driver_info            = 85;  // 老司机信息(包括车库)
+    optional role_count_info             count_info                 = 86;  // 玩家计数相关(供任务系统用)
+    optional db_home_info                home_info                  = 87;  // 家园信息
+    optional db_danmaku_info             danmaku_info               = 88;  // 弹幕广场相关信息               
+    optional role_interact_info          interact_info              = 89;  // 交互系统信息               
+    optional role_server_mail            mail_info                  = 90;  // 全服邮件加载信息
+    repeated button_cd                   button_info                = 91;  // 扭蛋机按钮信息(其它信息不用存)
+    optional guadratic_info              guadratic                  = 92;  // 二次园信息
+    optional www_share_info              share_info                 = 93;  // 网络分享信息
+    optional role_activity_info          activity                   = 94;  // 玩家活动信息
+    optional combination_skill_info      combination_skill          = 95;  // 组合技信息
+    optional role_open_package           open_info                  = 96;  // 玩家打开礼包的次数记录信息
+    optional role_common_shop            common_shop                = 97;  // 通用商店
+    optional server_update_info          version_update             = 98;  // 针对版本更新要进行特殊处理的信息存储                                      
+                                                                      
+    optional temp_info_in_memory    memory_info     = 200;            
+                                                                      
+    // 角色扩展属性                                                    
+    optional roleinfo_extend_attr_1 extend_attr1    = 201;            
+    optional roleinfo_extend_attr_2 extend_attr2    = 202;            
+    optional roleinfo_extend_attr_3 extend_attr3    = 203;        
+    optional roleinfo_extend_attr_4 extend_attr4    = 204;        
+    optional roleinfo_extend_attr_5 extend_attr5    = 205;        
+}
+
+// 澡堂玩家信息
+message bathhouse_player
+{
+    required sint64 role_index        = 1; 
+    required sint32 status_id         = 2;    // 状态id
+    required sint64 status_begin_time = 3;    // 状态初始时间
+    required sint32 fullness          = 4;    // 饱腹度
+    required sint32 stamina           = 5;    // 增加的体力
+    required sint32 exp               = 6;    // 增加的经验（目前直接加到玩家身上，不是退出澡堂时结算。但。防止策划破坏世界）
+}
+
+// 好友请求信息
+message sql_friend_mng_info
+{
+    required int64              role_index          = 1;
+    required int64              req_role_index      = 2;
+    optional db_friend_info     req_friend_info     = 3;
+    required int32              req_type            = 4;
+    optional int64              req_time            = 5;
+}
+
+// 存盘角色
+message sql_result_save_role
+{
+    required int32 ret_code  = 2;
+}
+
+// 活跃值变化信息
+message daily_activity_change_info
+{
+    required sint32   total_activity  = 1;
+    required sint32   activity_diff   = 2;
+}
+
+// SQL返回节点信息
+message sql_ret_cluster_node_info
+{
+    required sint64 node_index      = 1;    // 节点索引
+    required sint64 intaddr         = 2;    // 节点地址
+    required sint64 unit_next_index = 3;    // 下个索引
+    required sint64 cpu_pressure    = 4;    // CPU压力
+    required bool   is_online       = 5;    // 是否在线
+}
+
+// 交互表情系统
+message role_interact_info
+{
+    required sint32 energy           = 1; // 玩家交互能量上限
+    required sint32 get_energy_id    = 2; // 玩家在图鉴奖励已获取的有关于能量的奖励id(不能跨数量获取奖励)
+    required sint32 get_reward_id    = 3; // 玩家在图鉴奖励已获取的最大数量id(不能跨数量获取奖励)
+    repeated sint32 act_id_list      = 4; // 已解锁动作id信息
+    repeated sint32 active_act_list  = 5; // 已装备的主动交互动作 
+    repeated sint32 auto_act_list    = 6; // 已装备的自动交互动作 
+    repeated sint32 can_unlock_act_list    = 7; // 可解锁交互动作
+}                       
+                                     

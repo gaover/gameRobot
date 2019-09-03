@@ -1,0 +1,1715 @@
+syntax = "proto2";
+package pbd;
+import "ProtoDef.proto";
+import "ProtoBaseDef.proto";
+
+// Excel:sign签到.xls sheet:签到奖励表
+message lua_sign_reward
+{
+	required sint32 ID                 = 1;  // ID
+	repeated sign_day_reward reward    = 2;  // 奖励
+}
+
+// Excel:道具商店表.xls sheet:汽车商店
+message lua_park_shop
+{
+	required sint32 itemId      = 1;  // ID
+	required sint32 carId       = 2;  // 汽车ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:日常任务表.xls sheet:活跃度奖励
+message lua_daily_activity
+{
+	required sint32 id               = 1;  // ID
+	required sint32 activityValue    = 2;  // 活跃值
+	repeated sint32 reward           = 3;  // 奖励
+}
+
+// Excel:成就配置表.xls sheet:Sheet1
+message lua_achieve
+{
+	required sint32 id                 = 1;  // ID
+	required bytes typeName            = 2;  // 类型
+	required bytes name                = 3;  // 成就名称
+	required sint32 type               = 4;  // 成就类型
+	required sint32 isHide             = 5;  // 隐藏成就
+	required bytes des                 = 6;  // 触发条件（显示文本）
+	required sint64 conditionValue     = 7;  // 条件数值
+	required sint32 achievePoint       = 8;  // 成就点数
+	repeated item_config rewardList    = 9;  // 奖励列表
+	required sint32 quality            = 10; // 成就品质
+}
+
+// Excel:avatar表情.xls sheet:face_shop
+message lua_face_shop
+{
+	required sint32 index       = 1;  // 商店编号
+	required sint32 id          = 2;  // 表情ID
+	repeated sint32 duration    = 3;  // 时效消失
+	required sint32 costType    = 4;  // 购买消耗类型
+	repeated sint32 price       = 5;  // 买入价格
+}
+
+// Excel:z自带BGM.xls sheet:BGM
+message lua_bgm
+{
+	required sint32 id              = 1;  // ID
+	required bytes bgmNameID        = 2;  // 曲目名ID
+	required bytes sound            = 3;  // 音效文件
+	required sint32 needVipLevel    = 4;  // 需要VIP等级
+	required float time             = 5;  // 时长
+}
+
+// Excel:竞技场表.xls sheet:挑战奖励表
+message lua_arena_reward
+{
+	required sint32 level                  = 1;  // 等级
+	repeated item_config winRewardList     = 2;  // 胜利奖励列表
+	repeated item_config loseRewardList    = 3;  // 失败奖励列表
+}
+
+// Excel:竞技场表.xls sheet:挑战对手选取表
+message lua_arena_select_rule
+{
+	required sint32 id                     = 1;  // ID
+	repeated sint32 rankRect               = 2;  // 名次区间
+	repeated lua_arena_rect posRectList    = 3;  // 敌人位置区间列表
+}
+
+// Excel:f副本表.xls sheet:精英章节表
+message lua_danger_chapter
+{
+	required sint32 id                 = 1;  // ID
+	required bytes nameID              = 2;  // 章节名称ID
+	repeated sint32 dupList            = 3;  // 关卡ID列表
+	required bytes icon                = 4;  // 章节缩略图
+	required bytes title               = 5;  // 章节名称图片
+	required bytes lockIcon            = 6;  // 未解锁图标
+	repeated item_config rewardList    = 7;  // 奖励列表
+	required bytes sharePic            = 8;  // 分享图片
+	required lua_pos enemyPos          = 9;  // 敌方对白坐标
+}
+
+// Excel:x小助手表.xls sheet:游戏提示表
+message lua_assistant_tip
+{
+	required sint32 id             = 1;  // ID
+	required bytes questionID      = 2;  // 问题ID
+	required bytes answerID        = 3;  // 答案ID
+	required bytes icon            = 4;  // icon
+	required item_config reward    = 5;  // 阅读奖励
+}
+
+// Excel:equip装备.xls sheet:载具合成
+message lua_vehicle_compose
+{
+	required sint32 quality              = 1;  // 品质
+	repeated item_config needItemList    = 2;  // 消耗材料列表
+	required sint32 needLevel            = 3;  // 限制等级
+}
+
+// Excel:f副本表.xls sheet:章节表
+message lua_chapter
+{
+	required sint32 id                 = 1;  // ID
+	required bytes nameID              = 2;  // 章节名称ID
+	repeated sint32 dupList            = 3;  // 关卡ID列表
+	required bytes icon                = 4;  // 章节缩略图
+	required bytes title               = 5;  // 章节名称图片
+	required bytes lockIcon            = 6;  // 未解锁图标
+	repeated item_config rewardList    = 7;  // 奖励列表
+	required bytes sharePic            = 8;  // 分享图片
+	required lua_pos enemyPos          = 9;  // 敌方对白坐标
+}
+
+// Excel:场景表.xls sheet:建筑表
+message lua_building
+{
+	required sint32 id         = 1;  // ID
+	required bytes nameID      = 2;  // 建筑名称ID
+	required sint32 zOrder     = 3;  // 建筑层级
+	required sint32 type       = 4;  // 建筑类型
+	required sint32 resType    = 5;  // 建筑资源类型
+	required bytes res         = 6;  // 建筑资源
+	required lua_pos pos       = 7;  // 建筑坐标
+}
+
+// Excel:道具商店表.xls sheet:棒棒糖商店
+message lua_diamond_shop
+{
+	required sint32 id          = 1;  // ID
+	required sint32 itemID      = 2;  // 物品ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:q抢车位.xls sheet:破坏效果
+message lua_park_break
+{
+	required sint32 id           = 1;  // 破坏ID
+	required bytes nameID        = 2;  // 名称ID
+	required bytes descID        = 3;  // 描述ID
+	required bytes res           = 4;  // 动画资源
+	required bytes effect        = 5;  // 特效资源
+	repeated sint32 valueList    = 6;  // 效果
+	required bytes sound         = 7;  // 音效
+}
+
+// Excel:q抢车位.xls sheet:车辆列表
+message lua_park_car
+{
+	required sint32 id                         = 1;  // 车辆ID
+	required bytes nameID                      = 2;  // 车辆名称ID
+	required sint32 icon                       = 3;  // 车辆ICON
+	required sint32 quality                    = 4;  // 车辆品质
+	required sint32 maxLevel                   = 5;  // 车辆最大等级
+	required sint32 parkTime                   = 6;  // 停车时间
+	required sint32 protectValue               = 7;  // 装甲值
+	required sint32 lastProtectValue           = 8;  // 最终装甲
+	required sint32 repairCostCount            = 9;  // 修理1点装甲需要消耗材料数量
+	required sint32 decomposeGetCount          = 10; // 拆解获得材料数量
+	required item_config parkUnitBenefit       = 11; // 停车单位时间收益
+	required float addParkUnitBenefitRate      = 12; // 升级收益增长百分比
+	required sint32 sayYesReduceMaxParkTime    = 13; // 点赞缩短停车时间上限
+	required lua_pos parkOffset                = 14; // 场景偏移量
+	required lua_pos showOffset                = 15; // 圆台偏移量
+}
+
+// Excel:pet宠物.xls sheet:宠物被动技能
+message lua_pet_passive_talent
+{
+	required sint32 id            = 1;  // 技能ID
+	required bytes talentId       = 2;  // 技能名称ID
+	required bytes talentDesId    = 3;  // 技能描述ID
+	required bytes iconId         = 4;  // ICON
+	required sint32 weight        = 5;  // 随机权重
+	required sint32 type          = 6;  // 效果类别
+	repeated sint32 argList       = 7;  // 配置参数列表
+	repeated sint32 valueList     = 8;  // 等级效果参数列表
+}
+
+// Excel:t图鉴表.xls sheet:装备图鉴奖励
+message lua_equip_manual
+{
+	required sint32 num            = 1;  // 收集数量
+	required item_config reward    = 2;  // 奖励
+}
+
+// Excel:道具商店表.xls sheet:小游戏商店
+message lua_minigame_shop
+{
+	required sint32 id          = 1;  // ID
+	required sint32 itemID      = 2;  // 物品ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:场景表.xls sheet:传送信息表
+message lua_trans_info
+{
+	required sint32 id          = 1;  // ID
+	required sint32 targetID    = 2;  // 目标场景ID
+	repeated lua_pos rect       = 3;  // 目标区域
+}
+
+// Excel:j技能表.xls sheet:技能表
+message lua_skill
+{
+	required sint32 id                     = 1;  // ID
+	required bytes nameID                  = 2;  // 技能名称ID
+	required bytes descID                  = 3;  // 技能描述ID
+	required sint32 armaType               = 4;  // 技能骨骼类型
+	required sint32 type                   = 5;  // 技能类型
+	repeated sint32 eventConList           = 6;  // 触发条件列表
+	repeated sint32 eventValList           = 7;  // 触发参数列表
+	repeated sint32 atkEffList             = 8;  // 攻击发起时攻击方身上特效ID列表
+	repeated sint32 defEffList             = 9;  // 攻击发起时受击方身上特效ID列表
+	repeated sint32 preAtkEffList          = 10; // 技能准备时攻击方身上特效ID列表
+	repeated sint32 preDefEffList          = 11; // 技能准备时受击方身上特效ID列表
+	required bytes atkSound                = 12; // 攻击发起时的音效
+	repeated sint32 flyEffIDList           = 13; // 飞行特效ID列表
+	repeated sint32 hurtEffIDList          = 14; // 受击特效ID列表
+	required sint32 resIndex               = 15; // 资源文件序号
+	required bytes preAnim                 = 16; // 准备动作
+	required float preTime                 = 17; // 准备动作时间
+	required bytes flyAnim                 = 18; // 瞬移动作
+	required bytes atkAnim                 = 19; // 攻击动作
+	repeated float atkTimeList             = 20; // 攻击动作时间点列表
+	repeated sint32 atkHurtPerList         = 21; // 攻击伤害百分比列表
+	repeated bytes atkSoundList            = 22; // 攻击动作时间点音效列表
+	repeated shake_config shakeTimeList    = 23; // 震屏时间点列表
+	required float atkEndTime              = 24; // 攻击结束时间
+	required sint32 targetType             = 25; // 目标类型
+	required sint32 disType                = 26; // 近远程
+	repeated sint32 startBuffTargetList    = 27; // 技能开始buff目标类型列表
+	repeated sint32 startBuffList          = 28; // 技能开始buffID列表
+	repeated sint32 endBuffTargetList      = 29; // 技能结束buff目标类型列表
+	repeated sint32 endBuffList            = 30; // 技能结束buffID列表
+	required sint32 damageType             = 31; // 伤害类型
+	repeated sint32 perHurtList            = 32; // 百分比效果列表
+	repeated sint32 fixHurtList            = 33; // 固定效果列表
+	required bytes hurtSound               = 34; // 受击音效
+	repeated sint32 hurtTypeData           = 35; // 受击效果
+}
+
+// Excel:购买消耗表.xls sheet:购买体力消耗表
+message lua_buy_stamina
+{
+	required sint32 id         = 1;  // 购买次数
+	required sint32 diamond    = 2;  // 消耗棒棒糖
+}
+
+// Excel:二次元配置表.xls sheet:BOSS表
+message lua_guadratic_boss
+{
+	required sint32 id                 = 1;  // ID
+	required sint32 enterType          = 2;  // 入场方式
+	required sint32 exitType           = 3;  // 出场方式
+	required sint32 moveSpeed          = 4;  // 移动速度
+	required sint32 enterTime          = 5;  // 入场时间
+	required sint32 enterHurt          = 6;  // 入场伤害数值
+	required lua_size enterHurtSize    = 7;  // 入场伤害范围
+	required bytes res                 = 8;  // 资源文件
+	required bytes enterSound          = 9;  // 出场音效
+	repeated sint32 skillList          = 10; // 技能列表
+}
+
+// Excel:vip表.xls sheet:充值表
+message lua_vip_sale
+{
+	required sint32 id                   = 1;  // ID
+	required sint32 price                = 2;  // 价格
+	required sint32 baseDiamond          = 3;  // 基础棒棒糖奖励
+	required sint32 extraDiamond         = 4;  // 额外棒棒糖奖励
+	required sint32 firstFlag            = 5;  // 是否首次特殊获得
+	required sint32 firstExtraDiamond    = 6;  // 特殊获得棒棒糖奖励
+	required bytes iapID                 = 7;  // 产品ID
+	required bytes iapSuffix             = 8;  // 内购产品后缀
+}
+
+// Excel:j技能表.xls sheet:嘴炮技能
+message lua_zuipao
+{
+	required sint32 level              = 1;  // 等级
+	required sint32 skillID            = 2;  // 技能ID
+	required sint32 faceCount          = 3;  // 表情包收集
+	required sint32 needLevel          = 4;  // 解锁等级
+	required float addEnergyPercent    = 5;  // 能量值增加百分比
+	repeated int32 skillLevelList      = 6;  // 升级表情收集
+}
+
+// Excel:道具商店表.xls sheet:汽车商店等级随机表
+message lua_park_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:n扭蛋机.xls sheet:扭蛋机表
+message lua_niudan
+{
+	required sint32 id                         = 1;  // ID
+	repeated sint32 previewReward              = 2;  // 奖励预览列表
+	required sint32 showspeed                  = 3;  // 展示列表速度
+	required sint32 markshow                   = 4;  // 标签显示
+	repeated niudan_button_info button_list    = 5;  // 抽奖按钮列表
+	repeated sint32 text_quality               = 6;  // 文字品质列表
+	repeated sint32 text_prob                  = 7;  // 抽奖概率
+	required bytes text_desID                  = 8;  // 文字列表ID
+}
+
+// Excel:pet宠物.xls sheet:宠物属性
+message lua_pet
+{
+	required sint32 id                     = 1;  // ID
+	required bytes nameID                  = 2;  // 宠物名称ID
+	required bytes desID                   = 3;  // 宠物描述ID
+	required sint32 paintID                = 4;  // 立绘
+	required sint32 iconID                 = 5;  // icon
+	required sint32 skillIcon              = 6;  // 主动技能icon
+	required sint32 evolveLevel            = 7;  // 进化等级
+	required sint32 evolvePetId            = 8;  // 进化宠物ID
+	repeated item_config evolveCostList    = 9;  // 进化材料花费列表
+	required bytes res                     = 10; // 骨骼动画资源
+	repeated sint32 actNormalList          = 11; // 普攻列表
+	repeated sint32 actSkillList           = 12; // 主动技能列表
+	repeated sint32 actSkillProbList       = 13; // 主动技能触发概率列表
+	required bytes diedSound               = 14; // 死亡音效
+	required sint32 hurtPauseFrame         = 15; // 受击动作暂停帧
+	required lua_rect boundingBox          = 16; // 模型边框区域
+	required lua_pos hitPos                = 17; // 受击点坐标
+	required lua_pos topPos                = 18; // 头部顶点坐标
+	required sint32 maxLevel               = 19; // 最大等级
+	required sint32 weight                 = 20; // 出现权重
+}
+
+// Excel:q抢车位.xls sheet:停车场分线表
+message lua_park_place
+{
+	required sint32 id         = 1;  // ID
+	required sint32 sceneID    = 2;  // 场景ID
+	required bytes nameID      = 3;  // 名称ID
+}
+
+// Excel:出生数据.xls sheet:角色创建表
+message lua_role_create
+{
+	required sint32 id                 = 1;  // ID
+	repeated item_config hatList       = 2;  // 头盔列表
+	repeated face_config faceList      = 3;  // 表情列表
+	repeated item_config weaponList    = 4;  // 武器列表
+	repeated item_config wingList      = 5;  // 饰品列表
+}
+
+// Excel:道具商店表.xls sheet:扭蛋机商店等级随机表
+message lua_niudan_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:道具商店表.xls sheet:技能书商店等级随机表
+message lua_skill_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:奖励表.xls sheet:奖励表
+message lua_reward
+{
+	required sint32 id             = 1;  // ID
+	required sint32 itemID         = 2;  // 货物ID
+	required sint32 count          = 3;  // 数量
+	required sint32 miniRate       = 4;  // 最小倍数
+	required sint32 maxRate        = 5;  // 最大倍数
+	required sint32 isResetTime    = 6;  // 是否重置抽取次数
+	required sint32 getTime        = 7;  // 抽到次数
+}
+
+// Excel:pet宠物.xls sheet:宠物技能升级表
+message lua_pet_talent_level
+{
+	required sint32 level               = 1;  // 宠物等级
+	repeated sint32 actLevelList        = 2;  // 主动技能等级
+	repeated sint32 passiveLevelList    = 3;  // 被动技能等级
+}
+
+// Excel:z走马灯表.xls sheet:走马灯
+message lua_notable
+{
+	required sint32 type              = 1;  // 类型
+	repeated sint32 parameter_list    = 2;  // 参数
+	required bytes desID              = 3;  // 文本ID
+}
+
+// Excel:avatar表情.xls sheet:face
+message lua_face
+{
+	required sint32 id       = 1;  // ID
+	required bytes nameID    = 2;  // 名称ID
+	required bytes desID     = 3;  // 表情描述ID
+	required sint32 resID    = 4;  // 资源ID
+	required sint32 atk      = 5;  // 攻击力
+	required sint32 hp       = 6;  // HP
+	required sint32 def      = 7;  // 防御力
+	required sint32 crit     = 8;  // 暴击
+	required sint32 block    = 9;  // 格挡
+	required sint32 speed    = 10; // 速度
+}
+
+// Excel:日常任务表.xls sheet:日常任务
+message lua_daily_task
+{
+	required sint32 id             = 1;  // ID
+	repeated sint32 subTaskList    = 2;  // 子任务列表
+}
+
+// Excel:竞技场表.xls sheet:木桩敌人表
+message lua_arena_npc
+{
+	required sint32 rank     = 1;  // 名次
+	required bytes name      = 2;  // 名称
+	required sint32 temp     = 3;  // 模板id
+	required sint32 pos      = 4;  // 位置
+	required sint32 level    = 5;  // 等级
+	required sint32 dif      = 6;  // 难度
+}
+
+// Excel:卡牌表.xls sheet:卡牌技能表
+message lua_card
+{
+	required sint32 id                = 1;  // ID
+	required bytes nameID             = 2;  // 卡牌名称ID
+	required bytes descID             = 3;  // 卡牌描述ID
+	required sint32 type              = 4;  // 卡牌类型
+	required sint32 quality           = 5;  // 品质类型
+	required sint32 needEnergy        = 6;  // 能量消耗
+	required bytes icon               = 7;  // 卡牌图片
+	required bytes groupIcon          = 8;  // 卡组图片
+	required sint32 targetType        = 9;  // 目标类型
+	required sint32 targetCount       = 10; // 目标数量
+	required sint32 releaseEffID      = 11; // 释放特效
+	required sint32 releasePos        = 12; // 释放位置
+	repeated float atkTimeList        = 13; // 攻击时间点列表
+	repeated sint32 atkHurtPerList    = 14; // 攻击伤害百分比列表
+	required float atkEndTime         = 15; // 攻击结束时间点
+	repeated sint32 hurtEffList       = 16; // 受击特效列表
+	required sint32 perValue          = 17; // 百分比效果
+	required sint32 fixValue          = 18; // 固定效果
+	repeated sint32 buffTargetList    = 19; // BUFF目标类型列表
+	repeated sint32 buffList          = 20; // BUFF列表
+}
+
+// Excel:g挂机经验表.xls sheet:挂机经验计算
+message lua_hangup
+{
+	required sint32 level          = 1;  // 玩家等级
+	required sint32 timeUplimit    = 2;  // 总时间
+	required sint32 unitTime       = 3;  // 单位时间（秒）
+	required sint32 unitExp        = 4;  // 单位经验
+}
+
+// Excel:道具商店表.xls sheet:棒棒糖商店等级随机表
+message lua_diamond_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:道具商店表.xls sheet:扭蛋机商店
+message lua_niudan_shop
+{
+	required sint32 id          = 1;  // ID
+	required sint32 itemID      = 2;  // 物品ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:avatar表情.xls sheet:suit_shop
+message lua_suit_shop
+{
+	required sint32 index       = 1;  // 商店编号
+	required sint32 id          = 2;  // 套装ID
+	repeated sint32 duration    = 3;  // 时效消失
+	required sint32 costType    = 4;  // 购买消耗类型
+	repeated sint32 price       = 5;  // 买入价格
+}
+
+// Excel:f副本表.xls sheet:关卡表
+message lua_risk
+{
+	required sint32 id                        = 1;  // ID
+	required bytes nameID                     = 2;  // 关卡名称ID
+	required bytes desID                      = 3;  // 关卡描述ID
+	repeated sint32 waveList                  = 4;  // 战斗波次列表
+	required sint32 boss                      = 5;  // 是否为BOSS关
+	required sint32 type                      = 6;  // 关卡类型
+	required sint32 showType                  = 7;  // 关卡分类
+	required sint32 winCostStamina            = 8;  // 胜利消耗体力
+	required sint32 loseCostStamina           = 9;  // 失败消耗体力
+	required sint32 openLevel                 = 10; // 开启等级
+	repeated open_dup_config openDupList      = 11; // 通关副本列表
+	repeated sint32 winCondList               = 12; // 胜利条件列表
+	repeated sint32 winArgList                = 13; // 胜利条件参数列表
+	required sint32 loseCondType              = 14; // 失败条件类型
+	required sint32 limitTime                 = 15; // 关卡限制时间
+	required sint32 mapID                     = 16; // 地图ID
+	required sint32 startScreen               = 17; // 初始屏数
+	repeated sint32 dropRang                  = 18; // 掉落小怪宝箱范围
+	required sint32 monsterBoxID              = 19; // 小怪宝箱id
+	required sint32 bossBoxID                 = 20; // BOSS宝箱id
+	repeated sint32 showRewardList            = 21; // 通关显示奖励列表
+	repeated item_config getRewardList        = 22; // 通关固定奖励列表
+	required bytes icon                       = 23; // 关卡缩略图
+	repeated item_config firstDropItemList    = 24; // 首次通关必掉物品列表
+	required sint32 suggestFight              = 25; // 推荐战力
+	required sint32 fightCount                = 26; // 每日进入次数
+}
+
+// Excel:二次元配置表.xls sheet:二次元成长奖励表
+message lua_guadratic_level_reward
+{
+	required sint32 level              = 1;  // 等级
+	repeated item_config rewardList    = 2;  // 奖励列表1
+}
+
+// Excel:道具商店表.xls sheet:黑市商店等级随机表
+message lua_black_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:道具商店表.xls sheet:黑市商店
+message lua_black_shop
+{
+	required sint32 id          = 1;  // ID
+	required sint32 itemID      = 2;  // 物品ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:c场景失败表.xls sheet:切场景失败传送表
+message lua_scene_fail
+{
+	required sint32 Id                    = 1;  // ID
+	required sint32 srcSceneId            = 2;  // 原先场景
+	required sint32 trySceneId            = 3;  // 尝试场景
+	required sint32 returnSceneId         = 4;  // 返回场景
+	repeated lua_pos returnBornPosList    = 5;  // 返回坐标列表
+}
+
+// Excel:z澡堂大战表.xls sheet:大战阶段表
+message lua_bath_fight_step
+{
+	required sint32 step                               = 1;  // 阶段
+	required sint32 cdTime                             = 2;  // 触发CD
+	required bath_interact_tool nextStepCount          = 3;  // 晋级次数
+	repeated bath_interact_tool newInteractToolList    = 4;  // 新增交互道具数量
+	required sint32 isWatersplash                      = 5;  // 泼水动作开关
+	required sint32 broadcastTimeStep                  = 6;  // 道具出现间隔
+}
+
+// Excel:z澡堂大战表.xls sheet:澡堂交互道具类型
+message lua_bath_tool_type
+{
+	required sint32 type        = 1;  // 类型
+	required sint32 useCount    = 2;  // 可用次数
+}
+
+// Excel:竞技场表.xls sheet:木桩敌人模板表
+message lua_arena_template
+{
+	required sint32 id                    = 1;  // ID
+	required sint32 atk                   = 2;  // 攻击
+	required sint32 def                   = 3;  // 防御
+	required sint32 hp                    = 4;  // 生命
+	required sint32 crit                  = 5;  // 暴击
+	required sint32 block                 = 6;  // 格挡
+	required sint32 speed                 = 7;  // 速度
+	required sint32 act                   = 8;  // 初始行动值
+	required sint32 suitID                = 9;  // 套装ID
+	required sint32 faceID                = 10; // 表情ID
+	required sint32 weaponID              = 11; // 武器ID
+	required sint32 hatID                 = 12; // 头盔ID
+	required sint32 wingID                = 13; // 饰品ID
+	repeated sint32 skillList             = 14; // 技能ID列表
+	repeated sint32 skillLevelList        = 15; // 技能等级列表
+	repeated sint32 skillPropLevelList    = 16; // 技能熟练度等级列表
+	required sint32 suitSkillID           = 17; // 套装技能ID
+	required sint32 suitSkillLevel        = 18; // 套装技能等级
+	required sint32 suitSkillPropLevel    = 19; // 套装技能熟练度等级
+	repeated sint32 cardList              = 20; // 卡牌ID列表
+}
+
+// Excel:z澡堂大战表.xls sheet:结束条件表
+message lua_bath_fight_end
+{
+	required sint32 id                              = 1;  // ID
+	required sint32 cdTime                          = 2;  // 重置CD
+	repeated bath_interact_tool endConditionList    = 3;  // 结束条件
+	repeated sint32 rewardList                      = 4;  // 结束奖励列表
+}
+
+// Excel:z澡堂大战表.xls sheet:澡堂效果表
+message lua_bath_status
+{
+	required sint32 id           = 1;  // ID
+	required sint32 type         = 2;  // 类型
+	required sint32 typeRatio    = 3;  // 类型值
+	required sint32 stamina      = 4;  // 体力
+	required sint32 exp          = 5;  // 经验
+	required sint32 fullness     = 6;  // 饱腹度
+}
+
+// Excel:d氪星石兑换表.xls sheet:氪金石兑换
+message lua_stone_exchange
+{
+	required sint32 itemId           = 1;  // 兑换物品ID
+	required item_config needItem    = 2;  // 需求物品ID和数量
+}
+
+// Excel:小游戏表.xls sheet:小游戏排行表
+message lua_minigame_rank
+{
+	required sint32 id                               = 1;  // ID
+	repeated minigame_rank_info display_info_list    = 2;  // 参数列表
+}
+
+// Excel:h好友等级属性表.xls sheet:角色等级表
+message lua_friend_level
+{
+	required sint32 lvl      = 1;  // 好友等级
+	required sint32 hp       = 2;  // 生命
+	required sint32 atk      = 3;  // 攻击
+	required sint32 def      = 4;  // 防御
+	required sint32 crit     = 5;  // 暴击
+	required sint32 block    = 6;  // 格挡
+	required sint32 speed    = 7;  // 速度
+}
+
+// Excel:小游戏表.xls sheet:小游戏等级奖励表
+message lua_minigame_level
+{
+	required sint32 level                         = 1;  // 等级
+	repeated minigame_level_reward reward_list    = 2;  // 奖励参数
+}
+
+// Excel:二次元配置表.xls sheet:二次元关卡表
+message lua_guadratic_dup
+{
+	required sint32 id                     = 1;  // ID
+	required sint32 time                   = 2;  // 关卡时间
+	required lua_size mapSize              = 3;  // 关卡地图大小
+	repeated boss_enter bossEnterList      = 4;  // BOSS入场
+	repeated lua_pos_rect bossEnterRect    = 5;  // BOSS刷新区域列表
+	repeated bytes mapList                 = 6;  // 地图资源列表
+	required bytes dataFile                = 7;  // 行走区域配置文件
+	repeated lua_pos bornPosList           = 8;  // 出生点列表
+	required bytes music                   = 9;  // 背景音乐
+}
+
+// Excel:小游戏表.xls sheet:小游戏分数奖励表
+message lua_minigame_score
+{
+	required sint32 score                         = 1;  // 分数
+	repeated minigame_score_reward reward_list    = 2;  // 参数列表
+}
+
+// Excel:道具商店表.xls sheet:竞技场商店等级随机表
+message lua_arena_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:人物等级属性表.xls sheet:角色等级表
+message lua_role_level
+{
+	required sint32 lvl           = 1;  // 玩家等级
+	required sint32 exp           = 2;  // 升级所需经验
+	required sint32 skillPoint    = 3;  // 获得技能点
+	required sint32 stamina       = 4;  // 体力上限
+	required sint32 hp            = 5;  // 生命
+	required sint32 atk           = 6;  // 攻击
+	required sint32 def           = 7;  // 防御
+	required sint32 crit          = 8;  // 暴击
+	required sint32 block         = 9;  // 格挡
+	required sint32 speed         = 10; // 速度
+}
+
+// Excel:道具商店表.xls sheet:竞技场商店
+message lua_arena_shop
+{
+	required sint32 id          = 1;  // ID
+	required sint32 itemID      = 2;  // 物品ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:avatar表情.xls sheet:avatar_config
+message lua_avatar_config
+{
+	required sint32 shopID      = 1;  // 商店类型
+	required sint32 interval    = 2;  // 每次刷新时间
+	required sint32 cost        = 3;  // 手动刷新花费
+	required sint32 limit       = 4;  // 每日限制手动刷新次数
+}
+
+// Excel:pet宠物.xls sheet:宠物等级
+message lua_pet_level
+{
+	required sint32 id          = 1;  // ID
+	required sint32 level       = 2;  // 宠物等级
+	required sint32 exp         = 3;  // 宠物经验
+	required sint32 critProb    = 4;  // 暴击概率
+	required sint32 atk         = 5;  // 基础攻击值
+	required sint32 def         = 6;  // 基础防御值
+	required sint32 hp          = 7;  // 基础生命值
+	required sint32 crit        = 8;  // 基础暴击
+	required sint32 block       = 9;  // 基础格挡
+	required sint32 speed       = 10; // 基础速度
+	required sint32 act         = 11; // 先手值
+	required sint32 atkLimit    = 12; // 攻击值增加上限
+	required sint32 defLimit    = 13; // 防御值增加上限
+	required sint32 hpLimit     = 14; // 生命值增加上限
+}
+
+// Excel:function功能表.xls sheet:功能开放
+message lua_function_open
+{
+	required sint32 id                          = 1;  // ID
+	required sint32 index                       = 2;  // 开放顺序编号
+	required bytes nameID                       = 3;  // 功能名称ID
+	required sint32 level                       = 4;  // 人物等级
+	required sint32 vip                         = 5;  // VIP等级
+	repeated sint32 taskList                    = 6;  // 任务列表
+	repeated functionopen_risk_info riskList    = 7;  // 副本列表
+	required bytes icon                         = 8;  // 图标Icon
+	repeated bytes tipPicList                   = 9;  // 提示图片列表
+	required bytes tipTextID                    = 10; // 提示文字ID
+	repeated bytes tipTextList                  = 11; // 提示文字列表
+}
+
+// Excel:task任务表.xls sheet:任务类型定义
+message lua_main_task_module
+{
+	required sint32 id            = 1;  // 任务类型
+	required sint32 moduleType    = 2;  // 模块type
+}
+
+// Excel:家园表.xls sheet:仓库表
+message lua_house_storage
+{
+	required sint32 id               = 1;  // ID
+	required sint32 maxCount         = 2;  // 仓库上限扩展
+	required item_config costItem    = 3;  // 扩充消耗
+}
+
+// Excel:购买消耗表.xls sheet:购买比特币表
+message lua_buy_bitcoin
+{
+	required sint32 id              = 1;  // 购买次数
+	required item_config buyItem    = 2;  // 购买数量
+	required item_config costIem    = 3;  // 购买价格
+}
+
+// Excel:石中剑配置表.xls sheet:石中剑武器包
+message lua_sword
+{
+	required sint32 id           = 1;  // ID
+	required sint32 minLevel     = 2;  // 等级下限
+	required sint32 maxLevel     = 3;  // 等级上限
+	required sint32 baseBagID    = 4;  // 基础武器礼包ID
+	required sint32 godBagID     = 5;  // 山神武器礼包ID
+}
+
+// Excel:竞技场表.xls sheet:历史最高排名奖励表
+message lua_arena_history_rank
+{
+	required sint32 rank               = 1;  // 名次
+	repeated item_config rewardList    = 2;  // 奖励列表
+}
+
+// Excel:出生数据.xls sheet:出生表
+message lua_born
+{
+	required sint32 id                = 1;  // ID
+	required sint32 sceneID           = 2;  // 初始场景ID
+	required sint32 gold              = 3;  // 金币
+	required sint32 stamina           = 4;  // 药丸
+	required sint32 diamond           = 5;  // 棒棒糖
+	required sint32 level             = 6;  // 等级
+	required sint32 skillPoint        = 7;  // 技能点
+	required sint32 vip               = 8;  // VIP等级
+	repeated item_config itemList     = 9;  // 物品列表
+	repeated face_config faceList     = 10; // 表情列表
+	repeated suit_config suitList     = 11; // 套装列表
+	repeated item_config carList      = 12; // 车辆列表
+	repeated sint32 interactList      = 13; // 交互列表
+	repeated sint32 learnSkillList    = 14; // 已学习技能
+	repeated sint32 dressSkillList    = 15; // 已装备技能
+	repeated sint32 petIdList         = 16; // 宠物列表
+}
+
+// Excel:sign签到.xls sheet:补签花费
+message lua_sign_cost
+{
+	required sint32 count    = 1;  // 购买次数
+	required sint32 cost     = 2;  // 消耗棒棒糖
+}
+
+// Excel:小游戏表.xls sheet:小游戏表
+message lua_minigame
+{
+	required sint32 id                   = 1;  // ID
+	required sint32 sceneID              = 2;  // 场景ID
+	required bytes nameID                = 3;  // 小游戏名称ID
+	required bytes desID                 = 4;  // 描述ID
+	required sint32 icon                 = 5;  // 图片ID
+	required sint32 border               = 6;  // 外框资源ID
+	required sint32 hide                 = 7;  // 是否隐藏内容
+	required item_config costCurrency    = 8;  // 消耗货币
+	required bytes music                 = 9;  // 背景音乐
+}
+
+// Excel:二次元配置表.xls sheet:二次元奖励表
+message lua_guadratic_reward
+{
+	required sint32 ID                               = 1;  // ID
+	repeated item_list_config singleDayRewardList    = 2;  // 日期单号奖励列表
+	repeated item_list_config doubleDayRewardList    = 3;  // 日期双号奖励列表
+	repeated sint32 singleDayPercent                 = 4;  // 单号倍率字段
+	repeated sint32 doubleDayPercent                 = 5;  // 双号倍率字段
+}
+
+// Excel:购买消耗表.xls sheet:精英副本重置次数消耗表
+message lua_risk_fight_reset
+{
+	required sint32 id              = 1;  // 购买次数
+	required item_config costIem    = 2;  // 购买价格
+}
+
+// Excel:c彩蛋表.xls sheet:彩蛋表
+message lua_easter_egg
+{
+	required sint32 id                      = 1;  // 彩蛋ID
+	required sint32 sceneID                 = 2;  // 场景ID
+	required sint32 npcID                   = 3;  // NPC_ID
+	required sint32 needTouchCount          = 4;  // 需点击次数
+	required sint32 affectCount             = 5;  // 可触发次数
+	required sint32 probability             = 6;  // 获道具概率
+	repeated item_config rewardList         = 7;  // 获得道具列表
+	required sint32 cdTime                  = 8;  // 刷新间隔
+	required sint32 dayGetCount             = 9;  // 每日触发成功次数
+	repeated item_config firstRewardList    = 10; // 首次获得奖励列表
+	required bytes touchAnimName            = 11; // 触摸动画名称
+	required bytes touchSound               = 12; // 触摸音效
+	required bytes successAnimName          = 13; // 成功动画名称
+	required bytes successSound             = 14; // 成功音效
+	required sint32 globalType              = 15; // 其他玩家影响
+}
+
+// Excel:equip装备.xls sheet:装备制造
+message lua_equip_make
+{
+	required sint32 id                      = 1;  // ID
+	required sint32 openLevel               = 2;  // 开启等级
+	required sint32 level                   = 3;  // 装备等级
+	required sint32 quality                 = 4;  // 品质
+	required sint32 site                    = 5;  // 部位
+	repeated item_config caseOneItemList    = 6;  // 方案1材料列表
+	repeated item_config caseTwoItemList    = 7;  // 方案2材料列表
+	required sint32 equipIdOne              = 8;  // 普通成功武器ID
+	required sint32 equipIdTwo              = 9;  // 大成功武器ID
+	required sint32 prop                    = 10; // 大成功概率
+}
+
+// Excel:系统技能表.xls sheet:系统技能表
+message lua_role_skill
+{
+	required sint32 id                      = 1;  // ID
+	required bytes nameID                   = 2;  // 技能名称ID
+	required bytes desID                    = 3;  // 技能描述ID
+	repeated sint32 skillLevelList          = 4;  // 技能等级ID列表
+	repeated sint32 specialLevelList        = 5;  // 特殊升级等级列表
+	required sint32 type                    = 6;  // 类型
+	required bytes icon                     = 7;  // 图标
+	required sint32 openLevel               = 8;  // 解锁等级
+	repeated item_config learnItemList      = 9;  // 学习所需道具列表
+	repeated sint32 rateList                = 10; // 释放概率列表
+	repeated sint32 profiList               = 11; // 熟练度经验列表
+	repeated item_list_config upItemList    = 12; // 升级道具列表
+	required sint32 showType                = 13; // 技能分类
+	required sint32 quality                 = 14; // 技能品质
+}
+
+// Excel:日常任务表.xls sheet:任务成长奖励表
+message lua_daily_activity_growReward
+{
+	required sint32 id                 = 1;  // 等级
+	required item_config baseReward    = 2;  // 基础奖励
+	repeated item_config rewardList    = 3;  // 活跃度奖励
+}
+
+// Excel:equip装备.xls sheet:装备修复
+message lua_equip_fix
+{
+	required sint32 quality             = 1;  // 品质
+	required sint32 fixNeedItemId       = 2;  // 消耗材料
+	required sint32 everyNeedNum        = 3;  // 消耗数量
+	required sint32 everyNeedTime       = 4;  // 花费时间
+	required item_config fastFixCost    = 5;  // 立刻完成花费
+}
+
+// Excel:n扭蛋机.xls sheet:奖励包等级表
+message lua_niudan_package
+{
+	required sint32 id                       = 1;  // ID
+	required random_section level_section    = 2;  // 等级段
+	repeated item_config package_list        = 3;  // 参数列表
+}
+
+// Excel:场景表.xls sheet:传送门表
+message lua_transport
+{
+	required sint32 id            = 1;  // ID
+	required bytes nameID         = 2;  // 传送门名称ID
+	required lua_pos pos          = 3;  // 坐标
+	required sint32 resType       = 4;  // 动画资源类型
+	required bytes res            = 5;  // 特效资源
+	required sint32 isFlipX       = 6;  // 是否水平翻转
+	required sint32 isFlipY       = 7;  // 是否垂直翻转
+	required sint32 rotate        = 8;  // 旋转角度
+	repeated sint32 targetList    = 9;  // 传送目标ID列表
+	required bytes unlockRes      = 10; // 未开启播放动画
+	repeated sint32 unlockPos     = 11; // 未开启传送坐标
+}
+
+// Excel:二次元配置表.xls sheet:BOSS技能表
+message lua_guadratic_boss_skill
+{
+	required sint32 id              = 1;  // ID
+	required sint32 atkDistance     = 2;  // 攻击距离
+	required sint32 hurt            = 3;  // 伤害数值
+	required lua_rect hurtRect      = 4;  // 伤害范围
+	required bytes atkSound         = 5;  // 攻击音效
+	required float preTime          = 6;  // 技能准备时间
+	required bytes animName         = 7;  // 技能动作名称
+	required bytes effectRes        = 8;  // 技能特效资源
+	required bytes selfEffectRes    = 9;  // 自身特效资源
+}
+
+// Excel:技能坑位解锁.xls sheet:技能坑位解锁
+message lua_skill_hole
+{
+	required sint32 Id                     = 1;  // ID
+	repeated item_config unlockItemList    = 2;  // 解锁物品列表
+	required sint32 unlockVipLevel         = 3;  // 解锁VIP等级
+}
+
+// Excel:f副本表.xls sheet:随机宝箱表
+message lua_random_box
+{
+	required sint32 id          = 1;  // ID
+	required sint32 minLevel    = 2;  // 等级下限
+	required sint32 maxLevel    = 3;  // 等级上限
+	required sint32 rewardID    = 4;  // 礼包ID
+}
+
+// Excel:道具商店表.xls sheet:通用商店表
+message lua_common_shop
+{
+	required sint32 id               = 1;  // 商店ID
+	required bytes nameID            = 2;  // 商店名称ID
+	required bytes talkID            = 3;  // NPC说话ID
+	required sint32 resType          = 4;  // 资源类型
+	required bytes icon              = 5;  // 图标
+	required float scale             = 6;  // 缩放比例
+	required lua_pos pos             = 7;  // 偏移坐标
+	required sint32 type             = 8;  // 商店时间类型
+	required sint32 period           = 9;  // 开启周期
+	repeated sint32 weekdayList      = 10; // 星期几
+	repeated sint32 fixTimeList      = 11; // 定点时间列表
+	repeated sint32 limitTimeList    = 12; // 限制时间列表
+	repeated sint32 priceList        = 13; // 刷新价格
+	required bytes updateDesID       = 14; // 刷新描述ID
+	required sint32 cellNum          = 15; // 商品格子数量
+}
+
+// Excel:q抢车位.xls sheet:停车道具表
+message lua_park_item
+{
+	required sint32 id            = 1;  // ID
+	required sint32 itemID        = 2;  // 道具ID
+	required sint32 effectType    = 3;  // 效果类型
+	repeated sint32 valueList     = 4;  // 效果
+}
+
+// Excel:日常任务表.xls sheet:子任务
+message lua_daily_subtask
+{
+	required sint32 id                = 1;  // ID
+	required bytes desID              = 2;  // 描述ID
+	required sint32 conditionType     = 3;  // 条件类型
+	required sint32 conditionValue    = 4;  // 条件具体值
+	repeated sint32 reward            = 5;  // 奖励
+	required sint32 activity          = 6;  // 活跃度
+}
+
+// Excel:交互动作表.xls sheet:交互动作表
+message lua_interaction
+{
+	required sint32 id                    = 1;  // ID
+	required sint32 type                  = 2;  // 类型
+	required bytes nameID                 = 3;  // 名称ID
+	required bytes nameAct                = 4;  // 名称
+	required bytes unlockDesID            = 5;  // 解锁描述ID
+	required sint32 iconID                = 6;  // ICON地址
+	required bytes initiatorCSB           = 7;  // 发起者动作CSB
+	required bytes initiatorAction        = 8;  // 发起者动作名称
+	required bytes initiatorAction2       = 9;  // 发起者动作名称2
+	required bytes initiatorEffect        = 10; // 发起者特效名称
+	required bytes initiatorEffectFail    = 11; // 发起者特效名称失败
+	required sint32 loopType              = 12; // 发起动作循环
+	required sint32 consumerType          = 13; // 影响类型
+	required float consumerTime           = 14; // 影响时间
+	required bytes consumerEffect         = 15; // 影响特效名称
+	required bytes consumerCSB            = 16; // 影响动作CSB
+	required bytes consumerAction         = 17; // 影响动作名称
+	repeated sint32 deltaPos              = 18; // 影响偏移量
+	required sint32 effectType            = 19; // 影响范围类型
+	required sint32 radius                = 20; // 影响圆形范围半径
+	repeated sint32 size                  = 21; // 影响方形范围长宽
+	required sint32 cdTime                = 22; // 动作CD时间
+	repeated sint32 effectSelfList        = 23; // 自己效果
+	repeated sint32 effectOtherList       = 24; // 影响人效果
+	required sint32 interactToolType      = 25; // 交互道具类型
+	required bytes initiatorMusic         = 26; // 发起者音效
+	required sint32 isMusicLoop           = 27; // 发起者音效是否循环
+	required bytes consumerMusic          = 28; // 影响者音效
+}
+
+// Excel:奖励表.xls sheet:礼包表
+message lua_gift_bag
+{
+	required sint32 id                             = 1;  // ID
+	required bytes nameID                          = 2;  // 礼包名称ID
+	required sint32 randomCount                    = 3;  // 随机数量
+	repeated lua_package_item_weight rewardList    = 4;  // 奖励列表
+}
+
+// Excel:道具商店表.xls sheet:小游戏商店等级随机表
+message lua_minigame_shop_random
+{
+	required sint32 level                           = 1;  // 等级
+	repeated shop_random_section_list itemIdList    = 2;  // 位置列表
+}
+
+// Excel:石中剑配置表.xls sheet:山神选项
+message lua_sword_result
+{
+	required sint32 id            = 1;  // 选项编号ID
+	repeated sint32 rateList      = 2;  // 概率列表
+	repeated sint32 eventList     = 3;  // 事件ID列表
+	repeated sint32 resultList    = 4;  // 效果列表
+}
+
+// Excel:场景表.xls sheet:NPC交互表
+message lua_npc_interact
+{
+	required sint32 npcID               = 1;  // npcID
+	required sint32 isRepeat            = 2;  // 是否循环
+	required sint32 cdTime              = 3;  // 交互CD时间
+	required float actionTime           = 4;  // 交互动作时间
+	required lua_pos pos                = 5;  // 交互之后的坐标点
+	required bytes sound                = 6;  // 音效文件
+	required sint32 isMusic             = 7;  // 是音效还音乐
+	required sint32 isAudioEffectAll    = 8;  // 音效和音乐是否影响其他人
+	repeated sint32 mutexIDList         = 9;  // 互斥道具特效效果ID列表
+}
+
+// Excel:avatar表情.xls sheet:face_level
+message lua_face_lvl
+{
+	required sint32 level      = 1;  // 表情包等级
+	required sint32 count      = 2;  // 升级拥有表情数量
+	required bytes desID       = 3;  // 嘴炮描述ID
+	required sint32 lockLvl    = 4;  // 解锁等级
+}
+
+// Excel:equip装备.xls sheet:装备背包扩充
+message lua_equip_bag
+{
+	required sint32 id           = 1;  // 扩充次数
+	required sint32 upLimit      = 2;  // 背包数上限
+	repeated item_config cost    = 3;  // 消耗
+}
+
+// Excel:task任务表.xls sheet:任务
+message lua_main_task
+{
+	required sint32 id                       = 1;  // ID
+	required bytes nameID                    = 2;  // 名称ID
+	required sint32 preTalkID                = 3;  // 任务接受前对话ID
+	required sint32 nexTalkID                = 4;  // 任务接受后对话ID
+	required sint32 completeTalkID           = 5;  // 任务完成后对话ID
+	required bytes desID                     = 6;  // 任务描述ID
+	required sint32 type                     = 7;  // 任务类型
+	repeated sint32 completeIf               = 8;  // 完成条件
+	required sint32 isHasPreTask             = 9;  // 是否有前置任务
+	repeated sint32 nexIDList                = 10; // 后置任务列表
+	required sint32 funcID                   = 11; // 功能开放ID
+	repeated sint32 riskID                   = 12; // 通关副本ID
+	required sint32 friendCount              = 13; // 好友数量
+	required sint32 killCount                = 14; // 持剑杀人数
+	required sint32 level                    = 15; // 等级
+	required sint32 interactTime             = 16; // 整蛊玩家
+	repeated interact_npc interactNpcList    = 17; // 和NPC互动
+	required sint32 arenaOkTime              = 18; // 竞技场累积胜利
+	required sint32 bathWashTime             = 19; // 澡堂搓澡
+	required sint32 onlineTotalTime          = 20; // 在线累积时长
+	required sint32 npcID                    = 21; // 任务领取npcID
+	repeated item_config acceptRewardList    = 22; // 任务接受奖励列表
+	repeated item_config rewardList          = 23; // 奖励列表
+	required sint32 canGiveUp                = 24; // 任务放弃
+}
+
+// Excel:d点金手表.xls sheet:Sheet1
+message lua_exchange_gold
+{
+	required sint32 time                   = 1;  // 次数
+	required sint32 countDiamond           = 2;  // 花费棒棒糖
+	repeated exchange_gold_item getGold    = 3;  // 获得金币数
+}
+
+// Excel:avatar表情.xls sheet:suit
+message lua_suit
+{
+	required sint32 id           = 1;  // ID
+	required bytes nameID        = 2;  // 名称ID
+	required bytes desID         = 3;  // 套装描述ID
+	required sint32 isSpecial    = 4;  // 是否特殊套装
+	required sint32 resID        = 5;  // 资源ID
+	required sint32 atk          = 6;  // 攻击力
+	required sint32 hp           = 7;  // HP
+	required sint32 def          = 8;  // 防御力
+	required sint32 crit         = 9;  // 暴击
+	required sint32 block        = 10; // 格挡
+	required sint32 speed        = 11; // 速度
+}
+
+// Excel:全局配置表.xls sheet:全局配置表
+message lua_global_config
+{
+	required sint32 id                                      = 1;  // ID
+	required sint32 sceneMoveSpeed                          = 2;  // 场景移动速度值
+	required sint32 actArea                                 = 3;  // 行动区间数值
+	required sint32 swordInterval                           = 4;  // 恢复1次拔剑次数时间间隔
+	required sint32 levelUpStamina                          = 5;  // 升级获得体力值
+	required sint32 buyGetStamina                           = 6;  // 每次购买获得体力值
+	required sint32 staminaInterval                         = 7;  // 每恢复1点体力时间间隔
+	required sint32 swordGodProb                            = 8;  // 触发山神事件概率
+	required sint32 signDivisor                             = 9;  // 签到每几天抽1次
+	required sint32 signPakageID                            = 10; // 签到奖励礼包ID
+	repeated item_config signShowList                       = 11; // 签到抽奖显示列表
+	required sint32 swordCount                              = 12; // 石中剑初始次数
+	required sint32 arenaCount                              = 13; // 竞技场初始次数
+	required sint32 arenaCD                                 = 14; // 竞技场失败冷却时间
+	required item_config arenaClearCDCost                   = 15; // 重置竞技场冷却时间消耗
+	required sint32 fastTransItemID                         = 16; // 快速传送消耗道具ID
+	repeated sint32 arenaDayRewardList                      = 17; // 水管竞技结算奖励时间
+	required sint32 equipStrengthItemId                     = 18; // 装备升星材料ID
+	required sint32 equipResolveReturnPercent               = 19; // 装备分解返还比例
+	required equip_lasting_decline equipDeclineParameter    = 20; // 耐久消耗系数
+	required sint32 friendAssistCdTime                      = 21; // 好友助战冷却时间
+	required sint32 rechargeExchangeScale                   = 22; // 充值兑换经验比例
+	required sint32 bathFullnessUpperlimit                  = 23; // 澡堂饱腹度上限
+	required sint32 initCarport                             = 24; // 初始车库位置数量
+	required sint32 initRepairCarCount                      = 25; // 初始修理数量
+	required sint32 parkStopCDTime                          = 26; // 停车后无法收取的时间
+	required sint32 parkProtectCDTime                       = 27; // 停车后车子的保护时间
+	required sint32 parkBreakProtectCDTime                  = 28; // 整蛊后车子的保护时间
+	required sint32 parkRepairUnitTime                      = 29; // 每点装甲修理时间
+	required sint32 diamondReduceRepairCarTime              = 30; // 1棒棒糖加速修理时间
+	required sint32 fastRepairUseItemID                     = 31; // 时间水晶加速修理道具ID
+	required sint32 itemReduceRepairCarTime                 = 32; // 1时间水晶加速修理时间
+	required sint32 lastCarProtectTime                      = 33; // 最终装甲限制时间
+	required sint32 parkSayYesLimitTime                     = 34; // 时间乱流限制时间
+	required sint32 parkBenefitUnitTime                     = 35; // 车辆收益时间
+	required sint32 carportProtectTime                      = 36; // 车位保护时间
+	required float fullParkBenefitRate                      = 37; // 车辆满时间收益提升比例
+	required sint32 fullParkRewardID                        = 38; // 车辆满时间奖励礼包
+	required float parkBreakGetBenefitRate                  = 39; // 破坏车辆后获得车辆收益比例
+	required sint32 parkActCount                            = 40; // 抢车位行动最大次数
+	required sint32 parkActRefreshTime                      = 41; // 抢车位行动次数刷新时间间隔
+	required sint32 parkGetExpUnitTime                      = 42; // 停车多久获得1经验
+	required sint32 parkSayYesGetExp                        = 43; // 点赞1次获得经验
+	required sint32 parkBreakGetExp                         = 44; // 破坏1次获得经验
+	required sint32 parkGetRewardProb                       = 45; // 停车得到道具概率
+	required sint32 parkSayYesGetRewardProb                 = 46; // 点赞得到道具概率
+	required sint32 parkBreakGetRewardProb                  = 47; // 破坏得到道具概率
+	required sint32 systemParkRefreshTime                   = 48; // 系统停车时间点
+	required sint32 systemParkMaxCount                      = 49; // 系统刷车数量
+	required sint32 systemParkByLeftCount                   = 50; // 系统车变成多少的时候刷
+	repeated sint32 systemParkRandomCaridList               = 51; // 系统车列表
+	required sint32 parkStayTimeAfterFullTime               = 52; // 停车时间满后停留时间
+	required sint32 parkShopRefreshCarCount                 = 53; // 车子商店刷出车子数量
+	required sint32 parkDetailMaxCount                      = 54; // 抢车位概况事件最大条数
+	required sint32 parkSayYesProb                          = 55; // 时间乱流概率
+	required sint32 carPartID                               = 56; // 汽车零件ID
+	repeated sint32 interactNpcList                         = 57; // 交互任务统计NPC列表
+	repeated sint32 hangupRestrictList                      = 58; // 广场挂机时间间隔
+	required sint32 bathRecoveryUpperLimit                  = 59; // 澡堂每日可获得体力上限
+	required sint32 bathRecoveryInterval                    = 60; // 澡堂自动恢复时间间隔
+	repeated bath_once_stimina bathOnceTimeList             = 61; // 澡堂每日赠送体力列表
+	repeated sint32 addSwordItemList                        = 62; // 增加石中剑拔剑次数道具消耗列表
+	required sint32 chargeSkillBookItemID                   = 63; // 兑换所有技能书道具ID
+	repeated item_config petTalentRebuildCostList           = 64; // 宠物技能重修消耗列表
+	required equip_endurance_cost costInterval              = 65; // 装备耐久消耗区间
+	repeated sint32 petRefreshTimeList                      = 66; // 宠物出现时间列表
+	repeated item_config uploadHeadImageCostList            = 67; // 上传照片花费列表
+	repeated item_config foreverUploadHeadImageCostList     = 68; // 永久上传照片花费列表
+	required sint32 horseSpeed                              = 69; // 走马灯速度
+	required float horseInterval                            = 70; // 走马灯间隔时间
+	required sint32 caliburnCountLimit                      = 71; // 石中剑拔剑次数
+	repeated lua_pos cannonPosList                          = 72; // 人间大炮排队坐标列表
+	required sint32 fightFriendTime                         = 73; // 每天切磋好友的次数
+	required sint32 greenHatLimit                           = 74; // 绿帽上限
+	required sint32 greenHatGap                             = 75; // 绿帽出现间隔
+	required sint32 guadraticMaxRole                        = 76; // 二次元入场人数
+	required sint32 guadraticMaxCount                       = 77; // 二次元每日次数
+	required item_config guadraticCost                      = 78; // 二次元消耗
+	repeated time_range guadraticOpenTimeList               = 79; // 二次元开放时间列表
+	required sint32 guadraticStartCDTime                    = 80; // 二次元战斗开始倒计时
+	required sint32 guadraticQuitCD                         = 81; // 二次元结果界面自动退出等待时间
+	required sint32 guadraticEndHurtCD                      = 82; // 二次元战斗结束扣血间隔时间
+	required sint32 guadraticEndHurt                        = 83; // 二次元战斗结束扣血
+	required sint32 guadraticAtkCD                          = 84; // 二次元战斗主动攻击CD
+	required sint32 guadraticUnderAtkCD                     = 85; // 二次元战斗被攻击CD
+	required sint32 guadraticHP                             = 86; // 二次元玩家初始血量
+	required sint32 guadraticHurt                           = 87; // 二次元技能每次伤害
+	required sint32 levelRankNum                            = 88; // 等级排行榜数量
+	required sint32 killRankNum                             = 89; // 杀人排行榜数量
+	required sint32 diamondRankNum                          = 90; // 土豪排行榜数量
+	required sint32 minigameRankNum                         = 91; // 小游戏排行榜数量
+	required item_config faceDupReturnItem                  = 92; // 表情包重复返还
+	required sint32 sellBagGridMaxNum                       = 93; // 出售物品格子上限
+	repeated item_config firstSaveMoneryRewardList          = 94; // 首冲奖励列表
+	repeated item_config weixinRewardList                   = 95; // 分享奖励列表
+	required sint64 rechargeLimit                           = 96; // 充值突破上限经验条
+	repeated item_config petEggReturnItemList               = 97; // 宠物蛋额外获得列表
+	required sint32 friendNumLimit                          = 98; // 好友上限
+	required sint32 pianoTime                               = 99; // 钢琴弹奏限制时间
+	required sint32 unlockBattleSpeedLevel                  = 100; // 战斗加速加速需要人物等级
+	required float pvpAtkRate                               = 101; // PVP攻击百分比
+	required float pvpDefRate                               = 102; // PVP防御百分比
+	required sint32 diamondFaceNum                          = 103; // 汤圆店棒棒糖可购买的数量
+	required sint32 goldFaceNum                             = 104; // 汤圆店金币可购买的数量
+	repeated sint32 initRoleAttr                            = 105; // 初始人物参数
+	repeated sint32 perLevelAttr                            = 106; // 等级影响人物参数
+	repeated sint32 fightParameter                          = 107; // 叼值参数
+	repeated item_config dailyGameItemList                  = 108; // 每日领取比特币
+}
+
+// Excel:j交互系统表.xls sheet:交互系统动作
+message lua_interact_system
+{
+	required sint32 id                          = 1;  // ID
+	required sint32 type                        = 2;  // 类型
+	repeated sint32 childInteract               = 3;  // 子类动作列表
+	required bytes nameID                       = 4;  // 名称ID
+	required bytes actDesID                     = 5;  // 动作描述ID
+	repeated interact_unlock unlockCondition    = 6;  // 解锁条件
+	required sint32 energyPoint                 = 7;  // 所需能量点
+	required sint32 iconID                      = 8;  // ICON地址
+	required bytes initiatorCSB                 = 9;  // 发起者动作CSB
+	required bytes initiatorAction              = 10; // 发起者动作名称
+	required bytes initiatorSound               = 11; // 发起者音效
+	required bytes initiatorAction2             = 12; // 发起者动作名称2
+	required bytes initiatorEffect              = 13; // 发起者特效名称
+	required bytes initiatorEffectFail          = 14; // 发起者特效名称失败
+	required sint32 loopType                    = 15; // 发起动作循环
+	required sint32 initiatorHideEffect         = 16; // 发起者是否隐藏饰品
+	required sint32 consumerHideEffect          = 17; // 影响者是否隐藏饰品
+	required sint32 consumerType                = 18; // 影响类型
+	required float consumerTime                 = 19; // 影响时间
+	required float colorDuration                = 20; // 变色持续时间
+	required lua_rgba colorRGB                  = 21; // 变色值
+	required bytes consumerEffect               = 22; // 影响特效名称
+	required bytes consumerCSB                  = 23; // 影响动作CSB
+	required bytes consumerAction               = 24; // 影响动作名称
+	required bytes consumerSound                = 25; // 影响音效
+	repeated sint32 deltaPos                    = 26; // 影响偏移量
+	required sint32 effectType                  = 27; // 影响范围类型
+	required sint32 radius                      = 28; // 影响圆形范围半径
+	repeated sint32 size                        = 29; // 影响方形范围长宽
+	required sint32 sortLevel                   = 30; // 排序等级
+}
+
+// Excel:q抢车位.xls sheet:老司机等级
+message lua_park_driver
+{
+	required sint32 id                     = 1;  // 老司机等级
+	required sint32 exp                    = 2;  // 升级所需经验
+	repeated sint32 breakProbList          = 3;  // 破坏效果随机概率
+	repeated sint32 breakGetRewardItem     = 4;  // 破坏车辆后奖励零件
+	repeated sint32 sayYesProbList         = 5;  // 点赞效果随机概率
+	repeated sint32 sayYesGetRewardItem    = 6;  // 点赞奖励时间水晶
+	repeated sint32 sayYesExRewardItem     = 7;  // 时间乱流额外奖励量
+	repeated sint32 randomItemRange        = 8;  // 奖励随机道具ID范围
+	required sint32 getCarportCount        = 9;  // 奖励车位个数
+}
+
+// Excel:家园表.xls sheet:商店表
+message lua_house_shop
+{
+	required sint32 id                = 1;  // 商品ID
+	required sint32 furnitureID       = 2;  // 家园物品ID
+	required sint32 needHouseLevel    = 3;  // 需要家园等级
+	required sint32 needVipLevel      = 4;  // 需要VIP等级
+	required item_config costItem     = 5;  // 购买消耗
+	required sint32 isNew             = 6;  // 是否为新品
+}
+
+// Excel:小面板引导表.xls sheet:小面板引导表
+message lua_findway_guid
+{
+	required sint32 id                         = 1;  // ID
+	required bytes descID                      = 2;  // 描述ID
+	required sint32 sceneID                    = 3;  // 场景ID
+	required sint32 npcID                      = 4;  // NPCID
+	required sint32 suggestLevel               = 5;  // 推荐等级
+	required sint32 reachLevel                 = 6;  // 等级达到
+	required sint32 accecpTaskID               = 7;  // 接取任务ID
+	required sint32 finishTaskID               = 8;  // 完成任务ID
+	required chapter_risk finishChapterRisk    = 9;  // 完成章节副本
+	required sint32 lockRisk                   = 10; // 关闭大炮
+}
+
+// Excel:q抢车位.xls sheet:车库扩充价格
+message lua_park_garage_port
+{
+	required sint32 id                   = 1;  // 扩充次数
+	repeated item_config costItemList    = 2;  // 扩充消耗列表
+}
+
+// Excel:j交互系统表.xls sheet:交互图鉴奖励
+message lua_interact_manual
+{
+	required sint32 num                = 1;  // Num
+	required sint32 energy             = 2;  // 奖励能量
+	repeated item_config rewardList    = 3;  // 奖励物品列表
+}
+
+// Excel:avatar表情.xls sheet:face_discount
+message lua_face_discount
+{
+	required sint32 index       = 1;  // 商店编号
+	required sint32 id          = 2;  // 表情ID
+	repeated sint32 duration    = 3;  // 时效消失
+	required sint32 costType    = 4;  // 购买消耗类型
+	repeated sint32 price       = 5;  // 买入价格
+	required sint32 discount    = 6;  // 折扣
+}
+
+// Excel:q抢车位.xls sheet:事件表
+message lua_park_event
+{
+	required sint32 id                     = 1;  // 事件ID
+	required bytes nameID                  = 2;  // 名称ID
+	required bytes descID                  = 3;  // 描述ID
+	required sint32 totalTime              = 4;  // 持续时间
+	required sint32 cdTime                 = 5;  // CD时间
+	repeated sint32 condList               = 6;  // 出现条件列表
+	repeated sint32 selectCarEffectList    = 7;  // 选中车辆效果列表
+	repeated sint32 exCarEffectList        = 8;  // 附带车辆效果列表
+}
+
+// Excel:场景表.xls sheet:NPC表
+message lua_npc
+{
+	required sint32 id              = 1;  // ID
+	required bytes nameID           = 2;  // NPC名称ID
+	required sint32 type            = 3;  // NPC类型
+	required bytes head             = 4;  // 头像
+	required sint32 zOrder          = 5;  // NPC层级
+	required sint32 resType         = 6;  // 动画资源类型
+	required bytes res              = 7;  // 动画资源
+	required float scale            = 8;  // 缩放比例
+	required sint32 flipX           = 9;  // 是否资源翻转
+	repeated bytes effectList      = 10; // 效果列表
+	repeated lua_pos pos            = 11; // NPC坐标
+	repeated sint32 targetList      = 12; // 传送目标ID列表
+	repeated sint32 talkIDList      = 13; // NPC对话ID列表
+	repeated float clickRect        = 14; // 点击区域
+	required lua_pos talkHeadPos    = 15; // NPC对话头像坐标
+	required float talkHeadScale    = 16; // NPC对话头像缩放比例
+	required lua_pos markPos        = 17; // 标示坐标
+	required lua_pos namePos        = 18; // NPC名称坐标
+	required lua_pos findwayPos     = 19; // 自动寻路坐标点
+}
+
+// Excel:饰品属性增益表.xls sheet:饰品属性增益
+message lua_wing_extra_effect
+{
+	required sint32 level                      = 1;  // 穿戴等级
+	repeated random_section randomNumList      = 2;  // 属性条目列表
+	repeated extra_per_section extraPerList    = 3;  // 品质属性列表
+}
+
+// Excel:家园表.xls sheet:扩展表
+message lua_house_expand
+{
+	required sint32 id                = 1;  // ID
+	required lua_size size            = 2;  // 范围
+	required sint32 icon              = 3;  // 图标
+	required sint32 needHouseLevel    = 4;  // 需要家园等级
+	required sint32 needVipLevel      = 5;  // 需要VIP等级
+	required item_config costItem     = 6;  // 扩充消耗
+}
+
+// Excel:item道具表.xls sheet:道具表
+message lua_item
+{
+	required sint32 id                 = 1;  // ID
+	required sint32 type               = 2;  // 道具类型
+	required bytes nameID              = 3;  // 道具名称ID
+	required bytes desID               = 4;  // 道具描述ID
+	required sint32 resID              = 5;  // 图标ID
+	required sint32 useLevel           = 6;  // 使用等级
+	required sint32 quality            = 7;  // 品质
+	repeated sint32 rewardList         = 8;  // 奖励列表
+	required sint32 price              = 9;  // 价格
+	repeated sint32 testWearList       = 10; // 穿戴装备列表
+	repeated item_config effectList    = 11; // 效果值
+	required sint32 spID               = 12; // 道具特殊效果ID
+	required bytes itemSound           = 13; // 道具音效
+	required bytes fromID              = 14; // 来源ID
+	required bytes useforID            = 15; // 用途ID
+}
+
+// Excel:道具商店表.xls sheet:技能书商店
+message lua_skill_shop
+{
+	required sint32 id          = 1;  // ID
+	required sint32 itemID      = 2;  // 物品ID
+	required sint32 num         = 3;  // 数量
+	required sint32 costType    = 4;  // 购买消耗类型
+	required sint32 price       = 5;  // 总价
+}
+
+// Excel:equip装备.xls sheet:equip
+message lua_equip
+{
+	required sint32 id                              = 1;  // ID
+	required bytes nameID                           = 2;  // 名称ID
+	required bytes desID                            = 3;  // 装备描述ID
+	required sint32 type                            = 4;  // 装备类型ID
+	required bytes wingCSB                          = 5;  // 饰品csb
+	required bytes wingSuffix                       = 6;  // 饰品动作名
+	required sint32 wingBindType                    = 7;  // 饰品绑定类型
+	required bytes csbName                          = 8;  // 载具csb
+	required sint32 animSuffix                      = 9;  // 载具动作名
+	required sint32 quality                         = 10; // 品质
+	required sint32 wearLevel                       = 11; // 穿戴等级
+	required sint32 atkMin                          = 12; // 最小攻击力
+	required sint32 atkMax                          = 13; // 最大攻击力
+	required sint32 hp                              = 14; // HP
+	required sint32 def                             = 15; // 防御力
+	required sint32 crit                            = 16; // 暴击
+	required sint32 block                           = 17; // 格挡
+	required sint32 speed                           = 18; // 速度
+	required sint32 fullAttr                        = 19; // 全属性
+	required sint32 endurance                       = 20; // 耐久
+	required sint32 icon                            = 21; // 图片地址
+	required sint32 weaponEffect                    = 22; // 武器特效
+	required sint32 basePrice                       = 23; // 基本回收价格
+	required sint32 atkStarStepValue                = 24; // 攻击力升星
+	required sint32 hpStarStepValue                 = 25; // HP升星
+	required sint32 defStarStepValue                = 26; // 防御力升星
+	required sint32 critStarStepValue               = 27; // 暴击升星
+	required sint32 blockStarStepValue              = 28; // 格挡升星
+	required sint32 speedStarStepValue              = 29; // 速度升星
+	repeated item_config resolveBaseList            = 30; // 分解材料列表
+	repeated equip_resolve_item resolveExtraList    = 31; // 额外获得列表
+	required sint32 starUpperLimit                  = 32; // 星级上限
+	required sint32 isResoluble                     = 33; // 是否可以分解
+	repeated sint32 qualityAtkList                  = 34; // 攻击力升品
+	repeated sint32 qualityHpList                   = 35; // HP升品
+	repeated sint32 qualityDefList                  = 36; // 防御力升品
+	repeated sint32 qualityCritList                 = 37; // 暴击升品
+	repeated sint32 qualityBlockList                = 38; // 格挡升品
+	repeated sint32 qualitySpeedList                = 39; // 速度升品
+	required sint32 moveSpeed                       = 40; // 移动速度值
+	required bytes carSound                         = 41; // 载具音效
+	required sint32 rareDegree                      = 42; // 稀有度
+	required bytes fromID                           = 43; // 装备出处ID
+	required bytes useforID                         = 44; // 用途_ID
+}
+
+// Excel:pet宠物.xls sheet:宠物系统技能表
+message lua_pet_act_skill
+{
+	required sint32 id       = 1;  // ID
+	required bytes nameID    = 2;  // 技能名称ID
+	required bytes desID     = 3;  // 技能描述ID
+	required bytes icon      = 4;  // icon
+}
+
+// Excel:vip表.xls sheet:vip特权表
+message lua_vip
+{
+	required sint32 id                            = 1;  // 等级
+	required sint32 exp                           = 2;  // 经验值
+	repeated item_config specialRewardList        = 3;  // 限定礼包奖励列表
+	required item_config showPrice                = 4;  // 限定礼包价格打折前
+	required item_config realPrice                = 5;  // 限定礼包价格打折后
+	repeated item_config dailyRewardList          = 6;  // 每日礼包奖励列表
+	repeated sint32 riskAddSpeed                  = 7;  // 冒险加速功能
+	repeated sint32 uploadFaceFlag                = 8;  // 开启照片上传功能
+	repeated sint32 unlockSkillPos                = 9;  // 解锁第4个技能槽
+	repeated sint32 vipChatPP                     = 10; // VIP专属聊天泡泡
+	repeated sint32 noCdArenaFail                 = 11; // 竞技场挑战失败无CD
+	repeated sint32 fixTimePlus                   = 12; // 缩短装备修理时间
+	repeated sint32 vipSkipFight                  = 13; // 副本跳过战斗功能
+	repeated sint32 bathExpSpeedup                = 14; // 澡堂挂机经验倍率
+	repeated sint32 vipPet                        = 15; // VIP专属宠物
+	repeated sint32 skilledSpeed                  = 16; // 技能熟练度加快百分比
+	repeated sint32 vipBMG                        = 17; // 出场自带BGM
+	repeated sint32 vipBarrageFont                = 18; // VIP弹幕专属字体
+	repeated sint32 expPromoteRatio               = 19; // 提升获得经验值百分比
+	repeated sint32 friendSkillCD                 = 20; // 好友合体技CD
+	repeated sint32 exchangeGoldTime              = 21; // 棒棒糖兑换金币次数
+	repeated sint32 buyArenaCount                 = 22; // 竞技场挑战购买次数
+	repeated sint32 buyStaminaCount               = 23; // 每日购买体力次数
+	repeated sint32 buyBitCoinCount               = 24; // 每日购买比特币次数
+	repeated sint32 faceRefreshCountUpperLimit    = 25; // 汤圆店每日可刷新次数
+	repeated sint32 updateSkillShopCount          = 26; // 技能书商店刷新次数
+	repeated sint32 updateMinigameShopCount       = 27; // 小游戏商店刷新次数
+	repeated sint32 updateArenaShopCount          = 28; // 竞技场商店刷新次数
+	repeated sint32 updateBlackShopCount          = 29; // 黑市商店刷新次数
+	repeated sint32 updateDiamondShopCount        = 30; // 棒棒糖商店刷新次数
+	repeated sint32 signManualCount               = 31; // 每月签到补签次数
+	repeated sint32 dangerRiskResetCount          = 32; // 精英副本重置次数
+	repeated sint32 parkNum                       = 33; // 抢车位停车数量增加开启
+	repeated sint32 vipAct                        = 34; // VIP专属整蛊动作
+	repeated sint32 vipFurnitureShop              = 35; // VIP家具商城开放
+	repeated sint32 vipVechical                   = 36; // VIP限定赠送抢车位的车辆
+	repeated sint32 riskDropRate                  = 37; // 冒险中掉宝率增加开启
+	repeated sint32 vipFellow                     = 38; // VIP跟随小弟
+	repeated sint32 selfDefVehicle                = 39; // 自定义载具
+	repeated sint32 carportCount                  = 40; // 动态车辆可停数量
+}
+
+// Excel:家园表.xls sheet:家具表
+message lua_furniture
+{
+	required sint32 id                = 1;  // 家具ID
+	required bytes nameID             = 2;  // 名称ID
+	required bytes desID              = 3;  // 描述ID
+	required sint32 icon              = 4;  // 图标
+	required sint32 type              = 5;  // 类型
+	required sint32 subType           = 6;  // 子类型
+	required lua_size size            = 7;  // 占地面积大小
+	required sint32 dirType           = 8;  // 方向类型
+	required sint32 directIndex       = 9;  // 初始方向
+	required sint32 resType           = 10; // 资源类型
+	required bytes res                = 11; // 资源文件
+	required sint32 isCanPass         = 12; // 是否可行走
+	required lua_pos offsetPos        = 13; // 资源偏移坐标
+	required item_config salePrice    = 14; // 售价
+}
+
+// Excel:竞技场表.xls sheet:挑战购买表
+message lua_arena_buy
+{
+	required sint32 count      = 1;  // 购买次数
+	required sint32 diamond    = 2;  // 花费棒棒糖
+}
+
+// Excel:f副本表.xls sheet:波次表
+message lua_battle_wave
+{
+	required sint32 id                          = 1;  // ID
+	required bytes nameID                       = 2;  // 波次名称ID
+	repeated sint32 monsterList                 = 3;  // 怪物列表
+	repeated sint32 posList                     = 4;  // 阵型站位列表
+	required sint32 talkID                      = 5;  // 吐槽ID
+	repeated sint32 levelList                   = 6;  // 等级列表
+	repeated sint32 diffList                    = 7;  // 难度列表
+	required sint32 eventID                     = 8;  // 触发事件id
+	repeated sint32 eventConList                = 9;  // 触发事件条件列表
+	required lua_event_arg_list eventArgList    = 10; // 触发事件参数列表
+}
+
+// Excel:小游戏规则表.xls sheet:大战三侠镇
+message lua_mini_warrior
+{
+	required sint32 level                    = 1;  // 等级
+	required sint32 numPerGroup              = 2;  // 每组波数
+	required sint32 enemyNumMax              = 3;  // 每波最多敌人数
+	required float gap                       = 4;  // 刷敌人时间间隔
+	required sint32 enemyNum                 = 5;  // 第一组普通敌人数量
+	required sint32 addEnemyGroup            = 6;  // 普通敌人数量变动组数
+	required sint32 enemyAddPerGroup         = 7;  // 普通敌人数量增加个数
+	required sint32 firstSpeed               = 8;  // 第一组普通敌人移动速度
+	required sint32 addSpeedGroup            = 9;  // 普通敌人移动速度变动组数
+	required float speedAddPerGroup          = 10; // 普通敌人移动速度增加值
+	required sint32 speedMaxLimit            = 11; // 普通敌人移动速度最快速度
+	required sint32 attLimit                 = 12; // 普通敌人攻击范围
+	required sint32 bossAppearScore          = 13; // 第一次BOSS出现要求得分
+	required sint32 bossAppearScoreAdd       = 14; // BOSS出现要求得分加值
+	required sint32 bossChangeColorNum       = 15; // 第一次BOSS变色次数
+	required sint32 bossChangeColorNumAdd    = 16; // BOSS变色次数加值
+	required sint32 bossGatherEnergy         = 17; // 第一次BOSS聚气时间
+	required sint32 bossGatherEnergyAdd      = 18; // BOSS聚气时间加值
+	required sint32 enemyScore               = 19; // 消灭普通敌人得分
+	required sint32 bossScore                = 20; // 消灭BOSS敌人得分
+	required sint32 mapSpeed                 = 21; // 地图移动速度
+}
+
+// Excel:q抢车位.xls sheet:车位表
+message lua_park_carport
+{
+	required sint32 id            = 1;  // 停车场车位ID
+	required float benefitRate    = 2;  // 收益倍数
+}
+
+// Excel:q抢车位.xls sheet:点赞效果
+message lua_park_sayyes
+{
+	required sint32 id           = 1;  // 点赞ID
+	required bytes res           = 2;  // 动画资源
+	required bytes effect        = 3;  // 特效资源
+	repeated sint32 valueList    = 4;  // 效果
+	required bytes sound         = 5;  // 音效
+}
+
+// Excel:q抢车位.xls sheet:修理位扩充价格
+message lua_park_repair_port
+{
+	required sint32 id                   = 1;  // 扩充次数
+	repeated item_config costItemList    = 2;  // 扩充消耗列表
+}
+
+// Excel:家园表.xls sheet:家园等级表
+message lua_house_level
+{
+	required sint32 level    = 1;  // 等级
+	required sint32 exp      = 2;  // 经验
+}
+
+// Excel:7天登陆.xls sheet:Sheet1
+message lua_seven_days
+{
+	required sint32 ID             = 1;  // ID
+	repeated item_config reward    = 2;  // REWARD
+}
+
+// Excel:pet宠物.xls sheet:宠物效果道具
+message lua_pet_pill
+{
+	required sint32 itemId         = 1;  // 消耗道具ID
+	required sint32 type           = 2;  // 类型
+	required sint32 effectValue    = 3;  // 效果值
+}
+
+// Excel:场景表.xls sheet:场景表
+message lua_scene
+{
+	required sint32 id                    = 1;  // ID
+	required sint32 type                  = 2;  // 场景类别
+	required bytes nameID                 = 3;  // 场景名称ID
+	required sint32 maxRole               = 4;  // 最大人数限制
+	required sint32 isCanMoreOpen         = 5;  // 是否可以多开
+	repeated sint32 mapList               = 6;  // 地图资源列表
+	required bytes dataFile               = 7;  // 行走区域配置文件
+	required lua_size mapSize             = 8;  // 地图格子大小
+	repeated sint32 transportList         = 9;  // 传送门ID列表
+	required sint32 fastTransEnable       = 10; // 是否可以快速前往
+	required sint32 openFuncID            = 11; // 功能开放ID
+	repeated sint32 buildingList          = 12; // 建筑列表
+	repeated sint32 npcList               = 13; // NPC列表
+	repeated lua_pos bornPosList          = 14; // 出生点列表
+	repeated bytes musicList              = 15; // 背景音乐列表
+	required float roleScale              = 16; // 人物缩放比例
+	repeated lua_pos petRefreshPosList    = 17; // 宠物刷新区域列表
+}
+
+// Excel:竞技场表.xls sheet:每日排名奖励表
+message lua_arena_day_rank
+{
+	required sint32 id                 = 1;  // ID
+	repeated sint32 rankRect           = 2;  // 名次区间
+	repeated item_config rewardList    = 3;  // 奖励列表
+}

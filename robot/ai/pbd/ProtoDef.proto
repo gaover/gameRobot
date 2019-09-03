@@ -1,0 +1,668 @@
+syntax = "proto2";
+package pbd;
+import "EnumDef.proto";
+
+// 通用存储
+message universal_data
+{
+    required int64 key  = 1;
+    required bytes type = 2;
+    required bytes name = 3;
+
+    repeated bool   b   = 4;
+    repeated float  f   = 5;
+    repeated double d   = 6;
+    repeated sint32 e   = 7;
+    repeated sint32 i32 = 8;
+    repeated sint64 i64 = 9;
+    repeated uint32 u32 = 10;
+    repeated uint64 u64 = 11;
+    repeated bytes  str = 12;
+
+    repeated universal_data sub = 13;
+}
+
+// 坐标
+message lua_pos
+{  
+    required sint32 pos_x   = 1;
+    required sint32 pos_y   = 2;
+}
+
+// 背包道具
+message db_bag_item
+{
+    required sint64 item_index  = 1;
+    required sint32 item_id     = 2;
+    required sint64 item_count  = 3;
+    required bool   is_touched  = 4;
+}
+
+message list_db_bag_items
+{
+    repeated db_bag_item    bag_item    = 1;
+}
+
+
+// 背包装备
+message db_bag_equip
+{
+    required sint64 equip_index          = 1;
+    required sint32 equip_id             = 2;
+    required sint32 level                = 3;
+    required sint32 attack               = 4;
+    required sint32 endurance            = 5;  // 耐久
+    required sint32 quality              = 6;  // 品质
+    required E_EQUIP_SITE_TYPE site_type = 7;
+    required bool   is_touched           = 8;
+    optional equip_extra_per   extra_per = 9;
+}
+
+// 角色装备
+message db_role_equip
+{
+    required sint64 equip_index          = 1;
+    required sint32 equip_id             = 2;
+    required sint32 level                = 3;
+    required sint32 attack               = 4;
+    required sint32 endurance            = 5;
+    required sint32 quality              = 6;  // 品质
+    required E_EQUIP_SITE_TYPE site_type = 7;
+    optional equip_extra_per   extra_per = 8;
+}
+
+// 额外增益百分比
+message equip_extra_per
+{
+    required sint32 fight_per = 1;
+    required sint32 def_per   = 2;
+    required sint32 crit_per  = 3;
+    required sint32 block_per = 4;
+    required sint32 speed_per = 5;
+    required sint32 hp_per    = 6;
+}
+
+// 修复背包装备
+message db_fix_equip
+{
+    required sint32         full_endurance = 1;
+    required sint64         fix_time       = 2;
+    required sint32         need_time      = 3;
+    required db_bag_equip   bag_equip      = 4;
+}
+
+message list_db_fix_equips
+{
+    repeated db_fix_equip fix_info = 1;
+}
+
+message list_db_bag_equips
+{
+    repeated db_bag_equip bag_equip        = 1;
+    optional sint32       last_reward_id   = 2; // 上次领取装备图鉴奖励id
+    repeated sint32       equip_id_list    = 3;
+    optional sint32       bag_curr_size    = 4; // 包裹当前上限 
+    optional sint32       bag_extend_count = 5; // 包裹扩充次数 
+}
+
+
+message list_db_role_equips
+{
+    repeated db_role_equip  role_equip  = 1;
+}
+
+
+
+// 奖励信息
+message reward_info
+{
+    required sint32 id      = 1;
+    required sint32 count   = 2;
+}
+
+// 好友信息
+message db_friend_info
+{
+    required sint64               role_index            = 1; 
+    required bytes                state                 = 2;    // "yes"(正式好友), "no"(不是好友), "o+m"(别人加的我), "m+o"(我加的别人)
+    required sint64               time                  = 3;
+    required sint64               login_time            = 4;
+    required visiting_card_info   card_info             = 5;
+}
+
+// 竞技场杀人榜信息
+message db_arena_kill_info
+{
+    required sint64             role_index  = 1;
+    required sint32             kill_date   = 2; 
+    required player_show_info   show_info   = 3;
+}
+
+message role_face
+{
+    required sint32 type        = 1; // 0: 未装备表情, 1:米诺斯表情, 2: 玩家自定义表情
+    optional sint32 face_id     = 2; // 
+}
+
+message minigame_record
+{
+    optional sint32 history_max_score = 1;
+    optional sint32 today_max_score   = 2;
+    optional sint32 history_top_rank  = 3;
+}
+
+message minigame_play_info
+{
+    repeated minigame_record play_record   = 1;
+    optional sint32          day_buy_count = 2;
+    optional sint32          get_flag      = 3; // 0: 未领取过; 1 : 领取过一次
+}
+
+// 走上剑
+//message db_walkon_sword_info
+//{
+//    optional sint32 history_max_score = 1;
+//    optional sint32 today_max_score   = 2;
+//    optional sint32 history_top_rank  = 3;
+//}
+//
+//// 下100层
+//message db_downstairs_info
+//{
+//    optional sint32 history_max_score = 1;
+//    optional sint32 today_max_score   = 2;
+//    optional sint32 history_top_rank  = 3;
+//}
+//
+//// 大战三侠镇
+//message db_fight_town_info
+//{
+//    optional sint32 history_max_score = 1;
+//    optional sint32 today_max_score   = 2;
+//    optional sint32 history_top_rank  = 3;
+//}
+
+// 玩家显示信息
+message player_show_info
+{                      
+    required sint32 level       = 1;    // 等级
+    required sint32 vip_lvl     = 2;    // vip
+    required sint32 gender      = 3;    // 性别
+    required bytes  nick_name   = 4;    // 昵称
+    required sint32 helmet_id   = 5;    // 帽子
+    required sint32 clothes_id  = 6;    // 衣服
+    required sint32 shoes_id    = 7;    // 鞋子
+    required sint32 wing_id     = 8;    // 饰品
+    required sint32 weapon_id   = 9;    // 武器
+    required sint32 vehicle_id  = 10;   // 载具
+    required sint32 suit_id     = 11;   // 套装
+    required role_face face     = 12;   // 表情
+    required bytes player_id    = 13;   // playerID
+}
+
+//玩家基础数据
+message player_value_info
+{
+    required sint32 hp      = 1;    // 血量
+    required sint32 atk     = 2;    // 攻击
+    required sint32 def     = 3;    // 防御
+    required sint32 crit    = 4;    // 暴击
+    required sint32 block   = 5;    // 格挡
+    required sint32 speed   = 6;    // 速度
+    optional sint32 fight   = 7;    // 叼值
+}
+
+// 名片
+message visiting_card_info
+{
+    optional player_show_info  show_info     = 1;
+    optional player_value_info player_info   = 2;
+    optional sint64            role_index    = 3;
+    optional equip_extra_per   extra_percent = 4; // 额外属性增加
+}
+
+// 竞技场玩家属性
+//message arena_player_info
+//{
+//    required sint64 role_index              = 1;
+//    required sint32 rank                    = 2;    // 排名
+//    required player_show_info player_info   = 3;    // 玩家显示信息
+//    required sint32 fight                   = 4;    // 战力
+//}
+
+message arena_player_info
+{
+    required sint32 rank                    = 1;    // 排名
+    required visiting_card_info player_info = 2;    // 玩家显示信息
+}
+
+// 战斗技能信息
+message battle_skill_info
+{
+    required sint32 id       = 1;    // 技能Id
+    required sint32 level    = 2;    // 技能级别
+    required sint32 skilled  = 3;    // 技能熟练度等级
+}
+
+// 竞技场玩家战斗数据
+//message battle_player_info
+//{
+//    optional arena_player_info arena_show_info  = 1;    // 玩家显示信息
+//    optional player_value_info value_info       = 2;    // 玩家战斗基础数据
+//    repeated battle_skill_info skill_list       = 3;    // 玩家天赋、秘籍技能列表
+//    optional battle_skill_info suit_skill       = 4;    // 玩家套装技能信息
+//    repeated sint32 card_list                   = 5;    // 玩家卡牌信息
+//    optional sint32 position                    = 6;    // 阵型位置
+//    optional sint32 act_value                   = 7;    // 初始行动值
+//}
+
+
+
+
+// 玩家战斗数据(与竞技场排行无关, 不应存排行)
+message battle_player_info
+{
+    optional visiting_card_info visiting_card   = 1;    // 玩家名片
+    repeated battle_skill_info skill_list       = 2;    // 玩家天赋、秘籍技能列表
+    optional battle_skill_info suit_skill       = 3;    // 玩家套装技能信息
+    repeated sint32 card_list                   = 4;    // 玩家卡牌信息
+    optional sint32 position                    = 5;    // 阵型位置
+    optional sint32 act_value                   = 6;    // 初始行动值
+    optional pet_info          fight_pet        = 7;    // 战斗中的宠物信息
+}
+
+// 竞技场战斗信息(与排名有关)
+message arena_battle_info
+{
+    required battle_player_info player = 1;
+    required sint32             rank   = 2;
+}
+
+// 琅琊榜排行榜信息
+message RankInfo
+{
+    required sint64 role_index              = 1;
+    required player_show_info player_info   = 2;    // 玩家显示信息
+    required sint32 rank                    = 3;    // 排名
+    required sint64 score                   = 4;    // 分数
+}
+
+// 战斗中使用的技能次数
+message SkillUseInfo
+{
+    required sint32 skill_id    = 1;    // 使用的技能ID
+    required sint32 skill_count = 2;    // 技能使用的次数
+}
+
+// 日常任务信息
+message db_daily_task_info
+{
+    required sint32 type        = 1;
+    required sint32 id          = 2;
+    required sint32 count       = 3;
+    required sint32 tot_count   = 4;
+    required bool   get_flag    = 5;   // 是否已领取
+}
+
+// 日常活跃度信息
+message db_daily_activity_per_level_info
+{
+    required int32   level     = 1;
+    required bool    get_flag  = 2;
+}
+
+// 日常活跃度信息
+message db_daily_activity_info
+{
+    required sint32                           total_avtivity_value   =  1;
+    repeated db_daily_activity_per_level_info level_info             =  2;
+}
+
+// 区域范围
+message lua_rect
+{  
+    required sint32 x = 1;
+    required sint32 y = 2;
+    required sint32 w = 3;
+    required sint32 h = 4;
+}
+
+// 坐标范围
+message lua_pos_rect
+{  
+    required sint32 start_x = 1;
+    required sint32 start_y = 2;
+    required sint32 end_x   = 3;
+    required sint32 end_y   = 4;
+}
+
+// 物品列表
+message item_config
+{
+    required sint32 item_id     = 1;
+    required sint32 item_count  = 2;
+}
+
+// 表情列表
+message face_config
+{
+    required sint32 item_id     = 1;
+    required sint32 item_time   = 2;
+}
+
+// 套装列表
+message suit_config
+{
+    required sint32 item_id     = 1;
+    required sint32 item_time   = 2;
+}
+
+// 邮件结构
+message minos_mail_title
+{
+    required sint64 mail_index      = 1;
+    required bytes  mail_title      = 2;
+    required sint64 mail_time       = 3;
+    optional sint32 mail_type       = 4;
+}
+
+message minos_mail
+{
+    required sint64             src_role_index  = 1;
+    required sint64             tar_role_index  = 2;
+    required minos_mail_title   mail_title      = 3;
+    required bytes              mail_text       = 4;
+    repeated item_config        mail_list_items = 5;
+    repeated face_config        mail_list_faces = 6;
+    repeated suit_config        mail_list_suits = 7;
+}
+
+message interact_npc
+{
+    required sint32 npc_id = 1;
+    required sint32 count  = 2;
+}
+
+// 交互动作计数
+message interact_count
+{
+    required sint32 id    = 1;
+    required sint32 count = 2;
+}
+
+// 交互系统解锁条件
+message interact_unlock
+{
+    repeated sint32 condition = 1;
+}
+
+message level_need
+{
+    required sint32 cur_level   = 1;
+    required sint32 need_level  = 2;
+}
+
+message item_need
+{
+    required sint32 id          = 1;
+    required sint64 cur_count   = 2;
+    required sint64 need_count  = 3;
+}
+
+// 特殊道具广播
+message sp_info
+{
+    required sint32 sp_id       = 1;
+    required sint64 stamp       = 2;
+}
+
+// 自定义表情
+message role_custom_face
+{
+    required sint32 face_id = 1; // face id
+    required sint32 valid   = 2; // 是否有效,  0:初始状态(没有照片), 1:审核中, 2: 审核通过
+}
+
+// 宠物战斗基本属性(宠物战斗属性由基本属性与等级对应属性的和)
+message pet_base_fight
+{
+    required sint64 hp      = 1;    // 血量
+    required sint64 atk     = 2;    // 攻击
+    required sint64 def     = 3;    // 防御
+    required sint64 crit    = 4;    // 暴击
+    required sint64 block   = 5;    // 格挡
+    required sint64 speed   = 6;    // 速度
+}
+
+// 宠物技能
+message pet_talent
+{
+    required sint32 talent_id = 1; // 天赋id
+    required sint32 level     = 2; // 等级
+}
+
+// 宠物信息
+message pet_info
+{
+    required sint32         pet_id       = 1;  // 宠物id
+    required sint32         level        = 2;  // 宠物等级
+    required sint64         exp          = 3;  // 经验
+    required pet_base_fight base_attr    = 4;  // 额外增加的属性
+    repeated pet_talent     active_list  = 5;  // 主动技能列表
+    repeated pet_talent     passive_list = 6;  // 被动技能列表
+}
+
+// 宠物刷新信息
+message pet_refresh
+{
+    optional sint32  status                 = 1; // 刷新点状态
+    optional sint64  next_refresh_timestamp = 2; // 宠物刷新时间戳
+    optional sint32  pet_id                 = 3; // 刷新宠物
+    optional sint32  scene_id               = 4; // 刷新场景
+    optional lua_pos pos_info               = 5; // 刷新坐标
+}
+
+// 走马灯数据信息
+message horse_event
+{
+    optional E_HORSE_LIGHT_TYPE type = 1;
+    repeated sint64 para_list        = 2;
+}
+
+// 物品列表
+message item_list_config
+{
+    repeated item_config item   = 1;
+}
+
+// 走马灯推送
+message horse_light_info
+{
+    required sint32 horse_id  = 1; // 当id为-1时为后台公告,参数就是left_time
+    optional bytes  nick_name = 2;
+    repeated sint64 para_list = 3;
+}
+
+message success_detail
+{
+    required sint64 success_count = 1;
+    optional sint64 success_num   = 2;
+}
+
+// 二次园结果信息
+message guadratic_result
+{
+   required player_show_info show   = 1;
+   required sint32 live_time        = 2;
+   required sint32 kill_num         = 3;
+   required item_list_config item_list = 4;
+   required sint64 role_index = 5;
+}
+
+// 二次元房间玩家坐标信息
+message guadratic_role_info
+{
+    required sint64  role_index = 1;
+    optional lua_pos pos        = 2;
+    required sint32  current_hp = 3;
+}
+
+// 二次元房间玩家血量变化
+message guadratic_role_hp
+{
+    required sint64 role_index = 1;
+    required sint32 hp         = 2;
+}
+
+// 二次元房间玩家CD变化
+message guadratic_role_cd
+{
+    required sint64 role_index = 1;
+    required sint32 cd         = 2;
+}
+
+message sell_info 
+{
+	required sint64 index = 1;
+	required sint32 num   = 2;
+}
+
+// 兑换码信息
+message redeem_code_info
+{
+    required bytes code         = 1; 
+    required bytes batch_no     = 2; 
+    required int32 account_type = 3; 
+    required int32 server_rule  = 4; 
+    required int32 server_id    = 5; 
+    required int64 gift_id      = 6; 
+    required int64 start_time   = 7; 
+    required int64 end_time     = 8; 
+}
+
+// 兑换码对应奖励信息
+message redeem_gift_info
+{
+    required sint64 gift_id             = 1;
+    required item_list_config item_list = 2;
+}
+
+// 活动
+message activity_summary
+{
+    optional sint32 id          = 1;    // 活动唯一id
+    optional sint32 platform_id = 2; 
+    optional bytes title        = 3;    // 标题
+    optional bytes content      = 4;    // 描述
+    optional int32 type         = 5; 
+    optional int32 sub_type     = 6; 
+    optional sint64 start_time  = 7; 
+    optional sint64 end_time    = 8; 
+    optional sint64 stop_time   = 9; 
+    optional sint32 reset_type  = 10;
+    optional sint32 reset_hour  = 11;
+    optional bytes  rules       = 12;   
+    optional sint64 reset_time  = 13;
+}
+
+// 具体的活动规则,利用变长参数
+message activity_rule
+{
+    optional bytes rule_des          = 1;  // 规则描述
+    optional sint32 sub_type         = 2;  
+    repeated sint32 para_list        = 3;  // 具体参数列表, 参数列表的意义要根据sub_type来解析.
+    optional sint32 can_get_count    = 4;  // 可领取次数
+    optional sint32 got_count        = 5;  // 已领取次数
+    optional sint32 get_limit_count  = 6;  // 配置中领取次数上限
+    repeated item_config reward_list = 7;  // 奖励列表
+}
+
+// 还要写上对应每个活动类型的子规则
+message activity_info
+{
+    required sint32           version      = 1;
+    optional activity_summary summary_info = 2;
+    repeated activity_rule    rule_list    = 3;
+}
+
+// 活动进度信息
+message activity_progress_info
+{
+    required E_ACTIVITY_TYPE     type     = 1;
+    optional E_ACTIVITY_SUB_TYPE sub_type = 2;
+    repeated sint32 param = 3;
+}
+
+message activity_base_info
+{
+    optional sint32 id  = 1;
+    optional sint32 ver = 2;
+}
+
+// 合体技
+message combination_skill_info
+{
+    optional sint64 cd_time = 1;
+
+}
+
+// 玩家副本信息
+message fight_risk_info
+{
+    optional sint32 chapter_id = 1;
+    optional sint32 dup_id     = 2;
+    optional sint32 submit_status = 3;
+    optional sint32 danger_mode   = 4;
+}
+
+// 玩家打开礼包的次数
+message package_count
+{
+    required sint32 package_id = 1;
+    required sint32 count      = 2;
+}
+
+//玩家打开礼包的次数
+message role_open_package
+{
+    repeated package_count count = 1;
+}
+
+// 首充相关
+message shop_recharge
+{
+    optional sint32 id              = 1;
+    optional sint64 start_time      = 2;
+    optional sint64 end_time        = 3;
+    repeated item_config rewardList = 4;
+    repeated item_config CostList   = 5;
+}
+
+
+message role_recharge_get
+{
+    optional sint32 get_flag      = 1; // 首充奖励能否领取标识,0 : 不能领取, 1:可领取, 2:已领取
+    optional sint32 ver           = 2;
+    optional shop_recharge reward = 3;
+}
+
+// 通用商品属性
+message common_shop_goods_info
+{
+    required sint32 item_id             = 1;
+    required sint32 count               = 2;
+    required sint32 currency            = 3;
+    required sint32 price               = 4;
+    required bool   is_buy              = 5;
+    required sint32 shop_index          = 6;
+}
+
+// 通过商店信息
+message common_shop_info
+{
+    repeated common_shop_goods_info goods_info  = 1;
+    optional sint64 shop_next_refresh_timestamp = 2;
+    optional sint32 server_refresh_count        = 3;
+    optional sint32 manual_refresh_count        = 4;
+    optional sint32 manual_total_refresh_count  = 5;
+}

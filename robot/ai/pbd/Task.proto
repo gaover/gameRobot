@@ -1,0 +1,153 @@
+syntax = "proto2";
+package pbd;
+import "EnumDef.proto";
+import "ProtoDef.proto";
+
+// 任务结构
+message task_info
+{
+    required sint32      task_id             = 1;
+    required sint32      task_type           = 2;
+    required bytes       task_name_id        = 3;
+    required bytes       task_des            = 4;
+    required sint32      task_npc            = 5;
+    repeated item_config task_reward         = 6;
+    repeated sint64      task_progress_param = 7;
+    required bool        task_can_complete   = 8;
+    required sint32      pre_talk_id         = 9;
+    required sint32      nex_talk_id         = 10;
+    required sint32      complete_talk_id    = 11;
+    required bool        can_give_up         = 12;
+}
+
+// 玩家计数相关
+message role_count_info
+{
+    optional sint32 interact_count      = 1; // 总的交互次数
+    optional sint32 total_npc_count     = 2; // 总的npc交互次数
+    repeated interact_npc npc_count     = 3; // 和NPC互动
+    optional sint32 arena_join_count    = 4; // 竞技场挑战次数
+    optional sint32 arena_success_count = 5; // 竞技场累积胜利
+    optional sint32 bath_wash_count     = 6; // 澡堂搓澡
+    optional sint32 sword_join_count    = 7; // 拔剑次数
+    optional sint32 sword_success_count = 8; // 拔剑成功次数
+    repeated interact_count act_count   = 9; // 玩家交互动作使用次数
+}
+
+// 任务进度信息缓存
+message task_progress_info
+{
+    required MAIN_TASK_TYPE type  = 1;
+    repeated sint32         param = 2;
+}
+
+// 同步可接受任务
+message S2C_SyncCanAcceptTaskInfo
+{
+    repeated task_info  task_list   = 1;
+}
+
+// 同步已接受任务
+message S2C_SyncAcceptedTaskInfo
+{
+    repeated task_info  task_list   = 1;
+}
+
+// 请求接受任务
+message C2S_AcceptTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+}
+
+// 回复接受任务
+message S2C_AcceptTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+    optional sint32         nex_talk_id = 4;
+}
+
+// 请求完成任务
+message C2S_CompleteTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+}
+
+// 回复完成任务
+message S2C_CompleteTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+}
+
+// 通知对话任务完成状态
+message C2S_InformTalkTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+}
+
+// 通知服务玩家正在与npc交互
+message C2S_NPCInteractCount
+{
+    required sint64 role_index = 1;
+    required sint32 npc_id     = 2;
+}
+
+// 每日任务通知
+message C2S_DailyTaskStatus
+{
+    required sint64 role_index = 1;
+}
+
+message S2C_DailyTaskStatus
+{
+    required bool status = 1;
+}
+
+// 对材料消耗类任务做上交操作
+message C2S_UpdateCostItemTask
+{
+    required sint64 role_index = 1;
+    required sint32 task_id    = 2;
+}
+
+message S2C_UpdateCostItemTask
+{
+    required E_MSG_RET_CODE ret_code            = 1;
+    //repeated sint64         task_progress_param = 2;
+}
+
+// 通知客户端弹任务完成提示面板
+message S2C_TaskIsCompleted
+{
+    required sint32 task_id = 1;
+}
+
+// 通知服务器任务结算时机
+message C2S_TaskSettle
+{
+    required sint64 role_index      = 1;
+    required sint32 task_module     = 2;
+}
+
+// 放弃任务
+message C2S_GiveUpTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+}
+
+// 回复完成任务
+message S2C_GiveUpTask
+{
+    required sint64         role_index  = 1;
+    required sint32         task_id     = 2;
+    required E_MSG_RET_CODE ret_code    = 3;
+}
+
+
