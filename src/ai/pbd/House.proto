@@ -1,0 +1,186 @@
+syntax = "proto2";
+package pbd;
+import "EnumDef.proto";
+
+
+// 家俱
+message furniture_info
+{
+    optional sint32 id    = 1;
+    optional sint64 count = 2;
+}
+
+// 家园房间空间大小
+message home_room_size
+{
+    optional sint32 square_id = 1;
+    optional sint32 max_x     = 2;
+    optional sint32 max_y     = 3;
+}
+
+message decorate_pos
+{
+    optional sint32 x = 1;
+    optional sint32 y = 2;
+}
+
+// 家俱摆放信息
+message room_decorate_info
+{
+    optional sint32       direction = 1; // 方向
+    optional decorate_pos pos       = 2; // 坐标
+    optional sint32       id        = 3; // 家具id
+}
+
+// 房间摆放家俱信息
+message room_furniture_info
+{
+    optional sint64 role_index                 = 1; // 所属人
+    optional home_room_size     room_capacity  = 2; // 房间扩充块的id,空间大小:x*y(例如5*5)
+    repeated room_decorate_info wall_decorate  = 3; // 墙饰
+    repeated room_decorate_info wall_paper     = 4; // 墙纸
+    repeated room_decorate_info floor_decorate = 5; // 地上装饰
+    repeated room_decorate_info floor_tile     = 6; // 地板
+}
+
+// 家园信息
+message db_home_info
+{
+    optional sint32 level                        = 1;  // 家园等级
+    optional sint32 exp                          = 2;  // 当前经验
+    optional sint32 depot_capacity               = 3;  // 仓库大小
+    optional sint32 depot_extand_id              = 4;  // 仓库扩充次数
+    repeated furniture_info depot_furniture_list = 5;  // 仓库家俱信息
+    repeated furniture_info room_furniture_list  = 6;  // 房间家俱信息(该字段只有服务器使用)
+    optional room_furniture_info room_info       = 7;  // 房间摆放家俱信息
+}
+
+// 新房间信息
+message new_room_info
+{
+    repeated room_decorate_info wall_decorate  = 1; // 墙饰
+    repeated room_decorate_info wall_paper     = 2; // 墙纸
+    repeated room_decorate_info floor_decorate = 3; // 地上装饰
+    repeated room_decorate_info floor_tile     = 4; // 地板
+    // 以下两个字段的增加,删除都是对于房间的家俱来说的,并且是汇总之后的信息
+    repeated furniture_info     remove_list    = 5;
+    repeated furniture_info     increase_list  = 6;
+}
+
+// 同步家园等级相关信息
+message S2C_SyncHomeInfo
+{
+    optional sint32 level                = 1;  // 家园等级
+    optional sint32 exp                  = 2;  // 当前经验
+    optional sint32 depot_capacity       = 3;  // 仓库大小
+    optional sint32 depot_extand_time    = 4;  // 仓库扩充次数
+    optional home_room_size room_size    = 5;  // 房间扩充块的id,空间大小:x*y(例如5*5)
+    repeated sint32 exp_diff             = 6;
+}
+
+// 同步家具信息
+message S2C_Bag_Furniture_update
+{
+    optional furniture_info furniture_info = 1;
+    repeated sint64         diff_count     = 2;    
+}
+
+// 请求指定玩家的房间信息
+message C2S_OtherHomeInfo
+{
+    optional sint64 role_index     = 1; 
+    optional sint64 tar_role_index = 2; // 指定玩家
+    optional sint64 ret_intaddr    = 3;
+}
+
+message S2C_OtherHomeInfo
+{
+    optional E_MSG_RET_CODE      ret_code  = 1;
+    optional room_furniture_info room_info = 2; // 家园信息
+}
+
+// 玩家自己打开家园
+message C2S_RoleHomeInfo
+{
+    optional sint64 role_index  = 1; 
+}
+
+message S2C_RoleHomeInfo
+{
+    optional db_home_info home_info = 1; // 家园
+}
+
+// 购买家园商店商品
+message C2S_BuyHomeShopGood
+{
+    optional sint64 role_index = 1;
+    optional sint32 good_id    = 2;
+    optional sint32 count      = 3;
+}
+
+message S2C_BuyHomeShopGood
+{
+    optional E_MSG_RET_CODE ret_code = 1;
+    optional sint32 good_id          = 2;
+    optional sint32 count            = 3;
+}
+
+// 请求家园扩张
+//message C2S_HomeExtendShopInfo
+//{
+//    optional sint64 role_index  = 1;
+//}
+//
+//message S2C_HomeExtendShopInfo
+//{
+//    optional E_MSG_RET_CODE   ret_code   = 1;
+//    //repeated lua_house_expand goods_list = 2;
+//}
+
+// 购买扩张房间大小商品
+message C2S_ExtendRoomSize
+{
+    optional sint64 role_index = 1;
+}
+
+message S2C_ExtendRoomSize
+{
+    optional E_MSG_RET_CODE ret_code = 1;
+
+}
+
+// 仓库卖出商品
+message C2S_HomeDepotSell
+{
+    optional sint64 role_index = 1;
+    optional sint32 item_id    = 2;
+    optional sint32 item_count = 3;
+}
+
+message S2C_HomeDepotSell
+{
+    optional E_MSG_RET_CODE ret_code = 1;
+}
+
+// 扩充家园仓库容量
+message C2S_ExtendDepotSize
+{
+    optional sint64 role_index = 1;
+}
+
+message S2C_ExtendDepotSize
+{
+    optional E_MSG_RET_CODE ret_code = 1;
+}
+
+// 上传最终房间家俱信息
+message C2S_UpdateRoomInfo
+{
+    optional sint64        role_index = 1;
+    optional new_room_info room_info  = 2;
+}
+
+message S2C_UpdateRoomInfo
+{
+    optional E_MSG_RET_CODE ret_code = 1;
+}

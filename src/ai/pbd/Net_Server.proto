@@ -1,0 +1,885 @@
+syntax = "proto2";
+package pbd;
+import "EnumDef.proto";
+import "ProtoDef.proto";
+import "Sql_Login.proto";
+
+// 在线场景信息
+message online_scene_info
+{
+    optional sint64 instance_id = 1;    // 实例Id
+    optional sint32 scene_id    = 2;    // 场景Id
+
+    optional sint64 intaddr     = 3;    // 所在节点地址
+    optional sint32 type        = 4;    // 类型
+    optional sint64 last_time   = 5;    // 最后更新
+}
+
+// 在线玩家信息
+message online_player_info
+{
+    optional sint64 role_index          = 1;    // 角色索引
+    optional bytes  nick_name           = 2;    // 角色昵称
+    optional sint64 scene_instance_id   = 3;    // 场景实例
+    optional sint32 level               = 4;    // 级别
+    optional sint32 suit_id             = 5;
+    optional sint32 face_id             = 6;
+    optional sint32 weapon_id           = 7;
+    optional sint32 helmet_id           = 8;
+
+    optional sint64 intaddr             = 9;    // 所在节点地址
+    optional sint64 last_time           = 10;   // 最后更新
+}
+
+
+// 请求开启新场景信息
+message S2S_Ask_CreateNewScene
+{
+    optional sint32                 scene_id                = 1;
+    optional sint64                 scene_instance_id       = 2;
+    optional sint64                 server_instance_id      = 3;
+    optional E_SCENE_TYPE           scene_type              = 4;
+}
+
+// 回复开启新场景信息
+message S2S_Ret_CreateNewScene
+{
+    optional E_MSG_RET_CODE         ret_code                = 1;
+    optional sint32                 scene_id                = 2;
+    optional sint64                 scene_instance_id       = 3;
+    optional sint64                 server_instance_id      = 4;
+    optional E_SCENE_TYPE           scene_type              = 5;
+}
+
+// 同步新场景信息
+message S2S_Sync_NewSceneInfo
+{
+    optional sint32                 scene_id                = 1;
+    optional sint64                 scene_instance_id       = 2;
+    optional sint64                 server_instance_id      = 3;
+    optional E_SCENE_TYPE           scene_type              = 4;
+}
+
+// 获取场景信息
+message scene_int_addr_info
+{
+    optional sint64 scene_instance_id   = 1;
+    optional sint32 scene_id            = 2;
+    optional sint64 intaddr             = 3;
+}
+
+// 返回查询在线单元
+message S2S_Currency_Packet
+{
+    repeated bytes datas = 1;
+}
+
+
+
+// 玩家顶号请求
+message S2S_Player_Displacement
+{
+    optional sint64 role_index          = 1;
+    optional sint64 gate_intaddr        = 2;
+    optional sint64 scene_intaddr       = 3;
+    optional sint64 scene_instance_id   = 4;
+    optional sint64 save_intaddr        = 5;
+}
+
+// 通知玩家下线
+message S2S_Player_Offline
+{
+    optional sint64 role_index  = 1;
+    optional bytes  kick_reason = 2;
+    optional E_MSG_RET_CODE ret_code = 3;
+}
+
+// 通知角色存盘
+message S2S_Ask_Role_Save
+{
+
+    optional sql_result_roleinfo    role_info   = 2;
+}
+
+// 通知角色离开网关
+message S2S_Ask_Role_Leave_Login
+{
+    optional sint64 role_index          = 1;
+}
+
+// 通知角色进入场景
+message S2S_Ask_Role_Enter_Scene
+{
+    optional sint64             role_index          = 1;
+    optional sint64             role_intaddr        = 2;
+    optional sint64             scene_instance_id   = 3;
+    optional visiting_card_info card_info           = 4;
+}
+message S2S_Ask_Role_Leave_Scene
+{
+    optional sint64 role_index          = 1;
+    optional sint64 role_intaddr        = 2;
+    optional sint64 scene_instance_id   = 3;
+}
+
+// 回复注册集群节点
+message S2S_Ret_Register_ClusterNode
+{
+    optional sint32 node_index      = 1;    // 节点索引
+    optional sint64 unit_next_index = 2;    // 对象起始索引
+}
+
+// 回复集群节点信息
+message S2S_Ret_Select_ClusterNode
+{
+    repeated sint64 intaddr     = 1;    // 地址
+    repeated sint32 node_index  = 2;    // 节点索引
+    repeated sint64 pressure    = 3;    // 压力
+    repeated sint64 last_time   = 4;    // 最后更新
+}
+
+// 回复注册集群节点
+message S2S_Ret_Update_ClusterNode
+{
+    optional sint64 intaddr     = 1;    // 地址
+    optional sint32 node_index  = 2;    // 端口
+}
+
+// 移除集群节点
+message S2S_Ask_Delete_ClusterNode
+{
+    optional sint64 node_index      = 1;    // 节点索引
+    optional bytes  addr            = 2;    // 地址
+    optional sint32 port            = 3;    // 端口
+    optional sint64 pressure        = 4;    // 压力
+    optional sint64 unit_next_index = 5;    // 对象起始索引
+}
+
+// 请求集群信息
+message S2S_Ask_ClusterInfo
+{
+    optional sint64 node_index  = 1;    // 节点索引
+}
+
+// 回复集群信息
+message S2S_Ret_ClusterInfo
+{
+    repeated bytes  addr        = 1;    // 地址
+    repeated sint32 port        = 2;    // 端口
+    repeated sint64 pressure    = 3;    // 压力
+    repeated sint32 node_index  = 4;    // 节点索引
+}
+
+// 更新在线单元
+message S2S_Ret_Update_OnlineUnit
+{
+    optional E_ONLINE_UNIT_RET  ret = 1;
+}
+
+// 移除在线单元
+message S2S_Delete_OnlineUnitInfo
+{
+    optional sint32 unit_type   = 1;    // 对象类型
+    optional sint64 unit_index  = 2;    // 对象索引
+}
+
+// 挂起在线单元
+message S2S_Suspend_OnlineUnitInfo
+{
+    optional sint32 unit_type   = 1;    // 对象类型
+    optional sint64 unit_index  = 2;    // 对象索引
+}
+
+// 恢复在线单元
+message S2S_Resume_OnlineUnitInfo
+{
+    optional sint32 unit_type   = 1;    // 对象类型
+    optional sint64 unit_index  = 2;    // 对象索引
+}
+
+// 查询在线单元
+message S2S_Select_OnlineUnitInfo
+{
+    optional sint32 unit_type   = 1;    // 对象类型
+    optional sint64 unit_index  = 2;    // 对象索引
+    optional bytes  addr        = 3;    // 地址
+    optional sint32 port        = 4;    // 端口
+}
+
+// 返回查询在线单元
+message S2S_Ret_Select_OnlineUnitInfo
+{
+    optional sint32 unit_type   = 1;    // 对象类型
+    optional sint64 unit_index  = 2;    // 对象索引
+    optional bytes  addr        = 3;    // 地址
+    optional sint32 port        = 4;    // 端口
+}
+
+message S2S_RetReadyChangeScene
+{
+    optional E_MSG_RET_CODE ret_code        = 1;
+    optional sint64 role_index              = 2;
+    optional sint32 scene_id                = 5;
+    optional sint64 scene_instance_id       = 6;
+    optional sint64 login_intaddr           = 7;
+    optional sql_result_roleinfo role_info  = 8;
+}
+
+message S2S_RetScenePlayerByLevel
+{
+    repeated online_player_info scene_player_infos = 1;
+}
+
+message S2S_GetScenePlayerByRoleIndex
+{
+    optional online_player_info scene_player_info = 1;
+}
+
+message S2S_Request_Add_Friend
+{
+    optional sint64 role_index      = 1;
+    optional sint64 src_role_index  = 2;
+    optional bool   is_refuse       = 3;
+}
+
+message S2S_Friends_List
+{
+    repeated sint64 friend_role_index   = 1;
+}
+
+message S2S_Ret_Select_Friends_OnlineList
+{
+    repeated online_player_info online_friends_info = 1;
+}
+
+message S2S_Ret_Find_OnlinePlayer
+{
+    optional sint64             role_index    = 1;
+    optional bytes              nick_name     = 2;
+    optional sint64             ret_unitindex = 3;
+    optional sint64             ret_intaddr   = 4;
+    optional online_player_info player_info   = 5;
+}
+
+// 检查登录是否存在指定玩家
+message S2S_AskCheckPlayerInLogin
+{
+    optional sint64 role_index          = 1;
+    optional sint64 src_temp_unit_index = 2;
+    optional sint64 src_intaddr         = 3;
+    optional sint64 intaddr             = 4;
+}
+message S2S_RetCheckPlayerInLogin
+{
+    optional sint64 role_index          = 1;
+    optional bool   in_login            = 2;
+    optional sint64 intaddr             = 3;
+}
+
+// 查询分线
+message S2S_QuerySceneLine
+{
+    optional uint32 scene_id      = 1;
+    repeated uint32 scene_index   = 2;
+    optional sint64 ret_unitindex = 3;
+    optional sint64 ret_intaddr   = 4;
+}
+
+message S2S_ChangeSceneLine
+{
+    optional sint64 role_index              = 1;
+    optional uint32 scene_id                = 2;
+    optional uint32 scene_index             = 3;
+    optional sql_result_roleinfo role_info  = 4;
+    optional sint64 login_intaddr           = 5;
+}
+
+
+// 请求进入场景
+//message S2S_AskEnterScene
+//{
+//    optional bool                force_enter_flag   = 1; // 强行进入场景标识（由于服务器支持分线，此标识是针对于不开分线的场景）
+//    optional sint32              scene_id           = 2;
+//    optional sint32              map_id             = 3;
+//    optional E_SCENE_TYPE        scene_type         = 4;
+//    repeated sql_result_roleinfo list_role_info     = 5;
+//    repeated sint64              list_login_intaddr = 6;
+//}
+
+// 回复进入场景
+message S2S_RetEnterScene
+{
+    optional sint32 scene_id                    = 1;
+    optional sint64 role_index                  = 2;
+    optional bool   is_ok                       = 3;
+}
+
+
+
+
+// 回复载入新场景
+message S2S_RetLoadNewScene
+{
+    optional sint32 scene_id                = 1;
+    optional sint32 scene_index             = 2;
+    optional sint32 map_id                  = 3;
+    optional E_SCENE_TYPE scene_type        = 4;
+    repeated sql_result_roleinfo list_role_info    = 5;
+    repeated sint64 list_login_intaddr      = 6;
+    optional sint64 scene_intptr            = 7;
+}
+
+// 请求注册新场景
+message S2S_AskRegRunningSceneInfo
+{
+    optional RunningSceneInfo scene_info   = 1;
+    optional sint64 scene_intptr           = 2;
+
+}
+// 请求反注册场景
+message S2S_AskUnRegRunningSceneInfo
+{
+    optional RunningSceneInfo scene_info   = 1;
+}
+
+
+// 新个人邮件
+message S2S_Add_New_Mail
+{
+    optional sint64 src_role_index  = 1;
+    optional sint64 tar_role_index  = 2;
+    optional minos_mail mail_full   = 3;
+}
+
+// 模板邮件
+message New_Templet_Mail
+{
+    optional S2S_Add_New_Mail mail_info = 1;
+    optional sint32 unique_id = 2;
+}
+
+// 全服邮件
+message New_Server_Mail
+{
+    optional S2S_Add_New_Mail mail_info = 1;
+    optional sint64 start_time  = 2;
+    optional sint64 end_time    = 3;
+    optional sint32 start_level = 4;
+    optional sint32 end_level   = 5;
+    optional sint64 serial_no   = 6;
+}
+
+// 玩家的全服邮件
+message Add_New_Server_Mail
+{
+    repeated S2S_Add_New_Mail mail_list = 1;
+}
+
+// 请求登录管理
+message GM2S_AskLogin
+{
+    optional bytes  account         = 1;
+    optional bytes  password        = 2;
+}
+// 回复登录管理
+message S2GM_RetLogin
+{
+    optional E_MSG_RET_CODE ret_code    = 1;
+    optional bytes          account     = 2;
+}
+
+// 注册节点信息
+message S2S_RegNodeInfo
+{
+    optional sql_ret_cluster_node_info cluster_node_info        = 1;
+}
+
+// 请求节点信息
+message GM2S_AskNodeInfo
+{
+    optional bytes  request_node_name   = 1;
+    optional bool   is_online           = 2;
+}
+// 回复节点信息
+message S2GM_RetNodeInfo
+{
+    optional bytes                      request_node_name       = 1;
+    repeated sql_ret_cluster_node_info  list_cluster_node_info  = 2;
+}
+
+// 请求玩家信息
+message GM2S_AskPlayerInfo
+{
+    optional bytes  request_node_name   = 1;
+    optional bool   is_online           = 2;
+}
+
+// 回复玩家信息
+message S2GM_RetPlayerInfo
+{
+    optional bytes request_node_name   = 1;
+    repeated sql_result_roleinfo   list_role_info      = 2;
+}
+
+// 请求场景信息
+message GM2S_AskSceneInfo
+{
+    optional bool is_online             = 1;
+}
+// 回复场景信息
+message S2GM_RetSceneInfo
+{
+    repeated sql_ret_cluster_node_info list_cluster_node_info   = 1;
+}
+
+// 踢人信息
+message GM2S_KickPlayer
+{
+    optional sint64 role_index = 1;
+}
+
+// 支付模块统计
+message S2S_GamePayData
+{
+    optional bytes  play_id     = 1;
+    optional bytes  nick        = 2;
+    optional sint32 vip_level   = 3;
+    optional sint32 level       = 4;
+    optional sint32 module      = 5;
+    optional sint32 currency    = 6;
+    optional sint32 value       = 7;
+}
+
+// 在线时长
+message S2S_GameOnlineData
+{
+    optional bytes play_id = 1;
+    optional bytes nick    = 2;
+    optional bytes account = 3;
+    optional bytes device  = 4;
+    optional sint32 online_type =  5;
+    optional sint32 vip_level   =  6;
+    optional sint32 level       =  7; 
+    optional sint64 online_time =  8;
+    optional sint64 online_days =  9;
+    optional sint32 continue_days = 10; // 连续天数
+    optional player_show_info show = 11; // 显示信息
+    optional sint64 diamond        = 12; 
+
+}
+
+// 玩家棒棒糖更新
+message S2S_RoleDiamondUpdate
+{
+    optional bytes play_id  = 1;
+    optional sint64 diamond = 2;
+    optional bytes tcb      = 3;
+}
+
+// 留存
+message S2S_GameRetentionRateData
+{
+    optional bytes  play_id     = 1;
+    optional bytes  nick        = 2;
+    optional sint32 vip_level   = 3;
+    optional sint32 level       = 4;
+    optional sint32 login_count = 5;
+}
+
+// 每日最高在线
+message S2S_GameTopPlayNum
+{
+    optional sint32 curr_date  = 1;
+    optional sint32 player_num = 2;
+    optional sint64 time       = 3;
+}
+
+// 后台请求角色信息
+message S2P_RetRoleInfo
+{
+    optional E_PHP_ERROR_CODE       status  = 1;
+    optional bytes                  result  = 2;
+    optional sql_result_roleinfo    data    = 3;
+}
+
+// 后台请求角色信息
+message S2P_RetSendMail
+{
+    optional E_PHP_ERROR_CODE       status  = 1;
+    optional bytes                  result  = 2;
+}
+
+// 走马灯
+message S2S_HorseLight
+{
+    optional horse_light_info context = 1;
+    optional sint64 serial_no       = 2;
+    optional sint64 start_time      = 3;
+    optional sint64 end_time        = 4;
+    optional sint64 recv_time       = 5;
+    optional bool   send_flag       = 6;
+}
+
+message S2S_QueryHorseLight
+{
+    optional sint64 ret_intaddr = 1;
+    optional sint64 ret_index   = 2;
+}
+
+message S2S_RevokeHorseLight
+{
+    optional sint64 light_id = 1;
+}
+
+message UpdateRoleInfo
+{
+    optional bytes account    = 1;
+    optional bytes player_id  = 2;
+    optional sint32 server_id = 3;
+    optional sint32 level     = 4;
+    optional sint32 stimina   = 5;
+    optional sint32 diamond   = 6;
+    optional sint32 coin      = 7;
+}
+
+
+message center_cluster_from_server_info
+{
+    optional bool dirty = 1;
+    optional sql_ret_cluster_node_info node_info = 2;
+}
+
+// 网关上传自己的信息给中心结点
+message S2S_UploadGatewayInfoToCenter
+{
+    optional bool   is_online = 1;
+    optional sint64 node_addr = 2;
+}
+
+// 逻辑线程地图对象上传自己的信息给中心结点
+message S2S_UploadLogicInfoToCenter
+{
+    optional bool   is_online = 1;
+    optional sint64 node_addr = 2;
+    optional sint64 unit_index = 3;
+}
+
+// 逻辑线程上传自己的信息给中心结点
+message S2S_UploadLogicManagerInfoToCenter
+{
+    optional bool   is_online = 1;
+    optional sint64 node_addr = 2;
+}
+
+// 兑换码兑换服务器内通讯协议
+message S2S_ExchangeCode
+{
+    optional sint64 role_index = 1;
+    optional bytes  code       = 2;
+    optional bytes  account    = 3;
+    optional sint32 server_id  = 4;
+
+    optional sint64 login_addr = 5;
+    optional sint64 scene_addr = 6;
+    optional item_list_config  reward   = 7;
+    optional E_MSG_RET_CODE    ret_code = 8;
+}
+
+// 玩家领取全服邮件记录
+message S2S_RoleGetServerMail
+{
+    optional bytes player_id    = 1;
+    repeated sint32 php_mail_id = 2;
+    repeated sint32 mail_id     = 3;
+}
+
+message S2S_SceneRoleLose
+{
+    optional sint64 role_index = 1;
+    optional bytes  data       = 2;
+}
+
+// 玩家提交自己的相应榜
+message S2S_NewLevelInfo
+{
+    optional sint64 role_index = 1;
+    optional sint64 score      = 2;
+	optional player_show_info show = 3;
+}
+
+message S2S_NewKillNumInfo
+{
+    optional sint64 role_index = 1;
+    optional sint64 score      = 2;
+	optional player_show_info show = 3;
+}
+
+message S2S_NewDiamondInfo
+{
+    optional sint64 role_index = 1;
+    optional sint64 score      = 2;
+	optional player_show_info show = 3;
+}
+
+message S2S_MinigameInfo
+{
+    optional sint64 role_index = 1;
+    optional sint64 score      = 2;
+    optional sint32 game_id    = 3;
+    optional bytes  nick_name  = 4;
+	optional player_show_info show = 5;
+}
+
+message RoleForbidden
+{
+    optional sint64 role_index = 1;
+    optional sint32 no_login   = 2;
+    optional sint32 no_speak   = 3;
+    optional sint64 next_login_time   = 4;
+}
+
+message RoleUnForbidden
+{
+    optional sint64 role_index = 1;
+    optional sint32 login   = 2;
+    optional sint32 speak   = 3;
+}
+
+
+// 竞技场相关服务器内部协议
+message S2S_ArenaPlayers
+{
+    optional sint64             role_index  = 1;
+    optional sint32             rank        = 2;
+    repeated battle_player_info players     = 3;
+}
+
+// 客户端超时解锁自己的锁定排名
+message S2S_UnlockSelfArenaRank
+{
+    optional sint64 role_index   = 1;
+}
+
+message S2S_FightArenaEnd
+{
+    optional sint64 role_index  = 1;
+    optional bool   passed      = 2;
+    optional bool   verify      = 3;
+    optional sint32 new_rank    = 4;
+    optional sint32 old_rank    = 5;
+    optional sint64 ret_addr    = 6;
+    optional visiting_card_info fail_role_card = 7;
+}
+
+message S2S_UpdateArenaRoleInfo
+{
+    optional sint64 role_index = 1;
+    optional battle_player_info battle = 2;
+}
+
+message S2S_InformSpeakForbidden
+{
+    optional sint64 role_index = 1;
+    optional sint32 no_speak   = 2;
+    optional sint64 next_speak_time = 3;
+}
+
+message role_save_monery
+{
+    optional sint32 platform_id = 1;
+    optional sint32 server_id   = 2;
+    optional sint64 role_index  = 3;
+    optional sint32 cbi         = 4;
+    optional sint32 fee         = 5;
+    optional bytes ssid         = 6;
+    optional bytes uid          = 7;
+    optional bytes tcb          = 8;
+}
+
+// 购买商品(服务器内部充值接口)
+message S2S_RechargeMoney
+{
+    optional sint64 role_index  = 1;
+    optional sint32 recharge_id = 2;
+    optional sint32 fee         = 3;
+    optional bytes  tcb         = 4;
+}
+
+// 充值确认订单
+message S2S_SaveMoneryOk
+{
+    optional bytes tcb     = 1;
+    optional sint32 status = 2;
+}
+
+message S2S_HasNewActivity
+{
+    repeated sint32 id = 1;
+    repeated sint32 delete_id = 2;
+}
+
+message S2S_AskNewActivityInfo
+{
+    optional sint64 role_index   = 1; 
+    optional sint64 ret_addr     = 2;
+    repeated activity_base_info curr_have = 3; 
+    repeated activity_info activity_list  = 4; 
+}
+
+// 通用
+message S2S_AskCommonActivityInfo
+{
+    optional sint64 server_begin_time = 1;
+    optional sint64 role_index        = 2; 
+    optional sint64 ret_addr          = 3;
+    repeated activity_base_info curr_have = 4; 
+    repeated activity_info activity_list  = 5; 
+}
+
+message S2S_AnswerNewActivityInfo
+{
+    repeated activity_info item_add    = 1; 
+    repeated activity_info item_update = 2;
+    repeated activity_base_info item_del = 3;
+}
+
+// 新场景信息(场景管理服务器广播时发送的消息)
+message new_scene_info
+{
+    optional sint32 scene_id   = 1;
+    optional E_SCENE_TYPE type = 2;
+    optional sint32 scene_unique_id = 3;
+    optional sint32 scene_line_no   = 4;
+}
+
+// 目标场景信息
+message target_scene_info
+{
+    optional sint32 scene_id   = 1;
+    optional E_SCENE_TYPE type = 2;
+    optional sint32 pos_x      = 3;
+    optional sint32 pos_y      = 4;
+    optional bool force_enter_flag = 5;
+    optional sint64 login_addr     = 6;
+    optional sint64 scene_addr     = 7;
+    optional sint64 scene_index    = 8;
+	optional sint64 login_index    = 9;
+}
+
+// 请求进入新场景, 若目标场景为空表明操作只是退出场景(适用于退出游戏的情况) 
+message S2S_AskEnterNewScene
+{
+    optional sint64 role_index              = 1;
+    optional sql_result_roleinfo role_info  = 2; // 若有此字段则表明玩家数据需要更新
+    optional target_scene_info   scene_info = 3; // 若有此字段则表明要到新的场景,否则只是退出场景
+}
+
+// 通知进入场景
+message S2S_ReadyEnterNewScene
+{
+    optional sint64            role_index = 1;
+    optional target_scene_info scene_info = 2;  
+}
+
+// 通知进入场景
+message S2S_ReadyEnterScene
+{
+    optional sint64 role_index              = 1;
+    optional target_scene_info   scene_info = 2;
+    optional sql_result_roleinfo role_info  = 3;
+}
+
+// 广播有新场景可以载入
+message S2S_BroadcastHaveNewScene
+{
+    optional sint64 center_scene_manager_intaddr = 1;
+    optional sint32 scene_unique_id              = 2;
+}
+
+// 准备跑起的场景
+message ReadyRunSceneInfo
+{
+    optional new_scene_info scene_info    = 1;
+    repeated sint64 list_role_info        = 2;
+    repeated target_scene_info scene_list = 3;
+}
+
+// 已经跑起的场景
+message RunningSceneInfo
+{
+    optional sint64 scene_instance_id   = 1;    // 实例索引
+    optional sint32 scene_id            = 2;    // 场景索引
+    optional sint32 scene_index         = 3;    // 分线索引
+    optional sint64 intaddr             = 4;    // 场景地址
+    optional sint32 loads               = 5;    // 负载(1-100)
+}
+
+// 请求载入新场景
+message S2S_AskLoadNewScene
+{
+    optional sint64 scene_manager_intaddr   = 1;
+    optional sint32 scene_unique_id         = 2;
+}
+
+// 午夜刷新
+message S2S_MidNightEvent
+{
+}
+
+// 竞技场奖励
+message S2S_ArenaRewardEvent
+{
+    optional sint64 curr_time = 1;
+}
+
+// 玩家更新自己名片
+message S2S_RoleUpdateVisitingCard
+{
+    optional visiting_card_info visiting_card = 1;
+    optional bool first_init = 2;
+}
+
+// 更新战斗信息
+message S2S_RoleUpdateBattleInfo
+{
+    optional battle_player_info battle = 1;
+    optional sint64 role_index = 2;
+}
+
+
+
+message S2S_OtherRechargeInfo
+{
+    optional shop_recharge info = 1;
+}
+
+// 向活动中心请求首充及之后的商品信息
+message S2S_AskRechargeInfo
+{
+    optional activity_base_info data = 1;
+    optional sint64 role_index       = 2; 
+    optional sint64 ret_addr         = 3;
+}
+
+message S2S_AnswerRechargeInfo
+{
+    optional sint32 id                       = 1;
+    optional role_recharge_get recharge_info = 2;
+}
+
+message S2S_LogicOnline
+{
+
+}
+
+// 玩家三倍返还
+message S2S_AndriodReturn
+{
+    optional bytes  account     = 1;
+    optional sint64 role_index  = 2;
+}
+
+message S2S_AreaTheOneSync
+{
+    optional player_show_info  show = 1;
+}

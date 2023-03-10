@@ -1,0 +1,12 @@
+protoc2_win --gofast_out=. ProtoBaseDef.proto
+protoc2_win --gofast_out=. ProtoDef.proto
+protoc2_win --gofast_out=. House.proto
+protoc2_win --gofast_out=. EnumDef.proto
+protoc2_win --gofast_out=. Danmaku.proto
+protoc2_win --gofast_out=. Sql_Login.proto
+protoc2_win --gofast_out=. Net_Game.proto
+protoc2_win --gofast_out=. ServerDef.proto
+protoc2_win --gofast_out=. Net_Server.proto
+protoc2_win --gofast_out=. Task.proto
+protoc2_win --gofast_out=. MG_Room.proto
+protoc2_win --gofast_out=. ParkLot.proto
